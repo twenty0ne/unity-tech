@@ -1,29 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace FSM
+class State
 {
-    class state
-    {
 
-    }
-
-    class stack
-    {
-        
-    }
 }
 
-//public class FSM :
-//{
+class Stack
+{
+	private Queue<State> queue = new Queue<State> ();
 
-//	// Use this for initialization
-//	void Start () {
+	public void Push(State stat)
+	{
 		
-//	}
+	}
+}
 	
-//	// Update is called once per frame
-//	void Update () {
-		
-//	}
-//}
+
