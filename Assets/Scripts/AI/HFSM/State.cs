@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// https://github.com/Real-Serious-Games/Fluent-State-Machine
-
 namespace AI
 {
 	public interface IState
