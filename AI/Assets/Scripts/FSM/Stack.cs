@@ -22,4 +22,9 @@ class Stack
 		}
 		return false;
 	}
+
+	public System.Action On(State from, State to)
+	{
+		return callbacks [new KeyValuePair<State, State> (from, to)];
+	}
 }
