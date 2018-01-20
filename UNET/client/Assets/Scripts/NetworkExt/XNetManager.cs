@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 using Lidgren.Network;
 
 public class XNetManager : MonoBehaviour 
 {
+	private const int MAX_CONNECTIONS = 2;
+
 	// C2H = client to host
 	// H2C = host to client
 	public enum DataType
@@ -18,6 +21,7 @@ public class XNetManager : MonoBehaviour
 	public static XNetClient instance = null;
 
 	private NetClient netClient = null;
+	private HostTopology hostTopology = null;
 
 	private void Awake()
 	{
@@ -67,8 +71,8 @@ public class XNetManager : MonoBehaviour
 		{
 			string clientId = im.ReadString();
 
-			var newConn = new XNetConnection();
-			newConn.ForceInitialize();
+			var conn = new XNetConnection();
+			conn.ForceInitialize();
 
 			NetworkServer.AddExternalConnection(newConn);
 			connRemote = newConn;
@@ -148,5 +152,17 @@ public class XNetManager : MonoBehaviour
 			}
 			netClient.Recycle(im);
 		}
+	}
+
+	private void InitUnetHost()
+	{
+		Debug.Log ("init unet host");
+
+		ConnectionConfig config = new ConnectionConfig ();
+		config.AddChannel (QosType.ReliableSequenced);
+		config.AddChannel (QosType.Unreliable);
+		hostTopology = new HostTopology (config, MAX_CONNECTIONS);
+
+
 	}
 }
