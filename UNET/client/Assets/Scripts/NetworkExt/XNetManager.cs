@@ -25,6 +25,7 @@ public class XNetManager : MonoBehaviour
 
 	// client to server connection
 	private NetworkClient myClient = null;
+	private List<GameObject> netPrefabs;
 
 	private void Awake()
 	{
@@ -182,5 +183,23 @@ public class XNetManager : MonoBehaviour
 		myClient.connection.ForceInitialize();
 
 		// Add local client to server's list of connections
+		// Here we get the connection from the NetworkServer because it represents the server-to-client connection
+		var hostToLocalClientConn = NetworkServer.connections[0];
+		AddConnection (hostToLocalClientConn);
+
+
+	}
+
+	private void AddConnection(NetworkConnection conn)
+	{
+		
+	}
+
+	private void RegisterNetworkPrefabs()
+	{
+		for (int i = 0; i < netPrefabs.Count; i++) 
+		{
+			ClientScene.RegisterPrefab (netPrefabs [i]);
+		}
 	}
 }
