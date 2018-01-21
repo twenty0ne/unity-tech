@@ -23,6 +23,9 @@ public class XNetManager : MonoBehaviour
 	private NetClient netClient = null;
 	private HostTopology hostTopology = null;
 
+	// client to server connection
+	private NetworkClient myClient = null;
+
 	private void Awake()
 	{
 		if (instance != null) 
@@ -163,6 +166,21 @@ public class XNetManager : MonoBehaviour
 		config.AddChannel (QosType.Unreliable);
 		hostTopology = new HostTopology (config, MAX_CONNECTIONS);
 
+		// Listen for player spawn request messages 
+		// NetworkServer.RegisterHandler(NetworkMessages.SpawnRequestMsg, OnSpawnRequested);
 
+		// Start UNET server
+		NetworkServer.Configure(hostTopology);
+		NetworkServer.dontListen = true;
+		NetworkServer.Listen(0);
+
+		// Create a local client-to-server connection to the "server"
+		// Connect to localhost to trick UNET's ConnectState state to "Connected", which allows data to pass through TransportSend
+		myClient = ClientScene.ConnectLocalServer();
+		myClient.Configure(hostTopology);
+		myClient.Connect("localhost", 0);
+		myClient.connection.ForceInitialize();
+
+		// Add local client to server's list of connections
 	}
 }

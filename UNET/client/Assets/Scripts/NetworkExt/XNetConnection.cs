@@ -5,8 +5,6 @@ using UnityEngine.Networking;
 
 public class XNetConnection : NetworkConnection 
 {
-	private static int nextConnectionId = -1;
-
 	public XNetConnection(string uid)
 	{
 	}
@@ -15,13 +13,18 @@ public class XNetConnection : NetworkConnection
 	{
 		
 	}
+}
+
+public static class NetworkConnectionExt
+{
+	private static int nextConnectionId = -1;
 
 	/// Because we fake the UNET connection, connection initialization is not handled by UNET internally. 
 	/// Connections must be manually initialized with this function.
 	/// 
-	public void ForceInitialize(HostTopology hostTopology)
+	public static void ForceInitialize(this NetworkConnection conn, HostTopology hostTopology)
 	{
 		int id = ++nextConnectionId;
-		this.Initialize ("localhost", id, id, hostTopology);
+		conn.Initialize ("localhost", id, id, hostTopology);
 	}
 }
