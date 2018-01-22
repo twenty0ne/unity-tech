@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 using Lidgren.Network;
+using UnityEngine.Networking.NetworkSystem;
 
 public class XNetManager : MonoBehaviour 
 {
@@ -11,21 +12,26 @@ public class XNetManager : MonoBehaviour
 
 	// C2H = client to host
 	// H2C = host to client
-	public enum DataType
+	public class DataType
 	{
-		C2H_Connect = 0,
-		H2C_Accept,
-		SYNC,
+        public const int C2H_Connect = 0;
+        public const int H2C_Accept = 1;
+        public const int Sync = 2;
 	}
 
-	public static XNetClient instance = null;
+	public static XNetManager instance = null;
 
-	private NetClient netClient = null;
+	private Lidgren.Network.NetClient netClient = null;
 	private HostTopology hostTopology = null;
 
-	// client to server connection
-	private NetworkClient myClient = null;
-	private List<GameObject> netPrefabs;
+    private GameObject playerPrefab;
+    private List<GameObject> netPrefabs;
+
+    // client to server connection
+    // for host: local client to host
+    // for remote: remote client to host
+    private NetworkClient myClient = null;
+    private List<NetworkConnection> connClients = new List<NetworkConnection>();
 
 	private void Awake()
 	{
@@ -45,7 +51,7 @@ public class XNetManager : MonoBehaviour
 
 		if (netClient != null) 
 		{
-			netClient.Disconnect ();
+			netClient.Disconnect ("disconnect from destroy");
 			netClient = null;
 		}
 	}
@@ -75,42 +81,43 @@ public class XNetManager : MonoBehaviour
 		{
 			string clientId = im.ReadString();
 
-			var conn = new XNetConnection();
-			conn.ForceInitialize();
+			var remoteClientToHostConn = new XNetConnection(clientId);
+            remoteClientToHostConn.ForceInitialize(hostTopology);
 
-			NetworkServer.AddExternalConnection(newConn);
-			connRemote = newConn;
-			//});
+			NetworkServer.AddExternalConnection(remoteClientToHostConn);
+            AddConnection(remoteClientToHostConn);
 
 			// send accept
-			NetOutgoingMessage om = _netClient.CreateMessage();
-			om.Write(DATA_TYPE.DAT_ACCEPT);
-			om.Write(client_id);
-			_netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, 0);
+			NetOutgoingMessage om = netClient.CreateMessage();
+			om.Write(DataType.H2C_Accept);
+			om.Write(clientId);
+			netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, 0);
 		}
 		else if (dataType == DataType.H2C_Accept)
 		{
-			// Create connection to host player's steam ID
-			var conn = new MyNetworkConnection();
-			var mySteamClient = new MyNetworkClient(conn);
-			myClient = mySteamClient;
+            string clientId = im.ReadString();
 
-			// Setup and connect
-			mySteamClient.RegisterHandler(MsgType.Connect, OnConnect);
-			mySteamClient.SetNetworkConnectionClass<MyNetworkConnection>();
-			mySteamClient.Configure(MyNetworkManager.hostTopology);
-			mySteamClient.Connect();
+			var conn = new XNetConnection(clientId);
+            Debug.Assert(myClient == null, "CHECK: myClient is not null");
+            myClient = new XNetClient(conn);
+
+            // Setup and connect
+            myClient.RegisterHandler(MsgType.Connect, OnRemoteClientConnect);
+            myClient.SetNetworkConnectionClass<XNetConnection>();
+            myClient.Configure(hostTopology);
+            ((XNetClient)myClient).Connect();
 		}
-		else if (dataType == DataType.SYNC)
+		else if (dataType == DataType.Sync)
 		{
-			int byteLength = im.ReadInt32();
-			byte[] byteArray = im.ReadBytes(byteLength);
+            string clientId = im.ReadString();
 
-			NetworkConnection conn = isHost ? connRemote : myClient.connection;
-
+            NetworkConnection conn = GetClientConnection(clientId);
 			if (conn != null)
 			{
-				conn.TransportReceive(byteArray, byteLength, 0);
+                int byteLength = im.ReadInt32();
+                byte[] byteArray = im.ReadBytes(byteLength);
+
+                conn.TransportReceive(byteArray, byteLength, 0);
 			}
 		}
 	}
@@ -180,19 +187,23 @@ public class XNetManager : MonoBehaviour
 		myClient = ClientScene.ConnectLocalServer();
 		myClient.Configure(hostTopology);
 		myClient.Connect("localhost", 0);
-		myClient.connection.ForceInitialize();
+		myClient.connection.ForceInitialize(hostTopology);
 
 		// Add local client to server's list of connections
 		// Here we get the connection from the NetworkServer because it represents the server-to-client connection
-		var hostToLocalClientConn = NetworkServer.connections[0];
-		AddConnection (hostToLocalClientConn);
+		var localClientToHostConn = NetworkServer.connections[0];
+		AddConnection (localClientToHostConn);
 
+        RegisterNetworkPrefabs();
 
+        // Spawn self
+        ClientScene.Ready(localClientToHostConn);
+        SpawnPlayer(localClientToHostConn);
 	}
 
 	private void AddConnection(NetworkConnection conn)
 	{
-		
+        connClients.Add(conn);
 	}
 
 	private void RegisterNetworkPrefabs()
@@ -202,4 +213,60 @@ public class XNetManager : MonoBehaviour
 			ClientScene.RegisterPrefab (netPrefabs [i]);
 		}
 	}
+
+    private bool SpawnPlayer(NetworkConnection conn)
+    {
+        if (playerPrefab == null)
+            return false;
+
+        NetworkServer.SetClientReady(conn);
+        var player = GameObject.Instantiate(playerPrefab);
+
+        return NetworkServer.SpawnWithClientAuthority(player, conn);
+    }
+
+    private void OnRemoteClientConnect(NetworkMessage msg)
+    {
+        // Set to ready and spawn player
+        Debug.Log("Connected to UNET server.");
+        myClient.UnregisterHandler(MsgType.Connect);
+
+        RegisterNetworkPrefabs();
+
+        var conn = myClient.connection;
+        if (conn != null)
+        {
+            ClientScene.Ready(conn);
+            Debug.Log("Requesting spawn");
+            myClient.Send(XNetMessage.SpawnRequestMsg, new StringMessage(""));
+        }
+    }
+
+    public bool Send(byte[] bytes, int numBytes, int channelId = 0)
+    {
+        NetOutgoingMessage om = netClient.CreateMessage();
+        om.Write(numBytes);
+        om.Write(bytes);
+        netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, channelId);
+
+        return true;
+    }
+
+    private NetworkConnection GetClientConnection(string clientId)
+    {
+        // if host
+        if (NetworkServer.active && NetworkServer.connections.Count > 0)
+            return NetworkServer.connections[0];
+
+        // find remote client
+        for (int i = 0; i < connClients.Count; ++i)
+        {
+            var xnetConn = connClients[i] as XNetConnection;
+            if (xnetConn != null && xnetConn.ClientId == clientId)
+                return xnetConn;
+        }
+
+        Debug.Log("client not found");
+        return null;
+    }
 }

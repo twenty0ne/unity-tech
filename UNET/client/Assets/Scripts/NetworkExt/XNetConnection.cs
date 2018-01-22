@@ -5,13 +5,34 @@ using UnityEngine.Networking;
 
 public class XNetConnection : NetworkConnection 
 {
-	public XNetConnection(string uid)
+    private string clientId;
+    public string ClientId { get { return clientId;  } }
+
+	public XNetConnection(string clientId)
 	{
+        this.clientId = clientId;
 	}
 
 	public override bool TransportSend(byte[] bytes, int numBytes, int channelId, out byte error)
 	{
-		
+        // TODO
+        //if (clientId == local client id)
+        //{
+            
+        //}
+
+        // Send packet to peer
+        bool ret = XNetManager.instance.Send(bytes, numBytes, channelId);
+        if (ret)
+        {
+            error = 0;
+            return true;
+        }
+        else
+        {
+            error = 1;
+            return false;
+        }
 	}
 }
 

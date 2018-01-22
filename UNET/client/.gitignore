@@ -34,3 +34,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+#######################
+!/Assets/Plugins/NetworkExt/Lidgren.Network.pdb
+!/Assets/Plugins/NetworkExt/Lidgren.Network.dll.mdb
+PojectSettings/ProjectVersion.txt
+#######################
