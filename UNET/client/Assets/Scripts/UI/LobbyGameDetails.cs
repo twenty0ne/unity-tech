@@ -4,7 +4,9 @@ using UnityEngine.Networking;
 using Tanks.Map;
 using Tanks.Rules;
 using Tanks.Networking;
+#if !XNET
 using TanksNetworkManager = Tanks.Networking.NetworkManager;
+#endif
 
 namespace Tanks.UI
 {
@@ -42,7 +44,11 @@ namespace Tanks.UI
 
 		//Internal references to game settings and network manager.
 		protected GameSettings m_Settings;
-		protected TanksNetworkManager m_NetManager;
+#if XNET
+        protected MyNetManager m_NetManager;
+#else
+        protected TanksNetworkManager m_NetManager;
+#endif
 
 		/// <summary>
 		/// Uses provided map data to populate backgrounds, descriptions, etc. on this screen.
@@ -101,16 +107,39 @@ namespace Tanks.UI
 		{
 			GameSettings.s_Instance.SetMapIndex(m_CurrentIndex);
 
-			for (int i = 0; i < TanksNetworkManager.s_Instance.connectedPlayers.Count; i++)
+#if XNET
+#else
+            for (int i = 0; i < TanksNetworkManager.s_Instance.connectedPlayers.Count; i++)
 			{
 				TanksNetworkManager.s_Instance.connectedPlayers[i].RpcSetGameSettings(m_CurrentIndex, m_Settings.modeIndex);
 			}
+#endif
 		}
 
 		protected virtual void OnEnable()
 		{
-			//Enable or disable map selection buttons based on whether this is the host or not.
-			for (int i = 0; i < m_MapButtons.Length; i++)
+#if XNET
+            //Enable or disable map selection buttons based on whether this is the host or not.
+            for (int i = 0; i < m_MapButtons.Length; i++)
+            {
+                m_MapButtons[i].SetActive(XNetManager.Instance.IsHost());
+            }
+
+            if (m_NetManager == null)
+            {
+                m_NetManager = MyNetManager.instance;
+            }
+
+            if (m_NetManager != null)
+            {
+                //m_NetManager.clientDisconnected += OnDisconnect;
+                //m_NetManager.clientError += OnError;
+                //m_NetManager.serverError += OnError;
+                //m_NetManager.matchDropped += OnDrop;
+            }
+#else
+            //Enable or disable map selection buttons based on whether this is the host or not.
+            for (int i = 0; i < m_MapButtons.Length; i++)
 			{
 				m_MapButtons[i].SetActive(TanksNetworkManager.s_IsServer);
 			}
@@ -127,20 +156,25 @@ namespace Tanks.UI
 				m_NetManager.serverError += OnError;
 				m_NetManager.matchDropped += OnDrop;
 			}
-		}
+#endif
+        }
 
 		protected virtual void OnDisable()
 		{
-			if (m_NetManager != null)
+#if XNET
+
+#else
+            if (m_NetManager != null)
 			{
 				m_NetManager.clientDisconnected -= OnDisconnect;
 				m_NetManager.clientError -= OnError;
 				m_NetManager.serverError -= OnError;
 				m_NetManager.matchDropped -= OnDrop;
 			}
-		}
+#endif
+        }
 
-		protected virtual void OnError(NetworkConnection conn, int errorCode)
+        protected virtual void OnError(NetworkConnection conn, int errorCode)
 		{
 			MainMenuUI menuUi = MainMenuUI.s_Instance;
 

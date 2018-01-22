@@ -23,12 +23,20 @@ namespace Tanks.UI
 
 		//Cached references to other UI singletons.
 		private MainMenuUI m_MenuUi;
-		private NetworkManager m_NetManager;
+#if XNET
+        private MyNetManager m_NetManager;
+#else
+        private NetworkManager m_NetManager;
+#endif
 
 		protected virtual void Start()
 		{
 			m_MenuUi = MainMenuUI.s_Instance;
-			m_NetManager = NetworkManager.s_Instance;
+#if XNET
+            m_NetManager = MyNetManager.instance;
+#else
+            m_NetManager = NetworkManager.s_Instance;
+#endif
 		}
 
 		/// <summary>
@@ -44,11 +52,14 @@ namespace Tanks.UI
 		/// </summary>
 		public void OnCreateClicked()
 		{
-			if (string.IsNullOrEmpty(m_MatchNameInput.text))
+#if XNET
+#else
+            if (string.IsNullOrEmpty(m_MatchNameInput.text))
 			{
 				m_MenuUi.ShowInfoPopup("Server name cannot be empty!", null);
 				return;
 			}
+#endif
 
 			StartMatchmakingGame();
 		}
@@ -65,7 +76,20 @@ namespace Tanks.UI
 			m_MenuUi.ShowConnectingModal(false);
 
 			Debug.Log(GetGameName());
-			m_NetManager.StartMatchmakingGame(GetGameName(), (success, matchInfo) =>
+#if XNET
+            m_NetManager.StartMatchmaking("0wI4g5Q8", (success, matchInfo) => {
+                if (!success)
+                {
+                    m_MenuUi.ShowInfoPopup("Failed to create game.", null);
+                }
+                else
+                {
+                    m_MenuUi.HideInfoPopup();
+                    m_MenuUi.ShowLobbyPanel();
+                }
+            });
+#else
+            m_NetManager.StartMatchmakingGame(GetGameName(), (success, matchInfo) =>
 				{
 					if (!success)
 					{
@@ -77,6 +101,7 @@ namespace Tanks.UI
 						m_MenuUi.ShowLobbyPanel();
 					}
 				});
+#endif
 		}
 
 		//Returns a formatted string containing server name and game mode information.

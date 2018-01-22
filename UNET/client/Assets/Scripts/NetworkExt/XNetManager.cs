@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 using Lidgren.Network;
 using UnityEngine.Networking.NetworkSystem;
 
-public class XNetManager : MonoBehaviour 
+public class XNetManager 
 {
 	private const int MAX_CONNECTIONS = 2;
 
@@ -14,18 +14,19 @@ public class XNetManager : MonoBehaviour
 	// H2C = host to client
 	public class DataType
 	{
-        public const int C2H_Connect = 0;
-        public const int H2C_Accept = 1;
-        public const int Sync = 2;
+        public const int MATCH = 0;
+        public const int C2H_Connect = 1;
+        public const int H2C_Accept = 2;
+        public const int Sync = 3;
 	}
 
-	public static XNetManager instance = null;
+	private static XNetManager instance = null;
 
-	private Lidgren.Network.NetClient netClient = null;
+	protected Lidgren.Network.NetClient netClient = null;
 	private HostTopology hostTopology = null;
 
     private GameObject playerPrefab;
-    private List<GameObject> netPrefabs;
+    [SerializeField] private List<GameObject> netPrefabs = new List<GameObject>();
 
     // client to server connection
     // for host: local client to host
@@ -33,48 +34,101 @@ public class XNetManager : MonoBehaviour
     private NetworkClient myClient = null;
     private List<NetworkConnection> connClients = new List<NetworkConnection>();
 
-	private void Awake()
-	{
-		if (instance != null) 
-		{
-			Debug.LogError ("More than one XNetManager instance was found.");
-			this.enabled = false;
-			return;
-		}
+	//protected void Awake()
+	//{
+	//	if (instance != null) 
+	//	{
+	//		Debug.LogError ("More than one XNetManager instance was found.");
+	//		this.enabled = false;
+	//		return;
+	//	}
 
-		instance = this;
+	//	instance = this;
+ //       // DontDestroyOnLoad(gameObject);
+	//}
+
+	//private void OnDestroy()
+	//{
+	//	instance = null;
+
+	//	if (netClient != null) 
+	//	{
+	//		netClient.Disconnect ("disconnect from destroy");
+	//		netClient = null;
+	//	}
+	//}
+
+	//private void Update()
+	//{
+	//	if (netClient != null) 
+	//	{
+	//		this.PeekMessages ();
+	//	}
+	//}
+
+    public static XNetManager Instance
+    {
+        get
+        {
+            if (instance == null)
+                instance = new XNetManager();
+            return instance;
+        }
+    }
+
+    public void Init()
+    {
+
+    }
+
+    public void Release()
+    {
+        if (netClient != null)
+        {
+            netClient.Disconnect("disconnect from destroy");
+            netClient = null;
+        }
+
+        instance = null;
+    }
+
+    public void Update()
+    {
+        if (netClient != null) 
+        {
+            this.PeekMessages ();
+        }
+    }
+
+    private System.Action<bool> cbServerConnect;
+    public void ConnectServer(string address, int port, System.Action<bool> onConnect)
+    {
+        cbServerConnect = onConnect;
+
+        // Connect to pvp game server
+        NetPeerConfiguration config = new NetPeerConfiguration("pvp");
+        config.EnableMessageType(NetIncomingMessageType.ConnectionLatencyUpdated);
+        // config.AutoFlushSendQueue = false;
+        netClient = new NetClient(config);
+
+        netClient.Start();
+        // NetOutgoingMessage hail = netClient.CreateMessage();
+        netClient.Connect(address, port);
+    }
+
+	private void OnServerConnected()
+	{
+        if (cbServerConnect != null)
+            cbServerConnect(true);
 	}
 
-	private void OnDestroy()
+    private void OnServerDisconnected()
 	{
-		instance = null;
-
-		if (netClient != null) 
-		{
-			netClient.Disconnect ("disconnect from destroy");
-			netClient = null;
-		}
+        if (cbServerConnect != null)
+            cbServerConnect(false);
 	}
 
-	private void Update()
-	{
-		if (netClient != null) 
-		{
-			this.PeekMessages ();
-		}
-	}
-
-	private void OnConnected()
-	{
-		
-	}
-
-	private void OnDisconnected()
-	{
-		
-	}
-
-	private void OnData(NetIncomingMessage im)
+    private void OnServerData(NetIncomingMessage im)
 	{
 		int dataType = im.ReadInt32();
 		if (dataType == DataType.C2H_Connect)
@@ -147,14 +201,14 @@ public class XNetManager : MonoBehaviour
 					Debug.Log (status.ToString () + ": " + reason);
 
 					if (status == NetConnectionStatus.Connected)
-						this.OnConnected ();
+						this.OnServerConnected ();
 					else if (status == NetConnectionStatus.Disconnected)
-						this.OnDisconnected ();
+						this.OnServerDisconnected ();
 				}
 				break;
 			case NetIncomingMessageType.Data:
 				{
-					this.OnData (im);
+					this.OnServerData (im);
 				}
 				break;
 			default:
@@ -245,6 +299,7 @@ public class XNetManager : MonoBehaviour
     public bool Send(byte[] bytes, int numBytes, int channelId = 0)
     {
         NetOutgoingMessage om = netClient.CreateMessage();
+        om.Write(DataType.Sync);
         om.Write(numBytes);
         om.Write(bytes);
         netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, channelId);
@@ -268,5 +323,37 @@ public class XNetManager : MonoBehaviour
 
         Debug.Log("client not found");
         return null;
+    }
+
+    public bool IsHost()
+    {
+        return NetworkServer.active;
+    }
+
+    public bool IsConnectServer()
+    {
+        return netClient != null && netClient.ConnectionStatus == NetConnectionStatus.Connected;
+    }
+
+    //public void SendMessage(XNetMessage msg)
+    //{
+    //    // TODO
+    //    // hard code
+    //    Debug.Assert(netClient != null, "CHECK: netClient is null");
+
+    //    NetOutgoingMessage om = netClient.CreateMessage(msg.Data.Length);
+    //    System.Array.Copy(om.Data,  msg.Data, msg.Data.Length);
+    //    netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, 0);
+    //}
+
+    public void SendMessage(NetOutgoingMessage msg)
+    {
+        // TODO
+        // hard code
+        Debug.Assert(netClient != null, "CHECK: netClient is null");
+
+        //NetOutgoingMessage om = netClient.CreateMessage(msg.Data.Length);
+        //System.Array.Copy(om.Data, msg.Data, msg.Data.Length);
+        netClient.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 0);
     }
 }

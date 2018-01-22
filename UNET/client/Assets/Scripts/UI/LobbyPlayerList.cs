@@ -18,7 +18,7 @@ namespace Tanks.UI
 		[SerializeField]
 		protected GameObject m_WarningDirectPlayServer;
 
-		private NetworkManager m_NetManager;
+        private NetworkManager m_NetManager;
 
 		protected virtual void Awake()
 		{
@@ -28,7 +28,7 @@ namespace Tanks.UI
 		//Subscribe to events on start
 		protected virtual void Start()
 		{
-			m_NetManager = NetworkManager.s_Instance;
+            m_NetManager = NetworkManager.s_Instance;
 			if (m_NetManager != null)
 			{
 				m_NetManager.playerJoined += PlayerJoined;
@@ -40,7 +40,7 @@ namespace Tanks.UI
 		//Unsubscribe to events on destroy
 		protected virtual void OnDestroy()
 		{
-			if (m_NetManager != null)
+            if (m_NetManager != null)
 			{
 				m_NetManager.playerJoined -= PlayerJoined;
 				m_NetManager.playerLeft -= PlayerLeft;

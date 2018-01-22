@@ -9,22 +9,36 @@ using SamplesCommon;
 
 namespace ChatServer
 {
-    public class DATA_TYPE
+    public class DataType
     {
-        public const int DAT_CONNECT = 0;
-        public const int DAT_UNET = 1;
+        public const int MATCH = 0;
+        public const int C2H_Connect = 1;
+        public const int H2C_Accept = 2;
+        public const int Sync = 3;
+    }
+
+    public class NetCode
+    {
+        public const int OK = 0;
+        // match
+        public const int MATCH_ROOMCREATE_SUCCESS = 100;
+        public const int MATCH_ROOMCREATE_FAIL = 101;
+        public const int MATCH_ROOMJOIN_SUCCESS = 102;
+        public const int MATCH_ROOMJOIN_FAIL = 103;
     }
 
     static class Program
 	{
+        private const int MAX_CONNECTIONS = 4;
+
 		private static Form1 s_form;
 		private static NetServer s_server;
 		private static NetPeerSettingsWindow s_settingsWindow;
 
         private class Room
         {
-            public string id;
-            public int timeCreate;
+            public string name;
+            //public int timeCreate;
 
             //public string ipHost;
             //public int portHost;
@@ -32,7 +46,8 @@ namespace ChatServer
             //public string ipClient;
             //public int portClient;
             public NetConnection host;
-            public NetConnection client;
+            // public NetConnection client;
+            public List<NetConnection> conns = new List<NetConnection>();
         }
 
         private static Dictionary<string, Room> s_rooms = new Dictionary<string, Room>();
@@ -46,8 +61,8 @@ namespace ChatServer
 			s_form = new Form1();
 
 			// set up network
-			NetPeerConfiguration config = new NetPeerConfiguration("chat");
-			config.MaximumConnections = 100;
+			NetPeerConfiguration config = new NetPeerConfiguration("pvp");
+			config.MaximumConnections = 4;
 			config.Port = 14242;
 			s_server = new NetServer(config);
 
@@ -86,33 +101,33 @@ namespace ChatServer
 
                             if (status == NetConnectionStatus.Connected)
                             {
-                                string roomId = im.SenderConnection.RemoteHailMessage.ReadString();
-                                Output("Remote hail: roomId>" + roomId);
+                                //string roomId = im.SenderConnection.RemoteHailMessage.ReadString();
+                                //Output("Remote hail: roomId>" + roomId);
 
-                                // create host
-                                if (s_rooms.ContainsKey(roomId) == false)
-                                {
-                                    Room room = new Room();
-                                    room.id = roomId;
-                                    room.host = im.SenderConnection;
-                                    s_rooms[room.id] = room;
+                                //// create host
+                                //if (s_rooms.ContainsKey(roomId) == false)
+                                //{
+                                //    Room room = new Room();
+                                //    room.id = roomId;
+                                //    room.host = im.SenderConnection;
+                                //    s_rooms[room.id] = room;
 
-                                    s_refRooms[im.SenderConnection.RemoteUniqueIdentifier.ToString()] = room.id;
-                                }
-                                // create client
-                                else 
-                                {
-                                    Room room = s_rooms[roomId];
-                                    room.client = im.SenderConnection;
+                                //    s_refRooms[im.SenderConnection.RemoteUniqueIdentifier.ToString()] = room.id;
+                                //}
+                                //// create client
+                                //else 
+                                //{
+                                //    Room room = s_rooms[roomId];
+                                //    room.client = im.SenderConnection;
 
-                                    s_refRooms[im.SenderConnection.RemoteUniqueIdentifier.ToString()] = room.id;
+                                //    s_refRooms[im.SenderConnection.RemoteUniqueIdentifier.ToString()] = room.id;
 
-                                    // send connect to host
-                                    NetOutgoingMessage om = s_server.CreateMessage(im.Data.Length);
-                                    om.Write(DATA_TYPE.DAT_CONNECT);
-                                    om.Write(im.SenderConnection.RemoteUniqueIdentifier.ToString());
-                                    s_server.SendMessage(om, room.host, NetDeliveryMethod.ReliableOrdered, 0);
-                                }
+                                //    // send connect to host
+                                //    NetOutgoingMessage om = s_server.CreateMessage(im.Data.Length);
+                                //    om.Write(DATA_TYPE.DAT_CONNECT);
+                                //    om.Write(im.SenderConnection.RemoteUniqueIdentifier.ToString());
+                                //    s_server.SendMessage(om, room.host, NetDeliveryMethod.ReliableOrdered, 0);
+                                //}
                             }
                             else if (status == NetConnectionStatus.Disconnected)
                             {
@@ -123,39 +138,69 @@ namespace ChatServer
 							break;
 						case NetIncomingMessageType.Data:
                             // incoming chat message from a client
+                            string client_id = im.SenderConnection.RemoteUniqueIdentifier.ToString();
 
-                            // broadcast this to all connections, except sender
-                            //List<NetConnection> all = s_server.Connections; // get copy
-                            //all.Remove(im.SenderConnection);
+                            int dataType = im.ReadInt32();
+                            if (dataType == DataType.MATCH)
+                            {
+                                string roomName = im.ReadString();
+                                if (s_rooms.ContainsKey(roomName) == false)
+                                {
+                                    Room room = new Room();
+                                    s_rooms[roomName] = room;
 
-                            //if (all.Count > 0)
+                                    room.name = roomName;
+                                    room.host = im.SenderConnection;
+                                    room.conns.Add(im.SenderConnection);
+
+                                    NetOutgoingMessage om = s_server.CreateMessage();
+                                    om.Write(DataType.MATCH);
+                                    om.Write(NetCode.MATCH_ROOMCREATE_SUCCESS);
+                                    s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                                }
+                                else
+                                {
+                                    Room room = s_rooms[roomName];
+                                    if (room == null || room.conns.Count >= MAX_CONNECTIONS)
+                                    {
+                                        NetOutgoingMessage om = s_server.CreateMessage();
+                                        om.Write(DataType.MATCH);
+                                        om.Write(NetCode.MATCH_ROOMJOIN_FAIL);
+                                        s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                                    }
+                                    else
+                                    {
+                                        room.conns.Add(im.SenderConnection);
+
+                                        NetOutgoingMessage om = s_server.CreateMessage();
+                                        om.Write(DataType.MATCH);
+                                        om.Write(NetCode.MATCH_ROOMJOIN_SUCCESS);
+                                        s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                                    }
+                                }
+                            }
+
+                            //string remote_id = im.SenderConnection.RemoteUniqueIdentifier.ToString();
+                            //if (s_refRooms.ContainsKey(remote_id))
                             //{
+                            //    string room_id = s_refRooms[remote_id];
+                            //    Room room = s_rooms[room_id];
+
                             //    NetOutgoingMessage om = s_server.CreateMessage(im.Data.Length);
                             //    om.Write(im.Data);
-                            //    s_server.SendMessage(om, all, NetDeliveryMethod.ReliableOrdered, 0);
+                            //    if (remote_id == room.host.RemoteUniqueIdentifier.ToString() && room.client != null)
+                            //    {
+                            //        s_server.SendMessage(om, room.client, NetDeliveryMethod.ReliableOrdered, 0);
+                            //    }
+                            //    else if (room.client != null && remote_id == room.client.RemoteUniqueIdentifier.ToString())
+                            //    {
+                            //        s_server.SendMessage(om, room.host, NetDeliveryMethod.ReliableOrdered, 0);
+                            //    }
                             //}
-
-                            string remote_id = im.SenderConnection.RemoteUniqueIdentifier.ToString();
-                            if (s_refRooms.ContainsKey(remote_id))
-                            {
-                                string room_id = s_refRooms[remote_id];
-                                Room room = s_rooms[room_id];
-
-                                NetOutgoingMessage om = s_server.CreateMessage(im.Data.Length);
-                                om.Write(im.Data);
-                                if (remote_id == room.host.RemoteUniqueIdentifier.ToString() && room.client != null)
-                                {
-                                    s_server.SendMessage(om, room.client, NetDeliveryMethod.ReliableOrdered, 0);
-                                }
-                                else if (room.client != null && remote_id == room.client.RemoteUniqueIdentifier.ToString())
-                                {
-                                    s_server.SendMessage(om, room.host, NetDeliveryMethod.ReliableOrdered, 0);
-                                }
-                            }
-                            else
-                            {
-                                Output("ERROR: cant find room for remote id>" + remote_id);
-                            }
+                            //else
+                            //{
+                            //    Output("ERROR: cant find room for remote id>" + remote_id);
+                            //}
 
                             /*
 							string chat = im.ReadString();

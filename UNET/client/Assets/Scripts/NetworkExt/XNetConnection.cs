@@ -22,7 +22,7 @@ public class XNetConnection : NetworkConnection
         //}
 
         // Send packet to peer
-        bool ret = XNetManager.instance.Send(bytes, numBytes, channelId);
+        bool ret = XNetManager.Instance.Send(bytes, numBytes, channelId);
         if (ret)
         {
             error = 0;
