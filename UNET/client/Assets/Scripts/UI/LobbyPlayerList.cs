@@ -18,7 +18,11 @@ namespace Tanks.UI
 		[SerializeField]
 		protected GameObject m_WarningDirectPlayServer;
 
+#if XNET
+        private XNetManager m_NetManager;
+#else
         private NetworkManager m_NetManager;
+#endif
 
 		protected virtual void Awake()
 		{
@@ -28,8 +32,12 @@ namespace Tanks.UI
 		//Subscribe to events on start
 		protected virtual void Start()
 		{
+#if XNET
+            m_NetManager = XNetManager.instance;
+#else
             m_NetManager = NetworkManager.s_Instance;
-			if (m_NetManager != null)
+#endif
+            if (m_NetManager != null)
 			{
 				m_NetManager.playerJoined += PlayerJoined;
 				m_NetManager.playerLeft += PlayerLeft;

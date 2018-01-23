@@ -5,10 +5,19 @@ using UnityEngine.Networking;
 
 using Lidgren.Network;
 using UnityEngine.Networking.NetworkSystem;
+using Tanks.UI;
+using UnityEngine.Networking.Types;
+using System;
+using UnityEngine.Networking.Match;
+using Tanks.Map;
+using Tanks;
+using UnityEngine.SceneManagement;
 
-public class XNetManager 
+public class XNetManager : MonoBehaviour
 {
-	private const int MAX_CONNECTIONS = 2;
+    private static readonly string s_LobbySceneName = "LobbyScene";
+
+    private const int MAX_CONNECTIONS = 2;
 
 	// C2H = client to host
 	// H2C = host to client
@@ -20,13 +29,24 @@ public class XNetManager
         public const int Sync = 3;
 	}
 
-	private static XNetManager instance = null;
+    public class NetCode
+    {
+        public const int OK = 0;
+        // match
+        public const int MATCH_ROOMCREATE_SUCCESS = 100;
+        public const int MATCH_ROOMCREATE_FAIL = 101;
+        public const int MATCH_ROOMJOIN_SUCCESS = 102;
+        public const int MATCH_ROOMJOIN_FAIL = 103;
+    }
+
+    public static XNetManager instance = null;
 
 	protected Lidgren.Network.NetClient netClient = null;
-	private HostTopology hostTopology = null;
+	// private HostTopology hostTopology = null;
 
-    private GameObject playerPrefab;
+    [SerializeField] private GameObject playerPrefab;
     [SerializeField] private List<GameObject> netPrefabs = new List<GameObject>();
+    //[SerializeField] private Tanks.Networking.NetworkPlayer m_NetworkPlayerPrefab;
 
     // client to server connection
     // for host: local client to host
@@ -34,71 +54,77 @@ public class XNetManager
     private NetworkClient myClient = null;
     private List<NetworkConnection> connClients = new List<NetworkConnection>();
 
-	//protected void Awake()
-	//{
-	//	if (instance != null) 
-	//	{
-	//		Debug.LogError ("More than one XNetManager instance was found.");
-	//		this.enabled = false;
-	//		return;
-	//	}
-
-	//	instance = this;
- //       // DontDestroyOnLoad(gameObject);
-	//}
-
-	//private void OnDestroy()
-	//{
-	//	instance = null;
-
-	//	if (netClient != null) 
-	//	{
-	//		netClient.Disconnect ("disconnect from destroy");
-	//		netClient = null;
-	//	}
-	//}
-
-	//private void Update()
-	//{
-	//	if (netClient != null) 
-	//	{
-	//		this.PeekMessages ();
-	//	}
-	//}
-
-    public static XNetManager Instance
+    protected GameSettings m_Settings;
+    public List<Tanks.Networking.NetworkPlayer> connectedPlayers
     {
-        get
+        get;
+        private set;
+    }
+
+    private void Awake()
+    {
+        if (instance != null)
         {
-            if (instance == null)
-                instance = new XNetManager();
-            return instance;
+            Debug.LogError("More than one XNetManager instance was found.");
+            this.enabled = false;
+            return;
         }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        connectedPlayers = new List<Tanks.Networking.NetworkPlayer>();
     }
 
-    public void Init()
+    private void Start()
     {
-
+        m_Settings = GameSettings.s_Instance;
     }
 
-    public void Release()
+    private void OnDestroy()
     {
+        instance = null;
+
         if (netClient != null)
         {
             netClient.Disconnect("disconnect from destroy");
             netClient = null;
         }
-
-        instance = null;
     }
 
-    public void Update()
+    private void Update()
     {
-        if (netClient != null) 
+        if (netClient != null)
         {
-            this.PeekMessages ();
+            this.PeekMessages();
         }
     }
+
+    //public static XNetManager Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //            instance = new XNetManager();
+    //        return instance;
+    //    }
+    //}
+
+    //public void Init()
+    //{
+
+    //}
+
+    //public void Release()
+    //{
+    //    if (netClient != null)
+    //    {
+    //        netClient.Disconnect("disconnect from destroy");
+    //        netClient = null;
+    //    }
+
+    //    instance = null;
+    //}
 
     private System.Action<bool> cbServerConnect;
     public void ConnectServer(string address, int port, System.Action<bool> onConnect)
@@ -174,6 +200,32 @@ public class XNetManager
                 conn.TransportReceive(byteArray, byteLength, 0);
 			}
 		}
+        else if (dataType == DataType.MATCH)
+        {
+            Debug.Assert(cbMatch != null, "CHECK");
+
+            int code = im.ReadInt32();
+
+            bool success = (code == NetCode.MATCH_ROOMCREATE_SUCCESS || code == NetCode.MATCH_ROOMJOIN_SUCCESS);
+            bool isHost = (code == NetCode.MATCH_ROOMCREATE_SUCCESS || code == NetCode.MATCH_ROOMCREATE_FAIL);
+            
+			XNetMatchInfo matchInfo = new XNetMatchInfo();
+			matchInfo.isHost = isHost;
+			cbMatch(success, matchInfo);
+			
+			if (success)
+			{
+                if (isHost)
+                {
+                    StartHost();
+                    StartLocalClient();
+                }
+                else
+                {
+                    StartRemoteClient();
+                }
+			}
+        }
 	}
 
 	private void PeekMessages()
@@ -219,23 +271,56 @@ public class XNetManager
 		}
 	}
 
-	private void InitUnetHost()
-	{
-		Debug.Log ("init unet host");
+    private static HostTopology m_hostTopology = null;
+    public static HostTopology hostTopology
+    {
+        get
+        {
+            if (m_hostTopology == null)
+            {
+                ConnectionConfig config = new ConnectionConfig();
+                config.AddChannel(QosType.ReliableSequenced);
+                config.AddChannel(QosType.Unreliable);
+                m_hostTopology = new HostTopology(config, 2);
+            }
 
-		ConnectionConfig config = new ConnectionConfig ();
-		config.AddChannel (QosType.ReliableSequenced);
-		config.AddChannel (QosType.Unreliable);
-		hostTopology = new HostTopology (config, MAX_CONNECTIONS);
+            return m_hostTopology;
+        }
+    }
+
+    // NOTE
+    // when match create
+    public void StartHost()
+	{
+		//ConnectionConfig config = new ConnectionConfig ();
+		//config.AddChannel (QosType.ReliableSequenced);
+		//config.AddChannel (QosType.Unreliable);
+		//hostTopology = new HostTopology (config, MAX_CONNECTIONS);
 
 		// Listen for player spawn request messages 
-		// NetworkServer.RegisterHandler(NetworkMessages.SpawnRequestMsg, OnSpawnRequested);
+		NetworkServer.RegisterHandler(XNetMessage.SpawnRequestMsg, OnSpawnRequested);
 
 		// Start UNET server
 		NetworkServer.Configure(hostTopology);
 		NetworkServer.dontListen = true;
 		NetworkServer.Listen(0);
+		
+		OnStartHost();
+	}
 
+    void OnSpawnRequested(NetworkMessage msg)
+    {
+        Debug.Log("Spawn request received");
+    }
+
+
+    public virtual void OnStartHost()
+	{
+		
+	}	
+	
+	public void StartLocalClient()
+	{
 		// Create a local client-to-server connection to the "server"
 		// Connect to localhost to trick UNET's ConnectState state to "Connected", which allows data to pass through TransportSend
 		myClient = ClientScene.ConnectLocalServer();
@@ -250,12 +335,44 @@ public class XNetManager
 
         RegisterNetworkPrefabs();
 
+        //myClient.RegisterHandler(MsgType.AddPlayer, OnServerAddPlayerMessageInternal);
+
         // Spawn self
         ClientScene.Ready(localClientToHostConn);
+        //ClientScene.AddPlayer(0);
         SpawnPlayer(localClientToHostConn);
+
+        OnStartLocalClient();
+	}
+	
+	public virtual void OnStartLocalClient()
+	{
+		
 	}
 
-	private void AddConnection(NetworkConnection conn)
+    public void StartRemoteClient()
+    {
+
+    }
+
+    public virtual void OnStartRemoteClient()
+    {
+
+    }
+
+    internal void OnServerAddPlayerMessageInternal(NetworkMessage netMsg)
+    {
+        //if (LogFilter.logDebug) { Debug.Log("NetworkManager:OnServerAddPlayerMessageInternal"); }
+
+        //Tanks.Networking.NetworkPlayer newPlayer = Instantiate<Tanks.Networking.NetworkPlayer>(playerPrefab);
+        //DontDestroyOnLoad(newPlayer);
+        //NetworkServer.AddPlayerForConnection(netMsg.conn, newPlayer.gameObject, playerControllerId);
+        //NetworkServer.SpawnWithClientAuthority(newPlayer.gameObject, netMsg.conn);
+        SpawnPlayer(netMsg.conn);
+    }
+
+    //
+    private void AddConnection(NetworkConnection conn)
 	{
         connClients.Add(conn);
 	}
@@ -275,8 +392,10 @@ public class XNetManager
 
         NetworkServer.SetClientReady(conn);
         var player = GameObject.Instantiate(playerPrefab);
+        //DontDestroyOnLoad(player);
 
-        return NetworkServer.SpawnWithClientAuthority(player, conn);
+        //return NetworkServer.SpawnWithClientAuthority(player, conn);
+        return NetworkServer.AddPlayerForConnection(conn, player, 0);
     }
 
     private void OnRemoteClientConnect(NetworkMessage msg)
@@ -346,14 +465,210 @@ public class XNetManager
     //    netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, 0);
     //}
 
-    public void SendMessage(NetOutgoingMessage msg)
-    {
-        // TODO
-        // hard code
-        Debug.Assert(netClient != null, "CHECK: netClient is null");
+    //public void SendMessage(NetOutgoingMessage msg)
+    //{
+    //    // TODO
+    //    // hard code
+    //    Debug.Assert(netClient != null, "CHECK: netClient is null");
 
-        //NetOutgoingMessage om = netClient.CreateMessage(msg.Data.Length);
-        //System.Array.Copy(om.Data, msg.Data, msg.Data.Length);
-        netClient.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 0);
+    //    //NetOutgoingMessage om = netClient.CreateMessage(msg.Data.Length);
+    //    //System.Array.Copy(om.Data, msg.Data, msg.Data.Length);
+    //    netClient.SendMessage(msg, NetDeliveryMethod.ReliableOrdered, 0);
+    //}
+
+    public NetClient GetNetClient()
+    {
+        return netClient;
+    }
+
+    public void Disconnect()
+    {
+    }
+
+    #region MatchMaking
+
+    private System.Action<bool, XNetMatchInfo> cbMatch;
+    public void StartMatchmaking(string roomName, System.Action<bool, XNetMatchInfo> onMatch)
+    {
+        cbMatch = onMatch;
+
+        if (IsConnectServer() == false)
+        {
+            ConnectServer("127.0.0.1", 14242, (success) =>
+            {
+                // TODO
+                // refactor > user shouldn't know NetOutgoingMessage exit
+                //XNetMessage msg = new XNetMessage();
+                //msg.Write(XNetManager.DataType.MATCH);
+                //msg.Write(roomName);
+
+                NetOutgoingMessage om = netClient.CreateMessage();
+                om.Write(DataType.MATCH);
+                om.Write(roomName);
+                netClient.SendMessage(om, Lidgren.Network.NetDeliveryMethod.ReliableOrdered, 0);
+
+                // XNetManager.Instance.SendMessage(msg);
+
+                //XNetMatchInfo matchInfo = new XNetMatchInfo();
+                //onMatch(true, matchInfo);
+            });
+        }
+        else
+        {
+            NetOutgoingMessage om = netClient.CreateMessage();
+            om.Write(DataType.MATCH);
+            om.Write(roomName);
+            netClient.SendMessage(om, Lidgren.Network.NetDeliveryMethod.ReliableOrdered, 0);
+        }
+    }
+    #endregion
+
+    public event System.Action<Tanks.Networking.NetworkPlayer> playerJoined;
+    public event System.Action<Tanks.Networking.NetworkPlayer> playerLeft;
+    public event System.Action serverPlayersReadied;
+    public event System.Action<NetworkConnection> clientDisconnected;
+    public event System.Action<NetworkConnection, int> clientError;
+    public event System.Action<NetworkConnection, int> serverError;
+    public event System.Action matchDropped;
+    public event Action gameModeUpdated;
+    public event Action clientStopped;
+
+    public bool hasSufficientPlayers
+    {
+        get
+        {
+            // return isSinglePlayer ? playerCount >= 1 : playerCount >= 2;
+            return false;
+        }
+    }
+
+    public static bool s_IsServer
+    {
+        get
+        {
+            return NetworkServer.active;
+        }
+    }
+
+    public virtual void OnPlayerSetReady(Tanks.Networking.NetworkPlayer player)
+    {
+        if (AllPlayersReady() && serverPlayersReadied != null)
+        {
+            serverPlayersReadied();
+        }
+    }
+
+    protected virtual void UpdatePlayerIDs()
+    {
+        for (int i = 0; i < connectedPlayers.Count; ++i)
+        {
+            connectedPlayers[i].SetPlayerId(i);
+        }
+    }
+
+    public void RegisterNetworkPlayer(Tanks.Networking.NetworkPlayer newPlayer)
+    {
+        MapDetails currentMap = m_Settings.map;
+        Debug.Log("Player joined");
+
+        connectedPlayers.Add(newPlayer);
+        newPlayer.becameReady += OnPlayerSetReady;
+
+        if (s_IsServer)
+        {
+            UpdatePlayerIDs();
+        }
+
+        // Send initial scene message
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (currentMap != null && sceneName == currentMap.sceneName)
+        {
+            newPlayer.OnEnterGameScene();
+        }
+        else if (sceneName == s_LobbySceneName)
+        {
+            newPlayer.OnEnterLobbyScene();
+        }
+
+        if (playerJoined != null)
+        {
+            playerJoined(newPlayer);
+        }
+
+        newPlayer.gameDetailsReady += FireGameModeUpdated;
+    }
+
+    protected void FireGameModeUpdated()
+    {
+        if (gameModeUpdated != null)
+        {
+            gameModeUpdated();
+        }
+    }
+
+    public void DeregisterNetworkPlayer(Tanks.Networking.NetworkPlayer removedPlayer)
+    {
+
+    }
+
+    public void ProgressToGameScene()
+    {
+        //// Clear all client's ready states
+        //ClearAllReadyStates();
+
+        //// Remove us from matchmaking lists
+        //UnlistMatch();
+
+        //// Update will change scenes once loading screen is visible
+        //m_SceneChangeMode = SceneChangeMode.Game;
+
+        //// Tell NetworkPlayers to show their loading screens
+        //for (int i = 0; i < connectedPlayers.Count; ++i)
+        //{
+        //    NetworkPlayer player = connectedPlayers[i];
+        //    if (player != null)
+        //    {
+        //        player.RpcPrepareForLoad();
+        //    }
+        //}
+    }
+
+    public void ReturnToMenu(MenuPage returnPage)
+    {
+    }
+
+    public bool AllPlayersReady()
+    {
+        return false;
+    }
+
+    public void ClearAllReadyStates()
+    {
+    }
+
+    public void DisconnectAndReturnToMenu() { }
+
+    public void JoinMatchmakingGame(NetworkID networkId, Action<bool, MatchInfo> onJoin)
+    {
+    }
+
+    public bool isSinglePlayer
+    {
+        get
+        {
+            return false;
+            //return gameType == NetworkGameType.Singleplayer;
+        }
+    }
+
+    public bool isNetworkActive
+    {
+        get { return false;  }
+    }
+
+    public Tanks.Networking.NetworkGameType gameType
+    {
+        get;
+        protected set;
     }
 }

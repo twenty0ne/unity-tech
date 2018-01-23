@@ -57,7 +57,11 @@ namespace Tanks
 
 		public bool isSinglePlayer
 		{
-			get { return NetworkManager.s_Instance.isSinglePlayer; }
+#if XNET
+            get { return XNetManager.instance.isSinglePlayer; }
+#else
+            get { return NetworkManager.s_Instance.isSinglePlayer; }
+#endif
 		}
 
 		/// <summary>

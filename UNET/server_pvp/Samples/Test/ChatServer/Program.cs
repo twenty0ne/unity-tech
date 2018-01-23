@@ -131,7 +131,32 @@ namespace ChatServer
                             }
                             else if (status == NetConnectionStatus.Disconnected)
                             {
-                               
+                                string clientId = im.SenderConnection.RemoteUniqueIdentifier.ToString();
+                                if (s_refRooms.ContainsKey(clientId))
+                                {
+                                    string roomName = s_refRooms[clientId];
+                                    if (roomName != null && s_rooms.ContainsKey(roomName))
+                                    {
+                                        Room room = s_rooms[roomName];
+
+                                        if (clientId == room.host.RemoteUniqueIdentifier.ToString())
+                                        {
+                                            s_rooms.Remove(roomName);
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < room.conns.Count; ++i)
+                                            {
+                                                NetConnection conn = room.conns[i];
+                                                if (conn.RemoteUniqueIdentifier.ToString() == clientId)
+                                                {
+                                                    room.conns.Remove(conn);
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
 							UpdateConnectionsList();
@@ -157,6 +182,8 @@ namespace ChatServer
                                     om.Write(DataType.MATCH);
                                     om.Write(NetCode.MATCH_ROOMCREATE_SUCCESS);
                                     s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+
+                                    s_refRooms[client_id] = roomName;
                                 }
                                 else
                                 {
@@ -176,6 +203,8 @@ namespace ChatServer
                                         om.Write(DataType.MATCH);
                                         om.Write(NetCode.MATCH_ROOMJOIN_SUCCESS);
                                         s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+
+                                        s_refRooms[client_id] = roomName;
                                     }
                                 }
                             }

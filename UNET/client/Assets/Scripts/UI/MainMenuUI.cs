@@ -170,8 +170,12 @@ namespace Tanks.UI
 		public void ShowLobbyPanelForConnection()
 		{
 			ShowPanel(m_LobbyPanel);
-			NetworkManager.s_Instance.gameModeUpdated -= ShowLobbyPanelForConnection;
-			HideInfoPopup();
+#if XNET
+            XNetManager.instance.gameModeUpdated -= ShowLobbyPanelForConnection;
+#else
+            NetworkManager.s_Instance.gameModeUpdated -= ShowLobbyPanelForConnection;
+#endif
+            HideInfoPopup();
 		}
 
 		public void ShowServerListPanel()
@@ -255,9 +259,13 @@ namespace Tanks.UI
 				throw new ArgumentNullException("task");
 			}
 
-			NetworkManager netManager = NetworkManager.s_Instance;
+#if XNET
+            XNetManager netManager = XNetManager.instance;
+#else
+            NetworkManager netManager = NetworkManager.s_Instance;
+#endif
 
-			if (netManager.isNetworkActive)
+            if (netManager.isNetworkActive)
 			{
 				m_WaitTask = task;
 
@@ -306,10 +314,10 @@ namespace Tanks.UI
 			ShowPanel(m_CreateGamePanel);
 		}
 
-		#endregion
+#endregion
 
 
-		#region Button events
+#region Button events
 
 		public void OnCustomiseClicked()
 		{
@@ -338,6 +346,6 @@ namespace Tanks.UI
 			Application.Quit();
 		}
 
-		#endregion
+#endregion
 	}
 }

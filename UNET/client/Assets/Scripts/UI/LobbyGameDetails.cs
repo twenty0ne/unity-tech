@@ -45,7 +45,7 @@ namespace Tanks.UI
 		//Internal references to game settings and network manager.
 		protected GameSettings m_Settings;
 #if XNET
-        protected MyNetManager m_NetManager;
+        protected XNetManager m_NetManager;
 #else
         protected TanksNetworkManager m_NetManager;
 #endif
@@ -122,12 +122,12 @@ namespace Tanks.UI
             //Enable or disable map selection buttons based on whether this is the host or not.
             for (int i = 0; i < m_MapButtons.Length; i++)
             {
-                m_MapButtons[i].SetActive(XNetManager.Instance.IsHost());
+                m_MapButtons[i].SetActive(XNetManager.instance.IsHost());
             }
 
             if (m_NetManager == null)
             {
-                m_NetManager = MyNetManager.instance;
+                m_NetManager = XNetManager.instance;
             }
 
             if (m_NetManager != null)

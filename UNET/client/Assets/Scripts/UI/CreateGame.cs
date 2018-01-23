@@ -24,7 +24,7 @@ namespace Tanks.UI
 		//Cached references to other UI singletons.
 		private MainMenuUI m_MenuUi;
 #if XNET
-        private MyNetManager m_NetManager;
+        private XNetManager m_NetManager;
 #else
         private NetworkManager m_NetManager;
 #endif
@@ -33,7 +33,7 @@ namespace Tanks.UI
 		{
 			m_MenuUi = MainMenuUI.s_Instance;
 #if XNET
-            m_NetManager = MyNetManager.instance;
+            m_NetManager = XNetManager.instance;
 #else
             m_NetManager = NetworkManager.s_Instance;
 #endif

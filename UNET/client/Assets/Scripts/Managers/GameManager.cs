@@ -175,11 +175,15 @@ namespace Tanks
 		//The modal displayed at the beginning of the game
 		protected StartGameModal m_StartGameModal;
 
-		//Cached network manager
-		private TanksNetworkManager m_NetManager;
+        //Cached network manager
+#if XNET
+        private XNetManager m_NetManager;
+#else
+        private TanksNetworkManager m_NetManager;
+#endif
 
-		//Round number. Non-round based games only have one round. Zero indexed
-		private int m_Round = 0;
+        //Round number. Non-round based games only have one round. Zero indexed
+        private int m_Round = 0;
 
 		//Cached reference to singleton InGameLeaderboardModal
 		protected InGameLeaderboardModal m_Leaderboard;
@@ -198,7 +202,7 @@ namespace Tanks
 			}
 		}
 
-		#region Initialisation
+#region Initialisation
 
 		/// <summary>
 		/// Unity message: Awake
@@ -214,10 +218,14 @@ namespace Tanks
 			m_HazardList = new List<LevelHazard>();
     
 			//Handles instantiating the endgamemodal
-			InstantiateEndGameModal(m_MultiplayerGameModal); 
+			InstantiateEndGameModal(m_MultiplayerGameModal);
 
-			//Cache the NetworkManager instance
-			m_NetManager = TanksNetworkManager.s_Instance;
+            //Cache the NetworkManager instance
+#if XNET
+            m_NetManager = XNetManager.instance;
+#else
+            m_NetManager = TanksNetworkManager.s_Instance;
+#endif
 
 			//Subscribe to events on the Network Manager
 			if (m_NetManager != null)
@@ -278,14 +286,14 @@ namespace Tanks
 			if (m_GameSettings.isSinglePlayer)
 			{
 				//Single player level has started
-				AnalyticsHelper.SinglePlayerLevelStarted(m_GameSettings.map.id);
+				//AnalyticsHelper.SinglePlayerLevelStarted(m_GameSettings.map.id);
 				//Set up single player modal
 				SetupSinglePlayerModals();
 			}
 			else
 			{
 				//Multiplayer game has started
-				AnalyticsHelper.MultiplayerGameStarted(m_GameSettings.map.id, m_GameSettings.mode.id, m_NetManager.playerCount);
+				//AnalyticsHelper.MultiplayerGameStarted(m_GameSettings.map.id, m_GameSettings.mode.id, m_NetManager.playerCount);
 			}
 		}
 
@@ -387,7 +395,7 @@ namespace Tanks
 			}
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Handles everyone bailed.
@@ -522,7 +530,7 @@ namespace Tanks
 		/// <summary>
 		/// Unity message: OnApplicationPause
 		/// </summary>
-		#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
 		protected void OnApplicationPause(bool paused)
 		{
 			if (paused)
@@ -531,9 +539,9 @@ namespace Tanks
 				m_NetManager.DisconnectAndReturnToMenu();
 			}
 		}
-		#endif
+#endif
 
-		#region STATE HANDLING
+#region STATE HANDLING
 
 		/// <summary>
 		/// Handles the state machine.
@@ -741,7 +749,7 @@ namespace Tanks
 			m_State = GameState.TimedTransition;
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Starts the round
@@ -1056,7 +1064,7 @@ namespace Tanks
 			}
 		}
 
-		#region Respawn
+#region Respawn
 
 		/// <summary>
 		/// Respawns the tank
@@ -1102,7 +1110,7 @@ namespace Tanks
 			respawningTank.StartRespawnCycle(tank, this, showLeaderboard, respawnPoint);
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Convenience function for showing the leaderboard
@@ -1263,7 +1271,7 @@ namespace Tanks
 			return null;
 		}
 
-		#region Networking Issues Listeners
+#region Networking Issues Listeners
 
 		/// <summary>
 		/// Convenience function for showing error panel
@@ -1301,9 +1309,9 @@ namespace Tanks
 			ShowErrorPanel();
 		}
 
-		#endregion
+#endregion
 
-		#region Lazy Loaders
+#region Lazy Loaders
 
 		/// <summary>
 		/// Lazy loads the loading panel
@@ -1344,6 +1352,6 @@ namespace Tanks
 			m_Announcer = AnnouncerModal.s_Instance;
 		}
 
-		#endregion
+#endregion
 	}
 }

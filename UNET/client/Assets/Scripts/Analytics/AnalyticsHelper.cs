@@ -19,7 +19,7 @@ namespace Tanks.Analytics
 		{
 			Dictionary<string, object> eventData = new Dictionary<string, object>();
 			eventData.Add("tankId", tankId);
-			eventData.Add("isSinglePlayer", NetworkManager.s_Instance.gameType == NetworkGameType.Singleplayer);
+			//eventData.Add("isSinglePlayer", NetworkManager.s_Instance.gameType == NetworkGameType.Singleplayer);
 			LogCustomEvent("PlayerUsedTankInGame", eventData);
 		}
 
@@ -31,7 +31,7 @@ namespace Tanks.Analytics
 		{
 			Dictionary<string, object> eventData = new Dictionary<string, object>();
 			eventData.Add("decorationId", decorationId);
-			eventData.Add("isSinglePlayer", NetworkManager.s_Instance.gameType == NetworkGameType.Singleplayer);
+			//eventData.Add("isSinglePlayer", NetworkManager.s_Instance.gameType == NetworkGameType.Singleplayer);
 			LogCustomEvent("PlayerUsedDecorationInGame", eventData);
 		}
 

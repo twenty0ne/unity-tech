@@ -223,8 +223,9 @@ namespace Tanks.Networking
 		/// </summary>
 		public static NetworkManager s_Instance
 		{
-			get;
-			protected set;
+			// get;
+            get { Debug.Assert(false); return null; }
+			protected set { Debug.Assert(false);  }
 		}
 
 		public static bool s_InstanceExists
@@ -1087,7 +1088,7 @@ namespace Tanks.Networking
 		/// </summary>
 		public override void OnStopServer()
 		{
-			base.OnStopServer();
+            base.OnStopServer();
 			Debug.Log("OnStopServer");
 
 			for (int i = 0; i < connectedPlayers.Count; ++i)
@@ -1116,7 +1117,7 @@ namespace Tanks.Networking
 		/// </summary>
 		public override void OnStopClient()
 		{
-			Debug.Log("OnStopClient");
+            Debug.Log("OnStopClient");
 			base.OnStopClient();
 
 			for (int i = 0; i < connectedPlayers.Count; ++i)

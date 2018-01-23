@@ -43,7 +43,11 @@ namespace Tanks.Networking
 		private int m_PlayerId;
 
 		private IColorProvider m_ColorProvider = null;
-		private TanksNetworkManager m_NetManager;
+#if XNET
+        private XNetManager m_NetManager;
+#else
+        private TanksNetworkManager m_NetManager;
+#endif
 		private GameSettings m_Settings;
 
 		private bool lateSetupOfClientPlayer = false;
@@ -163,7 +167,11 @@ namespace Tanks.Networking
 			}
 			if (m_NetManager == null)
 			{
-				m_NetManager = TanksNetworkManager.s_Instance;
+#if XNET
+                m_NetManager = XNetManager.instance;
+#else
+                m_NetManager = TanksNetworkManager.s_Instance;
+#endif
 			}
 			
 			base.OnStartClient();
@@ -179,7 +187,11 @@ namespace Tanks.Networking
 		{
 			if (m_NetManager == null)
 			{
-				m_NetManager = TanksNetworkManager.s_Instance;
+#if XNET
+                m_NetManager = XNetManager.instance;
+#else
+                m_NetManager = TanksNetworkManager.s_Instance;
+#endif
 			}
 		}
 
@@ -254,11 +266,10 @@ namespace Tanks.Networking
 			}
 		}
 
-
-		/// <summary>
-		/// Create our lobby object
-		/// </summary>
-		private void CreateLobbyObject()
+        /// <summary>
+        /// Create our lobby object
+        /// </summary>
+        private void CreateLobbyObject()
 		{
 			lobbyObject = Instantiate(m_LobbyPrefab).GetComponent<LobbyPlayer>();
 			lobbyObject.Init(this);
@@ -361,7 +372,7 @@ namespace Tanks.Networking
 			}
 		}
 
-		#region Commands
+#region Commands
 
 		/// <summary>
 		/// Create our tank
@@ -436,10 +447,10 @@ namespace Tanks.Networking
 			}
 		}
 
-		#endregion
+#endregion
 
 
-		#region Syncvar callbacks
+#region Syncvar callbacks
 
 		private void OnMyName(string newName)
 		{
@@ -524,6 +535,6 @@ namespace Tanks.Networking
 			}
 		}
 
-		#endregion
+#endregion
 	}
 }

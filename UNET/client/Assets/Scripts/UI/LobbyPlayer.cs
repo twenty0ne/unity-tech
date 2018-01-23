@@ -36,9 +36,13 @@ namespace Tanks.UI
 		/// </summary>
 		private TanksNetworkPlayer m_NetPlayer;
 
-		private TanksNetworkManager m_NetManager;
+#if XNET
+        private XNetManager m_NetManager;
+#else
+        private TanksNetworkManager m_NetManager;
+#endif
 
-		public void Init(TanksNetworkPlayer netPlayer)
+        public void Init(TanksNetworkPlayer netPlayer)
 		{
 			Debug.LogFormat("Initializing lobby player - Ready {0}", netPlayer.ready);
 			this.m_NetPlayer = netPlayer;
@@ -47,8 +51,12 @@ namespace Tanks.UI
 				netPlayer.syncVarsChanged += OnNetworkPlayerSyncvarChanged;
 			}
 
-			m_NetManager = TanksNetworkManager.s_Instance;
-			if (m_NetManager != null)
+#if XNET
+            m_NetManager = XNetManager.instance;
+#else
+            m_NetManager = TanksNetworkManager.s_Instance;
+#endif
+            if (m_NetManager != null)
 			{
 				m_NetManager.playerJoined += PlayerJoined;
 				m_NetManager.playerLeft += PlayerLeft;
@@ -67,7 +75,10 @@ namespace Tanks.UI
 			MainMenuUI mainMenu = MainMenuUI.s_Instance;
 			
 			mainMenu.playerList.AddPlayer(this);
-			mainMenu.playerList.DisplayDirectServerWarning(netPlayer.isServer && m_NetManager.matchMaker == null);
+#if XNET
+#else
+            mainMenu.playerList.DisplayDirectServerWarning(netPlayer.isServer && m_NetManager.matchMaker == null);
+#endif
 
 			if (netPlayer.hasAuthority)
 			{

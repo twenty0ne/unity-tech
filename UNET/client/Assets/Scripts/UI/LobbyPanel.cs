@@ -9,12 +9,20 @@ namespace Tanks.UI
 	public class LobbyPanel : MonoBehaviour
 	{
 		private MainMenuUI m_MenuUi;
-		private NetworkManager m_NetManager;
+#if XNET
+        private XNetManager m_NetManager;
+#else
+        private NetworkManager m_NetManager;
+#endif
 
-		protected virtual void Start()
+        protected virtual void Start()
 		{
 			m_MenuUi = MainMenuUI.s_Instance;
-			m_NetManager = NetworkManager.s_Instance;
+#if XNET
+            m_NetManager = XNetManager.instance;
+#else
+            m_NetManager = NetworkManager.s_Instance;
+#endif
 		}
 
 		public void OnBackClick()

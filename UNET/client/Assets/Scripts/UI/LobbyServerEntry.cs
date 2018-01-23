@@ -23,11 +23,15 @@ namespace Tanks.UI
 		[SerializeField]
 		protected Button m_JoinButton;
 
-		//The network manager
-		protected TanksNetworkManager m_NetManager;
+        //The network manager
+#if XNET
+        protected XNetManager m_NetManager;
+#else
+        protected TanksNetworkManager m_NetManager;
+#endif
 
-		//Sets up the UI
-		public void Populate(MatchInfoSnapshot match, Color c)
+        //Sets up the UI
+        public void Populate(MatchInfoSnapshot match, Color c)
 		{
 			string name = match.name;
 
@@ -53,7 +57,11 @@ namespace Tanks.UI
 		{
 			if (m_NetManager == null)
 			{
-				m_NetManager = TanksNetworkManager.s_Instance;
+#if XNET
+                m_NetManager = XNetManager.instance;
+#else
+                m_NetManager = TanksNetworkManager.s_Instance;
+#endif
 			}
 		}
 
