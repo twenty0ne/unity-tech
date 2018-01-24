@@ -226,7 +226,21 @@ namespace Tanks.UI
 		{
 			ShowInfoPopup("Connecting...", () =>
 				{
-					if (NetworkManager.s_InstanceExists)
+#if XNET
+                    if (XNetManager.instance)
+                    {
+                        //if (reconnectMatchmakingClient)
+                        //{
+                        //    XNetManager.instance.Disconnect();
+                        //    XNetManager.instance.StartMatchingmakingClient();
+                        //}
+                        //else
+                        //{
+                        //    XNetManager.instance.Disconnect();
+                        //}
+                    }
+#else
+                    if (NetworkManager.s_InstanceExists)
 					{
 						if (reconnectMatchmakingClient)
 						{
@@ -238,7 +252,8 @@ namespace Tanks.UI
 							NetworkManager.s_Instance.Disconnect();
 						}
 					}
-				});
+#endif
+                });
 		}
 
 		public void HideInfoPopup()
@@ -306,8 +321,12 @@ namespace Tanks.UI
 		private void GoToFindGamePanel()
 		{
 			ShowServerListPanel();
-			NetworkManager.s_Instance.StartMatchingmakingClient();
-		}
+#if XNET
+            XNetManager.instance.StartMatchingmakingClient();
+#else
+            NetworkManager.s_Instance.StartMatchingmakingClient();
+#endif
+        }
 
 		private void GoToCreateGamePanel()
 		{

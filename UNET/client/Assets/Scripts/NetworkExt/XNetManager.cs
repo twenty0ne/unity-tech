@@ -12,9 +12,13 @@ using UnityEngine.Networking.Match;
 using Tanks.Map;
 using Tanks;
 using UnityEngine.SceneManagement;
+using Tanks.Networking;
 
 public class XNetManager : MonoBehaviour
 {
+    private const string PVP_ADDRESS = "127.0.0.1";
+    private const int PVP_PORT = 14242;
+
     private static readonly string s_LobbySceneName = "LobbyScene";
 
     private const int MAX_CONNECTIONS = 2;
@@ -27,7 +31,12 @@ public class XNetManager : MonoBehaviour
         public const int C2H_Connect = 1;
         public const int H2C_Accept = 2;
         public const int Sync = 3;
-	}
+        public const int GetMatchList = 4;
+        public const int JoinMatch = 5;
+        public const int JoinMatchReturn = 6;
+        //public const int MatchReady = 6;
+        //public const int MatchUnready = 7;
+    }
 
     public class NetCode
     {
@@ -53,6 +62,8 @@ public class XNetManager : MonoBehaviour
     // for remote: remote client to host
     private NetworkClient myClient = null;
     private List<NetworkConnection> connClients = new List<NetworkConnection>();
+
+    private List<XNetMatchInfoSnapshot> matchInfoList = new List<XNetMatchInfoSnapshot>();
 
     protected GameSettings m_Settings;
     public List<Tanks.Networking.NetworkPlayer> connectedPlayers
@@ -226,6 +237,70 @@ public class XNetManager : MonoBehaviour
                 }
 			}
         }
+        else if (dataType == DataType.GetMatchList)
+        {
+            matchInfoList.Clear();
+
+            int roomCount = im.ReadInt32();
+            for (int i = 0; i < roomCount; ++i)
+            {
+                XNetMatchInfoSnapshot mi = new XNetMatchInfoSnapshot();
+                mi.networkId = im.ReadString();
+                mi.name = im.ReadString();
+                mi.maxSize = im.ReadInt32();
+                mi.currentSize = im.ReadInt32();
+
+                matchInfoList.Add(mi);
+            }
+
+            isGetMatchListDone = true;
+            if (cbListMatchs != null)
+            {
+                cbListMatchs(true, "", matchInfoList);
+                cbListMatchs = null;
+            }
+        }
+        else if (dataType == DataType.JoinMatchReturn)
+        {
+            bool success = im.ReadBoolean();
+            string clientId = im.ReadString();
+            Debug.Log("cmd joinmatchretrun>" + success.ToString() + ">" + clientId);
+
+            if (IsHost())
+            {
+                var remoteClientToHostConn = new XNetConnection(clientId);
+                remoteClientToHostConn.ForceInitialize(hostTopology);
+
+                NetworkServer.AddExternalConnection(remoteClientToHostConn);
+                AddConnection(remoteClientToHostConn);
+            }
+
+            // if send request client
+            if (m_NextMatchJoinedCallback != null)
+            {
+                if (success)
+                {
+                    state = NetworkState.InLobby;
+                }
+                else
+                {
+                    state = NetworkState.Pregame;
+                }
+
+                m_NextMatchJoinedCallback(success, null);
+                m_NextMatchJoinedCallback = null;
+
+                var conn = new XNetConnection(clientId);
+                Debug.Assert(myClient == null, "CHECK: myClient is not null");
+                myClient = new XNetClient(conn);
+
+                // Setup and connect
+                myClient.RegisterHandler(MsgType.Connect, OnRemoteClientConnect);
+                myClient.SetNetworkConnectionClass<XNetConnection>();
+                myClient.Configure(hostTopology);
+                ((XNetClient)myClient).Connect();
+            }
+        }
 	}
 
 	private void PeekMessages()
@@ -310,7 +385,13 @@ public class XNetManager : MonoBehaviour
 
     void OnSpawnRequested(NetworkMessage msg)
     {
-        Debug.Log("Spawn request received");
+        Debug.LogWarning("Spawn request received");
+
+        var conn = msg.conn;
+        if (conn != null)
+        {
+            SpawnPlayer(conn);
+        }
     }
 
 
@@ -419,6 +500,7 @@ public class XNetManager : MonoBehaviour
     {
         NetOutgoingMessage om = netClient.CreateMessage();
         om.Write(DataType.Sync);
+        om.Write(netClient.ServerConnection.RemoteUniqueIdentifier.ToString());
         om.Write(numBytes);
         om.Write(bytes);
         netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, channelId);
@@ -494,7 +576,7 @@ public class XNetManager : MonoBehaviour
 
         if (IsConnectServer() == false)
         {
-            ConnectServer("127.0.0.1", 14242, (success) =>
+            ConnectServer(PVP_ADDRESS, PVP_PORT, (success) =>
             {
                 // TODO
                 // refactor > user shouldn't know NetOutgoingMessage exit
@@ -532,6 +614,8 @@ public class XNetManager : MonoBehaviour
     public event System.Action matchDropped;
     public event Action gameModeUpdated;
     public event Action clientStopped;
+
+    private Action<bool, XNetMatchInfo> m_NextMatchJoinedCallback;
 
     public bool hasSufficientPlayers
     {
@@ -648,16 +732,30 @@ public class XNetManager : MonoBehaviour
 
     public void DisconnectAndReturnToMenu() { }
 
-    public void JoinMatchmakingGame(NetworkID networkId, Action<bool, MatchInfo> onJoin)
+    public void JoinMatchmakingGame(string networkId, Action<bool, XNetMatchInfo> onJoin)
     {
+        if (gameType != NetworkGameType.Matchmaking ||
+            state != NetworkState.Pregame)
+        {
+            throw new InvalidOperationException("Game not in matching state. Make sure you call StartMatchmakingClient first.");
+        }
+
+        state = NetworkState.Connecting;
+
+        m_NextMatchJoinedCallback = onJoin;
+        // matchMaker.JoinMatch(networkId, string.Empty, string.Empty, string.Empty, 0, 0, OnMatchJoined);
+
+        NetOutgoingMessage om = netClient.CreateMessage();
+        om.Write(DataType.JoinMatch);
+        om.Write(networkId);
+        netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, 0);
     }
 
     public bool isSinglePlayer
     {
         get
         {
-            return false;
-            //return gameType == NetworkGameType.Singleplayer;
+            return gameType == NetworkGameType.Singleplayer;
         }
     }
 
@@ -670,5 +768,73 @@ public class XNetManager : MonoBehaviour
     {
         get;
         protected set;
+    }
+
+    private bool isGetMatchListDone = false;
+    public delegate void DataResponseDelegate<T>(bool success, string extendedInfo, T responseData);
+    DataResponseDelegate<List<XNetMatchInfoSnapshot>> cbListMatchs = null;
+    // TODO:
+    // use coroutine is better
+    public void ListMatches(int startPageNumber, int resultPageSize, string matchNameFilter, bool filterOutPrivateMatchesFromResults, int eloScoreTarget, int requestDomain, DataResponseDelegate<List<XNetMatchInfoSnapshot>> callback)
+    {
+        if (isGetMatchListDone)
+        {
+            callback(true, "", matchInfoList);
+        }
+        else
+        {
+            cbListMatchs = callback;
+        }
+    }
+
+    public enum NetworkState
+    {
+        Inactive,
+        Pregame,
+        Connecting,
+        InLobby,
+        InGame
+    }
+
+    public NetworkState state
+    {
+        get;
+        protected set;
+    }
+
+    public void StartMatchingmakingClient()
+    {
+        if (state != NetworkState.Inactive)
+        {
+            throw new InvalidOperationException("Network currently active. Disconnect first.");
+        }
+
+        // minPlayers = 2;
+        // maxPlayers = multiplayerMaxPlayers;
+
+        state = NetworkState.Pregame;
+        gameType = NetworkGameType.Matchmaking;
+        StartMatchMaker();
+    }
+
+    public void StartMatchMaker()
+    {
+        isGetMatchListDone = false;
+
+        if (IsConnectServer() == false)
+        {
+            ConnectServer(PVP_ADDRESS, PVP_PORT, (success) =>
+            {
+                NetOutgoingMessage om = netClient.CreateMessage();
+                om.Write(DataType.GetMatchList);
+                netClient.SendMessage(om, Lidgren.Network.NetDeliveryMethod.ReliableOrdered, 0);
+            });
+        }
+        else
+        {
+            NetOutgoingMessage om = netClient.CreateMessage();
+            om.Write(DataType.GetMatchList);
+            netClient.SendMessage(om, Lidgren.Network.NetDeliveryMethod.ReliableOrdered, 0);
+        }
     }
 }

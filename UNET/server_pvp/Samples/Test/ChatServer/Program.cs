@@ -15,6 +15,9 @@ namespace ChatServer
         public const int C2H_Connect = 1;
         public const int H2C_Accept = 2;
         public const int Sync = 3;
+        public const int GetMatchList = 4;
+        public const int JoinMatch = 5;
+        public const int JoinMatchReturn = 6;
     }
 
     public class NetCode
@@ -205,6 +208,70 @@ namespace ChatServer
                                         s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
 
                                         s_refRooms[client_id] = roomName;
+                                    }
+                                }
+                            }
+                            else if (dataType == DataType.GetMatchList)
+                            {
+                                NetOutgoingMessage om = s_server.CreateMessage();
+                                om.Write(DataType.GetMatchList);
+
+                                om.Write(s_rooms.Count);
+                                foreach (var room in s_rooms.Values)
+                                {
+                                    om.Write(room.name);
+                                    om.Write(room.host.RemoteUniqueIdentifier.ToString() + "|" + room.name);
+                                    om.Write(MAX_CONNECTIONS);
+                                    om.Write(room.conns.Count);
+                                }
+                                s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                            }
+                            else if (dataType == DataType.JoinMatch)
+                            {
+                                string roomName = im.ReadString();
+                                
+                                if (s_rooms.ContainsKey(roomName))
+                                {
+                                    //NetOutgoingMessage om = s_server.CreateMessage(im.Data.Length);
+                                    //om.Write(DATA_TYPE.DAT_CONNECT);
+                                    //om.Write(im.SenderConnection.RemoteUniqueIdentifier.ToString());
+                                    //s_server.SendMessage(om, room.host, NetDeliveryMethod.ReliableOrdered, 0);
+
+                                    Room room = s_rooms[roomName];
+                                    room.conns.Add(im.SenderConnection);
+                                    s_refRooms[client_id] = roomName;
+
+                                    NetOutgoingMessage om = s_server.CreateMessage();
+                                    om.Write(DataType.JoinMatchReturn);
+                                    om.Write(true);
+                                    om.Write(client_id);
+                                    s_server.SendMessage(om, room.conns, NetDeliveryMethod.ReliableOrdered, 0);
+                                }
+                                else
+                                {
+                                    NetOutgoingMessage om = s_server.CreateMessage();
+                                    om.Write((Int32)DataType.JoinMatchReturn);
+                                    om.Write(false);
+                                    om.Write(client_id);
+                                    s_server.SendMessage(om, im.SenderConnection, NetDeliveryMethod.ReliableOrdered, 0);
+                                }
+                            }
+                            else if (dataType == DataType.Sync)
+                            {
+                                if (s_refRooms.ContainsKey(client_id))
+                                {
+                                    Room room = s_rooms[s_refRooms[client_id]];
+                                    if (room != null)
+                                    {
+                                        List<NetConnection> all = new List<NetConnection>(room.conns);  // get copy
+                                        all.Remove(im.SenderConnection);
+
+                                        if (all.Count > 0)
+                                        {
+                                            NetOutgoingMessage om = s_server.CreateMessage();
+                                            om.Write(im.Data);
+                                            s_server.SendMessage(om, all, NetDeliveryMethod.Unreliable, 0);
+                                        }
                                     }
                                 }
                             }

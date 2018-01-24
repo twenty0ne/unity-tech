@@ -40,9 +40,13 @@ namespace Tanks.UI
 		static Color s_OddServerColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
 		static Color s_EvenServerColor = new Color(.94f, .94f, .94f, 1.0f);
 
-		//Cached singletons
-		private NetworkManager m_NetManager;
-		private MainMenuUI m_MenuUi;
+        //Cached singletons
+#if XNET
+        private XNetManager m_NetManager;
+#else
+        private NetworkManager m_NetManager;
+#endif
+        private MainMenuUI m_MenuUi;
 
 
 		protected virtual void OnEnable()
@@ -50,7 +54,11 @@ namespace Tanks.UI
 			//Cache singletons
 			if (m_NetManager == null)
 			{
-				m_NetManager = NetworkManager.s_Instance;
+#if XNET
+                m_NetManager = XNetManager.instance;
+#else
+                m_NetManager = NetworkManager.s_Instance;
+#endif
 			}
 			if (m_MenuUi == null)
 			{
@@ -160,9 +168,68 @@ namespace Tanks.UI
 			m_NetManager.Disconnect();
 			m_MenuUi.ShowDefaultPanel();
 		}
-		
-		//Callback for request
-		public void OnGuiMatchList(bool flag, string extraInfo, List<MatchInfoSnapshot> response)
+
+        //Callback for request
+#if XNET
+        public void OnGuiMatchList(bool flag, string extraInfo, List<XNetMatchInfoSnapshot> response)
+        {
+            //If no response do nothing
+            if (response == null)
+            {
+                return;
+            }
+
+            m_NextButton.interactable = true;
+            m_PreviousButton.interactable = true;
+
+            m_PreviousPage = m_CurrentPage;
+            m_CurrentPage = m_NewPage;
+
+            //if nothing is returned
+            if (response.Count == 0)
+            {
+                //current page is 0 then set enable NO SERVER FOUND message
+                if (m_CurrentPage == 0)
+                {
+                    m_NoServerFound.SetActive(true);
+                    ClearUi();
+                    m_PreviousButton.interactable = false;
+                    m_NextButton.interactable = false;
+                    m_PageNumber.enabled = false;
+                }
+
+                m_CurrentPage = m_PreviousPage;
+
+                return;
+            }
+
+            //Prev button should not be interactable for first (zeroth) page
+            m_PreviousButton.interactable = m_CurrentPage > 0;
+            //Next button should not be interactable if the current page is not full
+            m_NextButton.interactable = response.Count == m_PageSize;
+
+            m_NoServerFound.SetActive(false);
+
+            //Handle page number
+            m_PageNumber.enabled = true;
+            m_PageNumber.text = (m_CurrentPage + 1).ToString();
+
+            //Clear all transforms
+            foreach (Transform t in m_ServerListRect)
+                Destroy(t.gameObject);
+
+            //Instantiate UI gameObjects
+            for (int i = 0; i < response.Count; ++i)
+            {
+                GameObject o = Instantiate(m_ServerEntryPrefab);
+
+                o.GetComponent<LobbyServerEntry>().Populate(response[i], (i % 2 == 0) ? s_OddServerColor : s_EvenServerColor);
+
+                o.transform.SetParent(m_ServerListRect, false);
+            }
+        }
+#else
+        public void OnGuiMatchList(bool flag, string extraInfo, List<MatchInfoSnapshot> response)
 		{
 			//If no response do nothing
 			if (response == null)
@@ -219,9 +286,10 @@ namespace Tanks.UI
 				o.transform.SetParent(m_ServerListRect, false);
 			}
 		}
-		
-		//Called by button clicks
-		public void ChangePage(int dir)
+#endif
+
+        //Called by button clicks
+        public void ChangePage(int dir)
 		{
 			int newPage = Mathf.Max(0, m_CurrentPage + dir);
 			this.m_NewPage = newPage;
@@ -236,7 +304,17 @@ namespace Tanks.UI
 		//Handle requests
 		public void RequestPage(int page)
 		{
-			if (m_NetManager != null && m_NetManager.matchMaker != null)
+#if XNET
+            if (m_NetManager != null)
+            {
+                m_NextButton.interactable = false;
+                m_PreviousButton.interactable = false;
+
+                Debug.Log("Requesting match list");
+                m_NetManager.ListMatches(page, m_PageSize, string.Empty, false, 0, 0, OnGuiMatchList);
+            }
+#else
+            if (m_NetManager != null && m_NetManager.matchMaker != null)
 			{
 				m_NextButton.interactable = false;
 				m_PreviousButton.interactable = false;
@@ -244,6 +322,7 @@ namespace Tanks.UI
 				Debug.Log("Requesting match list");
 				m_NetManager.matchMaker.ListMatches(page, m_PageSize, string.Empty, false, 0, 0, OnGuiMatchList);
 			}
+#endif
 		}
 
 		//We just set the autorefresh time to RIGHT NOW when this button is pushed, triggering all the refresh logic in the next Update tick.

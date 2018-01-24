@@ -581,7 +581,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    1: SKIP_IAP;XNET
+    1: SKIP_IAP;UNITY;XNET
     4: EVERYPLAY_IPHONE;SKIP_IAP
     7: EVERYPLAY_ANDROID;SKIP_IAP
     25: 
@@ -737,8 +737,8 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled:
     Analytics: 0
-    Build: 1
-    Collab: 1
+    Build: 0
+    Collab: 0
     ErrorHub: 0
     Game_Performance: 0
     Hub: 0
@@ -747,8 +747,8 @@ PlayerSettings:
     Unity_Ads: 0
   facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudProjectId: e8a20a2b-b669-4f2f-a157-de8b4894c540
+  projectName: Tanks
+  organizationId: twenty0ne
   cloudEnabled: 0
   enableNewInputSystem: 0

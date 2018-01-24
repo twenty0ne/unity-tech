@@ -31,6 +31,28 @@ namespace Tanks.UI
 #endif
 
         //Sets up the UI
+#if XNET
+        public void Populate(XNetMatchInfoSnapshot match, Color c)
+        {
+            string name = match.name;
+
+            string[] split = name.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+
+            m_ServerInfoText.text = split[1].Replace(" ", string.Empty);
+            m_ModeText.text = split[0];
+
+            m_SlotInfo.text = string.Format("{0}/{1}", match.currentSize, match.maxSize);
+
+            string networkId = match.networkId;
+
+            m_JoinButton.onClick.RemoveAllListeners();
+            m_JoinButton.onClick.AddListener(() => JoinMatch(networkId));
+
+            m_JoinButton.interactable = match.currentSize < match.maxSize;
+
+            GetComponent<Image>().color = c;
+        }
+#else
         public void Populate(MatchInfoSnapshot match, Color c)
 		{
 			string name = match.name;
@@ -51,9 +73,10 @@ namespace Tanks.UI
 
 			GetComponent<Image>().color = c;
 		}
+#endif
 
-		//Load the network manager on enable
-		protected virtual void OnEnable()
+        //Load the network manager on enable
+        protected virtual void OnEnable()
 		{
 			if (m_NetManager == null)
 			{
@@ -65,8 +88,32 @@ namespace Tanks.UI
 			}
 		}
 
-		//Fired when player clicks join
-		private void JoinMatch(NetworkID networkId)
+        //Fired when player clicks join
+#if XNET
+        private void JoinMatch(string networkId)
+        {
+            MainMenuUI menuUi = MainMenuUI.s_Instance;
+
+            menuUi.ShowConnectingModal(true);
+
+            m_NetManager.JoinMatchmakingGame(networkId, (success, matchInfo) =>
+            {
+                //Failure flow
+                if (!success)
+                {
+                    menuUi.ShowInfoPopup("Failed to join game.", null);
+                }
+                //Success flow
+                else
+                {
+                    menuUi.HideInfoPopup();
+                    menuUi.ShowInfoPopup("Entering lobby...");
+                    m_NetManager.gameModeUpdated += menuUi.ShowLobbyPanelForConnection;
+                }
+            });
+        }
+#else
+        private void JoinMatch(NetworkID networkId)
 		{
 			MainMenuUI menuUi = MainMenuUI.s_Instance;
 
@@ -88,5 +135,6 @@ namespace Tanks.UI
 					}
 				});
 		}
-	}
+#endif
+    }
 }
