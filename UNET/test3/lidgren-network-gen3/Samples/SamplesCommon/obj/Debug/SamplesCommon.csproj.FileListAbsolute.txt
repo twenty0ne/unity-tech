@@ -1,0 +1,10 @@
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\obj\Debug\SamplesCommon.csprojResolveAssemblyReference.cache
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\obj\Debug\SamplesCommon.NetPeerSettingsWindow.resources
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\obj\Debug\SamplesCommon.csproj.GenerateResource.Cache
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\bin\Debug\SamplesCommon.dll
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\bin\Debug\SamplesCommon.pdb
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\bin\Debug\Lidgren.Network.dll
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\bin\Debug\Lidgren.Network.pdb
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\bin\Debug\Lidgren.Network.xml
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\obj\Debug\SamplesCommon.dll
+D:\Git\lidgren-network-gen3\Samples\SamplesCommon\obj\Debug\SamplesCommon.pdb
