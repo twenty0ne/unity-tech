@@ -30,7 +30,13 @@ public class MyNetworkConnection : NetworkConnection
         //    error = 0;
         //    return true;
         //}
-        
+        //if (MyNetworkManager.instance.IsHost())
+        //{
+        //    TransportReceive(bytes, numBytes, channelId);
+        //    error = 0;
+        //    return true;
+        //}
+
         // Send packet to peer through Steam
         bool ret = MyNetworkManager.instance.Send(bytes, numBytes, channelId);
 

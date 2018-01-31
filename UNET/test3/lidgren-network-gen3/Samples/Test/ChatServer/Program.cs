@@ -137,6 +137,8 @@ namespace ChatServer
                             //}
 
                             string remote_id = im.SenderConnection.RemoteUniqueIdentifier.ToString();
+                            Console.Out.Write("remote id >" + remote_id);
+
                             if (s_refRooms.ContainsKey(remote_id))
                             {
                                 string room_id = s_refRooms[remote_id];

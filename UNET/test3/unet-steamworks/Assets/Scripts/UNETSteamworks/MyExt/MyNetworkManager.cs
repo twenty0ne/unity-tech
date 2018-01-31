@@ -893,6 +893,9 @@ public class MyNetworkManager : MonoBehaviour
                     }
 
                     break;
+                case NetIncomingMessageType.ConnectionLatencyUpdated:
+                    // heart beat 
+                    break;
                 default:
                     Debug.Log("Unhandled type: " + im.MessageType + " " + im.LengthBytes + " bytes");
                     break;
@@ -1079,6 +1082,9 @@ public class MyNetworkManager : MonoBehaviour
         _netClient.Connect("127.0.0.1", 14242, hail);
     }
 
-
+    public bool IsHost()
+    {
+        return isHost;
+    }
     
 }

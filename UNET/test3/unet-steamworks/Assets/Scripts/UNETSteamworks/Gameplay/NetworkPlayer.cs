@@ -30,10 +30,13 @@ public class NetworkPlayer : NetworkBehaviour {
         base.OnStartServer();
 
         //StartCoroutine(SetNameWhenReady());
+
+        this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
     }
 
     private void Start()
     {
+        curHealth = maxHealth;
         this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
     }
 
@@ -61,7 +64,7 @@ public class NetworkPlayer : NetworkBehaviour {
             //if (Input.GetButtonDown("Fire1"))
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                CmdFire();
+               CmdFire();
             }
         }
       
@@ -77,17 +80,21 @@ public class NetworkPlayer : NetworkBehaviour {
     [Command]
     public void CmdFire()
     {
+        Debug.Log("CmdFire 1");
+
         if (NetworkServer.active)
         {
+            Debug.Log("CmdFire 2");
+
             var bullet = GameObject.Instantiate(bulletPrefab, bulletSpawn.position, Quaternion.identity);
             
             // add velocity to bullet
-            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6f;
+            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 1f;
 
             NetworkServer.Spawn(bullet);
 
             // Destroy Bullet after 2 seg
-            Destroy(bullet, 2);
+            Destroy(bullet, 10);
 
             RpcAddNum();
         }
@@ -106,20 +113,22 @@ public class NetworkPlayer : NetworkBehaviour {
         //  server to handle
         if (!NetworkServer.active)
             return;
+        //if (!isServer)
+        //    return;
 
         this.curHealth -= amount;
-//
-//        if (this.curHealth <= 0)
-//        {
-//            Destroy(gameObject);
-//        }
-//
+        //
+        if (this.curHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+        //
         Debug.Log("take damage >" + amount.ToString());
     }
 
     void OnChangedHealth(int health)
     {
-//        Debug.LogWarning("on changed health > " + health.ToString() + " - " + this.curHealth.ToString());
+        Debug.LogWarning("on changed health > " + health.ToString() + " - " + this.curHealth.ToString());
         healthBar.sizeDelta = new Vector2(healthBarOriginWidth * 1.0f * health / maxHealth, healthBar.sizeDelta.y);
     }
 

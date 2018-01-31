@@ -455,7 +455,7 @@ MonoBehaviour:
   label: {fileID: 102667041839711248}
   moveSpeed: 4
   steamId: 0
-  curHealth: 5
+  curHealth: 100
   healthBar: {fileID: 224293784522216500}
   bulletSpawn: {fileID: 4741702565080726}
   healthBarOriginWidth: 0
