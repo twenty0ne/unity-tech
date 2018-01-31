@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Bullet : NetworkBehaviour
+public class Bullet2 : NetworkBehaviour
 {
 
     //public float speed;
@@ -14,10 +14,10 @@ public class Bullet : NetworkBehaviour
 
     // private bool isDestroy = false;
 
-//    private void Awake()
-//    {
-//        Debug.LogWarning("create bullet");
-//    }
+    private void Awake()
+    {
+        Debug.LogWarning("create bullet");
+    }
 
     private void OnCollisionEnter(Collision other)
     {
@@ -25,7 +25,7 @@ public class Bullet : NetworkBehaviour
         //    return;
 
         GameObject hit = other.gameObject;
-		var player = hit.GetComponent<NetworkPlayer>();
+		var player = hit.GetComponent<Player2>();
 
         if (player != null)
         {

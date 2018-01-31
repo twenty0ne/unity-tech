@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using Steamworks;
 using UnityEngine.Networking.NetworkSystem;
 
-public class NetworkPlayer : NetworkBehaviour {
+public class Player2 : NetworkBehaviour {
 
     public GameObject bulletPrefab;
-    public TextMesh label;
+//    public TextMesh label;
     public float moveSpeed;
-
-    [SyncVar]
-    public ulong steamId;
 
     public const int maxHealth = 100;
     [SyncVar(hook = "OnChangedHealth")] public int curHealth = maxHealth;
@@ -31,13 +27,13 @@ public class NetworkPlayer : NetworkBehaviour {
 
         //StartCoroutine(SetNameWhenReady());
 
-        this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
+        //this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
     }
 
     private void Start()
     {
-        curHealth = maxHealth;
-        this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
+        //curHealth = maxHealth;
+        //this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
     }
 
     //IEnumerator SetNameWhenReady()
@@ -111,10 +107,10 @@ public class NetworkPlayer : NetworkBehaviour {
     public void TakeDamage(int amount)
     {
         //  server to handle
-//        if (!NetworkServer.active)
-//            return;
-        if (!isServer)
+        if (!NetworkServer.active)
             return;
+        //if (!isServer)
+        //    return;
 
         this.curHealth -= amount;
         //
