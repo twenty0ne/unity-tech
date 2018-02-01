@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Bullet2 : MonoBehaviour
+public class Bullet3 : MonoBehaviour
 {
 
     //public float speed;
@@ -25,15 +25,16 @@ public class Bullet2 : MonoBehaviour
         //    return;
 
         GameObject hit = other.gameObject;
-		var player = hit.GetComponent<Player2>();
+		var player = hit.GetComponent<Player3>();
 
         if (player != null)
         {
             Debug.Log("xx-- bullet > " + gameObject.GetInstanceID().ToString());
             player.TakeDamage(10);
+
+            Destroy(gameObject);
         }
 
         //isDestroy = true;
-        Destroy(gameObject);
     }
 }

@@ -4,14 +4,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 
-public class Player2 : NetworkBehaviour {
+public class Player3 : MonoBehaviour {
 
     public GameObject bulletPrefab;
 //    public TextMesh label;
     public float moveSpeed;
 
     public const int maxHealth = 100;
-    [SyncVar(hook = "OnChangedHealth")]
     public int curHealth = 100;
     //[SyncVar]
     //
@@ -26,39 +25,12 @@ public class Player2 : NetworkBehaviour {
 
     private string logTag = "xx--";
 
-    public override void OnStartServer()
-    {
-        base.OnStartServer();
-
-        logTag = "xx--" + gameObject.GetInstanceID().ToString() + "-- ";
-        Debug.Log(logTag + "OnStartServer");
-
-        //StartCoroutine(SetNameWhenReady());
-
-        //this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
-    }
-
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-
-        logTag = "xx--" + gameObject.GetInstanceID().ToString() + "-- ";
-        Debug.Log(logTag + "OnStartClient");
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-        base.OnStartLocalPlayer();
-        Debug.Log(logTag + "OnStartLocalPlayer");
-    }
+    public bool isEnable = true;
 
     private void Start()
     {
         //curHealth = maxHealth;
         //this.healthBarOriginWidth = this.healthBar.sizeDelta.x;
-        Debug.Log(logTag + "isServer - " + isServer.ToString());
-        Debug.Log(logTag + "isClient - " + isClient.ToString());
-        Debug.Log(logTag + "isLocalPlayer - " + isLocalPlayer.ToString());
     }
 
     //IEnumerator SetNameWhenReady()
@@ -76,7 +48,7 @@ public class Player2 : NetworkBehaviour {
 
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!this.isEnable)
             return;
 
         // if (hasAuthority)
@@ -111,7 +83,6 @@ public class Player2 : NetworkBehaviour {
     }
         
 
-    [Command]
     public void CmdFire()
     {
         // Debug.Log("CmdFire 1");
@@ -126,16 +97,11 @@ public class Player2 : NetworkBehaviour {
             // add velocity to bullet
             bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 1f;
 
-            NetworkServer.Spawn(bullet);
-
             // Destroy Bullet after 2 seg
             Destroy(bullet, 10);
-
-            RpcAddNum();
         }
     }
 
-    [Command]
     public void CmdRotate()
     {
         // if (isServer)
@@ -144,24 +110,11 @@ public class Player2 : NetworkBehaviour {
         }
     }
 
-    [ClientRpc]
-    public void RpcAddNum()
-    {
-        if (isLocalPlayer)
-        {
-            totalShotBulletNum += 1;
-
-            Debug.LogWarning("total shot bullet: " + totalShotBulletNum.ToString());
-        }
-    }
-
     public void TakeDamage(int amount)
     {
         //  server to handle
         //if (!NetworkServer.active)
         //    return;
-        if (!isServer)
-            return;
 
         curHealth -= amount;
         
@@ -171,14 +124,6 @@ public class Player2 : NetworkBehaviour {
         }
         //
         Debug.Log(logTag + "take damage >" + amount.ToString());
-    }
-
-    void OnChangedHealth(int health)
-    {
-        curHealth = health;
-
-        // Debug.Log(logTag + "on changed health > " + health.ToString() + " - " + this.curHealth.ToString());
-        healthBar.sizeDelta = new Vector2(healthBarOriginWidth * 1.0f * health / maxHealth, healthBar.sizeDelta.y);
     }
 
 //    public override void OnStartLocalPlayer()

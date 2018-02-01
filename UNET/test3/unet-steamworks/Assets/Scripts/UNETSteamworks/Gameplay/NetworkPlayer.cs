@@ -111,10 +111,10 @@ public class NetworkPlayer : NetworkBehaviour {
     public void TakeDamage(int amount)
     {
         //  server to handle
-//        if (!NetworkServer.active)
-//            return;
-        if (!isServer)
+        if (!NetworkServer.active)
             return;
+        //if (!isServer)
+        //    return;
 
         this.curHealth -= amount;
         //
