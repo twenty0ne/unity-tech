@@ -501,7 +501,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: -104}
+  m_AnchoredPosition: {x: 806, y: -104}
   m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &909779935
@@ -884,7 +884,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 30, y: -30}
+  m_AnchoredPosition: {x: 806, y: -30}
   m_SizeDelta: {x: 160, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1534036239
@@ -1377,7 +1377,7 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1598751002499710, guid: 0a93b8d1c7fc4fe468b2e9a680091a38,
+  m_PlayerPrefab: {fileID: 1449616635752034, guid: b6aa3b4fdeca4ce468c2ea1ece60fa7b,
     type: 2}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
@@ -1385,6 +1385,7 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1312610670525394, guid: f1727d57d166303458b519fd8767e456, type: 2}
+  - {fileID: 1598751002499710, guid: 0a93b8d1c7fc4fe468b2e9a680091a38, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -1440,6 +1441,8 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  objPlayerPrefab: {fileID: 1598751002499710, guid: 0a93b8d1c7fc4fe468b2e9a680091a38,
+    type: 2}
 --- !u!4 &2102141310
 Transform:
   m_ObjectHideFlags: 0

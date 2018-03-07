@@ -26,6 +26,12 @@ public class Player2 : NetworkBehaviour {
 
     private string logTag = "xx--";
 
+    [SyncVar]
+    public int testSyncVar = 77;
+
+    private int lastTestSyncVar = 0;
+    float tick = 0f;
+
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -76,10 +82,10 @@ public class Player2 : NetworkBehaviour {
 
     void Update()
     {
-        if (!isLocalPlayer)
-            return;
+        //if (!isLocalPlayer)
+        //    return;
 
-        // if (hasAuthority)
+        if (hasAuthority)
         {
             // Only allow input for client with authority 
             var input = new Vector3( Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical") );
@@ -101,12 +107,32 @@ public class Player2 : NetworkBehaviour {
                 Debug.Log(logTag + "health > " + curHealth.ToString());
             }
         }
-      
+
         // Disable physics for peer objects
         //GetComponent<Rigidbody>().isKinematic = !hasAuthority;
 
         // Update player name
         // label.text = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+        if (isServer)
+        {
+            tick += Time.deltaTime;
+            if (tick >= 5f)
+            {
+                tick = 0f;
+                testSyncVar += 1;
+                Debug.Log("------ testSyncVar " + testSyncVar.ToString());
+            }
+        }
+
+        if (hasAuthority)
+        {
+            if (lastTestSyncVar != testSyncVar)
+            {
+                lastTestSyncVar = testSyncVar;
+                Debug.Log(">>>>> testSyncVar " + testSyncVar.ToString());
+            }
+        }
 
     }
         
