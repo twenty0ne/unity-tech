@@ -18,4 +18,11 @@ public class MyNet2 : NetworkManager
     //        NetworkServer.SpawnWithClientAuthority(player, client.connection);
     //    }
     //}
+
+    public override void OnStartClient(NetworkClient client)
+    {
+        base.OnStartClient(client);
+
+        LogFilter.currentLogLevel = 0;
+    }
 }

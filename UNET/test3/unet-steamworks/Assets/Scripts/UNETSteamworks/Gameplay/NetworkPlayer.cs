@@ -11,8 +11,8 @@ public class NetworkPlayer : NetworkBehaviour {
     public TextMesh label;
     public float moveSpeed;
 
-    [SyncVar]
-    public ulong steamId;
+    //[SyncVar]
+    //public ulong steamId;
 
     public const int maxHealth = 100;
     [SyncVar(hook = "OnChangedHealth")] public int curHealth = maxHealth;
@@ -24,6 +24,12 @@ public class NetworkPlayer : NetworkBehaviour {
     public static int totalShotBulletNum = 0;
 
     public float healthBarOriginWidth = 0;
+
+    [SyncVar]
+    public int testSyncVar = 77;
+
+    private int lastTestSyncVar = 0;
+    float tick = 0f;
 
     public override void OnStartServer()
     {
@@ -67,12 +73,29 @@ public class NetworkPlayer : NetworkBehaviour {
                CmdFire();
             }
         }
-      
+
         // Disable physics for peer objects
         //GetComponent<Rigidbody>().isKinematic = !hasAuthority;
 
         // Update player name
         // label.text = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+
+        if (isServer && hasAuthority)
+        {
+            tick += Time.deltaTime;
+            if (tick >= 5f)
+            {
+                tick = 0f;
+                testSyncVar += 1;
+                // Debug.Log("------ testSyncVar " + testSyncVar.ToString());
+            }
+        }
+
+        if (lastTestSyncVar != testSyncVar)
+        {
+            lastTestSyncVar = testSyncVar;
+            Debug.Log(">>>>> testSyncVar " + testSyncVar.ToString());
+        }
 
     }
         
@@ -128,6 +151,8 @@ public class NetworkPlayer : NetworkBehaviour {
 
     void OnChangedHealth(int health)
     {
+        curHealth = health;
+
         Debug.LogWarning("on changed health > " + health.ToString() + " - " + this.curHealth.ToString());
         healthBar.sizeDelta = new Vector2(healthBarOriginWidth * 1.0f * health / maxHealth, healthBar.sizeDelta.y);
     }

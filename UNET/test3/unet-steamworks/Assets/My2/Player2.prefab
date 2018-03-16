@@ -106,9 +106,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4641659089763606}
   - component: {fileID: 114684034031760788}
-  - component: {fileID: 114894293070458628}
   - component: {fileID: 65974478871352068}
+  - component: {fileID: 114894293070458628}
   - component: {fileID: 114349655417070718}
+  - component: {fileID: 114830138715069454}
   m_Layer: 0
   m_Name: Player2
   m_TagString: Untagged
@@ -350,6 +351,7 @@ MonoBehaviour:
   healthBar: {fileID: 224293784522216500}
   bulletSpawn: {fileID: 4741702565080726}
   healthBarOriginWidth: 100
+  testSyncVar: 77
 --- !u!114 &114430772218385350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -457,6 +459,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450c0242d548a774b9da8794cfe13c7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114830138715069454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1598751002499710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: feb32461af9aaa240a5396dc3237575d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kk: 32
 --- !u!114 &114894293070458628
 MonoBehaviour:
   m_ObjectHideFlags: 1

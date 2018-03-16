@@ -106,8 +106,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4641659089763606}
   - component: {fileID: 114684034031760788}
-  - component: {fileID: 114741865969174918}
   - component: {fileID: 114894293070458628}
+  - component: {fileID: 114741865969174918}
   - component: {fileID: 65974478871352068}
   m_Layer: 0
   m_Name: Player
@@ -454,11 +454,11 @@ MonoBehaviour:
     type: 2}
   label: {fileID: 102667041839711248}
   moveSpeed: 4
-  steamId: 0
   curHealth: 100
   healthBar: {fileID: 224293784522216500}
   bulletSpawn: {fileID: 4741702565080726}
   healthBarOriginWidth: 0
+  testSyncVar: 77
 --- !u!114 &114894293070458628
 MonoBehaviour:
   m_ObjectHideFlags: 1
