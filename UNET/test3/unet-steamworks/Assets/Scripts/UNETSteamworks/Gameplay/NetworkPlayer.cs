@@ -72,6 +72,11 @@ public class NetworkPlayer : NetworkBehaviour {
             {
                CmdFire();
             }
+
+			if (Input.GetKeyDown(KeyCode.F))
+			{
+				CmdTargetRpcTest();
+			}
         }
 
         // Disable physics for peer objects
@@ -91,11 +96,11 @@ public class NetworkPlayer : NetworkBehaviour {
             }
         }
 
-        if (lastTestSyncVar != testSyncVar)
-        {
-            lastTestSyncVar = testSyncVar;
-            Debug.Log(">>>>> testSyncVar " + testSyncVar.ToString());
-        }
+        //if (lastTestSyncVar != testSyncVar)
+        //{
+        //    lastTestSyncVar = testSyncVar;
+        //    Debug.Log(">>>>> testSyncVar " + testSyncVar.ToString());
+        //}
 
     }
         
@@ -161,4 +166,17 @@ public class NetworkPlayer : NetworkBehaviour {
 //    {
 //        GetComponent<Renderer>().material.color = Color.black;
 //    }
+
+	[Command]
+	void CmdTargetRpcTest()
+	{
+		Debug.Log("xx-- CmdTargetRpcTest");
+		TargetTestRpc(MyNetworkManager.instance.connRemote);
+	}
+
+	[TargetRpc]
+	public void TargetTestRpc(NetworkConnection conn)
+	{
+		Debug.Log("xx-- target test rpc");
+	}
 }
