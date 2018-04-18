@@ -23,21 +23,22 @@ public class MyNetworkConnection : NetworkConnection
 
     public override bool TransportSend(byte[] bytes, int numBytes, int channelId, out byte error)
     {
-        // if (playerId == SteamUser.GetSteamID().m_SteamID)
-        //{
-        //    // sending to self. short circuit
-        //    TransportReceive(bytes, numBytes, channelId);
-        //    error = 0;
-        //    return true;
-        //}
-        //if (MyNetworkManager.instance.IsHost())
-        //{
-        //    TransportReceive(bytes, numBytes, channelId);
-        //    error = 0;
-        //    return true;
-        //}
+		// if (playerId == SteamUser.GetSteamID().m_SteamID)
+		//{
+		//    // sending to self. short circuit
+		//    TransportReceive(bytes, numBytes, channelId);
+		//    error = 0;
+		//    return true;
+		//}
+		//if (MyNetworkManager.instance.IsHost())
+		//{
+		//    TransportReceive(bytes, numBytes, channelId);
+		//    error = 0;
+		//    return true;
+		//}
 
-        // Send packet to peer through Steam
+		// Send packet to peer through Steam
+		Debug.Log("xx-- TransportSend > " + channelId.ToString());
         bool ret = MyNetworkManager.instance.Send(bytes, numBytes, channelId);
 
         if (ret)

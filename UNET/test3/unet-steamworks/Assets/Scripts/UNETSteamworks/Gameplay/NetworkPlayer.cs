@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using Steamworks;
 using UnityEngine.Networking.NetworkSystem;
 
+[NetworkSettings(channel =1, sendInterval =5)]
 public class NetworkPlayer : NetworkBehaviour {
 
     public GameObject bulletPrefab;
@@ -15,7 +16,8 @@ public class NetworkPlayer : NetworkBehaviour {
     //public ulong steamId;
 
     public const int maxHealth = 100;
-    [SyncVar(hook = "OnChangedHealth")] public int curHealth = maxHealth;
+    [SyncVar(hook = "OnChangedHealth")]
+	public int curHealth = maxHealth;
 
     public RectTransform healthBar;
 
@@ -30,6 +32,8 @@ public class NetworkPlayer : NetworkBehaviour {
 
     private int lastTestSyncVar = 0;
     float tick = 0f;
+
+	public int testRpcSend = 1;
 
     public override void OnStartServer()
     {
@@ -76,33 +80,34 @@ public class NetworkPlayer : NetworkBehaviour {
 			if (Input.GetKeyDown(KeyCode.F))
 			{
 				CmdTargetRpcTest();
+				//TargetTestSendInterval(MyNetworkManager.instance.connRemote);
 			}
         }
 
-        // Disable physics for peer objects
-        //GetComponent<Rigidbody>().isKinematic = !hasAuthority;
+		// Disable physics for peer objects
+		//GetComponent<Rigidbody>().isKinematic = !hasAuthority;
 
-        // Update player name
-        // label.text = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
+		// Update player name
+		// label.text = SteamFriends.GetFriendPersonaName(new CSteamID(steamId));
 
-        if (isServer && hasAuthority)
-        {
-            tick += Time.deltaTime;
-            if (tick >= 5f)
-            {
-                tick = 0f;
-                testSyncVar += 1;
-                // Debug.Log("------ testSyncVar " + testSyncVar.ToString());
-            }
-        }
+		//if (isServer && hasAuthority)
+		//{
+		//	tick += Time.deltaTime;
+		//	if (tick >= 5f)
+		//	{
+		//		tick = 0f;
+		//		testSyncVar += 1;
+		//		// Debug.Log("------ testSyncVar " + testSyncVar.ToString());
+		//	}
+		//}
 
-        //if (lastTestSyncVar != testSyncVar)
-        //{
-        //    lastTestSyncVar = testSyncVar;
-        //    Debug.Log(">>>>> testSyncVar " + testSyncVar.ToString());
-        //}
+		//if (lastTestSyncVar != testSyncVar)
+		//{
+		//    lastTestSyncVar = testSyncVar;
+		//    Debug.Log(">>>>> testSyncVar " + testSyncVar.ToString());
+		//}
 
-    }
+	}
         
 
     [Command]
@@ -178,5 +183,12 @@ public class NetworkPlayer : NetworkBehaviour {
 	public void TargetTestRpc(NetworkConnection conn)
 	{
 		Debug.Log("xx-- target test rpc");
+	}
+
+	[TargetRpc]
+	public void TargetTestSendInterval(NetworkConnection conn)
+	{
+		Debug.Log("xx-- target test send interval");
+
 	}
 }

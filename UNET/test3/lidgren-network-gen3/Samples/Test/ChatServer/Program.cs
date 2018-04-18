@@ -51,6 +51,8 @@ namespace ChatServer
 			config.Port = 14242;
 			s_server = new NetServer(config);
 
+			StartServer();
+
 			Application.Idle += new EventHandler(Application_Idle);
 			Application.Run(s_form);
 		}
@@ -148,12 +150,13 @@ namespace ChatServer
                                 om.Write(im.Data);
                                 if (remote_id == room.host.RemoteUniqueIdentifier.ToString() && room.client != null)
                                 {
-                                    s_server.SendMessage(om, room.client, NetDeliveryMethod.ReliableOrdered, 0);
+                                    s_server.SendMessage(om, room.client, im.DeliveryMethod, im.SequenceChannel);
                                 }
                                 else if (room.client != null && remote_id == room.client.RemoteUniqueIdentifier.ToString())
                                 {
-                                    s_server.SendMessage(om, room.host, NetDeliveryMethod.ReliableOrdered, 0);
+                                    s_server.SendMessage(om, room.host, im.DeliveryMethod, im.SequenceChannel);
                                 }
+								Output("xx-- data > " + im.DeliveryMethod.ToString() + " - " + im.SequenceChannel.ToString());
                             }
                             else
                             {

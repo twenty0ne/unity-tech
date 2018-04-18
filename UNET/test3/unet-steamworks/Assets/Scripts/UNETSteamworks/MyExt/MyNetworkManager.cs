@@ -806,7 +806,12 @@ public class MyNetworkManager : MonoBehaviour
         om.Write(DATA_TYPE.DAT_UNET);
         om.Write(numBytes);
         om.Write(bytes);
-        _netClient.SendMessage(om, NetDeliveryMethod.ReliableOrdered, channelId);
+		if (channelId == 0)
+			_netClient.SendMessage(om, NetDeliveryMethod.ReliableSequenced, channelId);
+		else if (channelId == 1)
+			_netClient.SendMessage(om, NetDeliveryMethod.Unreliable, 0);
+		else
+			Debug.Assert(false, "CHECK");
 
         return true;
     }
@@ -874,7 +879,8 @@ public class MyNetworkManager : MonoBehaviour
 
                             if (conn != null)
                             {
-                                conn.TransportReceive(byteArray, byteLength, 0);
+								Debug.Log("xx-- TransportReceive > " + im.SequenceChannel.ToString());
+                                conn.TransportReceive(byteArray, byteLength, im.SequenceChannel);
                             }
                         }
                         else if (dataType == DATA_TYPE.DAT_ACCEPT)
