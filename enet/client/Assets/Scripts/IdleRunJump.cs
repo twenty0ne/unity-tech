@@ -6,7 +6,10 @@ public class IdleRunJump : MonoBehaviour {
 
 	protected Animator animator;
 	public float DirectionDampTime = .25f;
-	public bool ApplyGravity = true; 
+	public bool ApplyGravity = true;
+
+	public float nSpeed = 0f;
+	public float nDirection = 0f;
 
 	// Use this for initialization
 	void Start () 
@@ -20,31 +23,57 @@ public class IdleRunJump : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		if (!animator)
+			return;
 
-		if (animator)
+		AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+		if (NetManager.Instance.isHost)
 		{
-			AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);			
+			animator.applyRootMotion = true;
 
 			if (stateInfo.IsName("Base Layer.Run"))
 			{
-				if (Input.GetButton("Fire1")) animator.SetBool("Jump", true);                
-            }
+				if (Input.GetButton("Fire1"))
+				{
+					animator.SetBool("Jump", true);
+
+					NetManager.Instance.AddMessage(NetField.JUMP);
+				}
+			}
 			else
 			{
-				animator.SetBool("Jump", false);                
-            }
+				animator.SetBool("Jump", false);
+			}
 
-			if(Input.GetButtonDown("Fire2") && animator.layerCount >= 2)
+			if (Input.GetButtonDown("Fire2") && animator.layerCount >= 2)
 			{
 				animator.SetBool("Hi", !animator.GetBool("Hi"));
 			}
-			
-		
-      		float h = Input.GetAxis("Horizontal");
-        	float v = Input.GetAxis("Vertical");
-			
-			animator.SetFloat("Speed", h*h+v*v);
-            animator.SetFloat("Direction", h, DirectionDampTime, Time.deltaTime);	
-		}   		  
+
+			float h = Input.GetAxis("Horizontal");
+			float v = Input.GetAxis("Vertical");
+
+			nSpeed = h * h + v * v;
+			nDirection = h;
+
+			NetManager.Instance.AddMessage(NetField.ANI, h * h + v * v, h);
+		}
+		else
+		{
+			animator.applyRootMotion = false;
+
+			if (stateInfo.IsName("Base Layer.Run"))
+			{
+
+			}
+			else
+			{
+				animator.SetBool("Jump", false);
+			}
+		}
+
+		animator.SetFloat("Speed", nSpeed);
+		animator.SetFloat("Direction", nDirection, DirectionDampTime, Time.deltaTime);
 	}
 }

@@ -25,7 +25,7 @@ public class NetClient
 		peer = host.Connect(address, 200, 1234);
 	}
 
-	public void SendClientPacket(Packet pkt, byte chan)
+	public void SendPacket(Packet pkt, byte chan)
 	{
 		if (!bInit)
 		{

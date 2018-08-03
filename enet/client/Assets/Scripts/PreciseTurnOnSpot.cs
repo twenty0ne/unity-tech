@@ -1,9 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class PreciseTurnOnSpot : MonoBehaviour {
-
-
+public class PreciseTurnOnSpot : MonoBehaviour
+{
 	protected Animator animator;
 	float targetTurn = 90;
 	bool doTurn = false;

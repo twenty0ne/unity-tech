@@ -8,7 +8,7 @@ public class NetBuffer
 	/// <summary>
 	/// Number of bytes to overallocate for each message to avoid resizing
 	/// </summary>
-	protected const int c_overAllocateAmount = 4;
+	protected const int c_overAllocateAmount = 0;
 
 	private byte[] m_data;
 	private int m_byteLength = 0;
@@ -96,6 +96,11 @@ public class NetBuffer
 		float y = ReadSingle();
 		float z = ReadSingle();
 		return new UnityEngine.Vector3(x, y, z);
+	}
+
+	public bool IsEndOfRead()
+	{
+		return m_readPosition >= m_data.Length;
 	}
 
 	private void EnsureBufferSize(int byteLen)

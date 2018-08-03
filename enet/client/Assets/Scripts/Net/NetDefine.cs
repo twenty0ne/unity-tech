@@ -5,7 +5,13 @@ using UnityEngine;
 public enum NetField : byte
 {
 	POS = 0,
-	ROTATION = 1,
+	JUMP = 1,
+	ANI = 2,
+}
+
+public enum NetFlag : byte
+{
+	
 }
 
 public static class NetDefine
