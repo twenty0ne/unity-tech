@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 public class NetPlayer : MonoBehaviour
 {
 	//private Vector3 oldPos;
@@ -94,4 +95,10 @@ public class NetPlayer : MonoBehaviour
 			// transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime * rotateSmooth);
 		}
 	}
+}
+*/
+ 
+public class NetPlayer
+{
+	public string id;
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
 enum ChanId : byte
 {
 	POS,
@@ -151,6 +152,10 @@ public class NetManager : MonoBehaviour
 
 	public void AddMessage(NetField field, params object[] vals)
 	{
+		// TODO:
+		// 考虑 Message NetField 重复的情况
+		// 考虑 NetBuffer 重复利用
+
 		if (messages == null)
 			messages = new NetBuffer();
 
@@ -173,5 +178,59 @@ public class NetManager : MonoBehaviour
 
 		// messages.Add(buffer);
 		Debug.Log("xx-- add message");
+	}
+}
+*/
+
+public static class NetManager
+{
+	public static NetClient nclient;
+	public static NetPlayer player;
+
+	static NetManager()
+	{
+		// Init NetHandler
+		GameObject obj = new GameObject();
+		obj.AddComponent<NetHandler>();
+		obj.name = "NetHandler";
+
+		// Init NetClient
+		nclient = new NetClient();
+	}
+
+	public static bool isHost
+	{
+		get
+		{
+			return nclient.hostPlayerId == player.id;
+		}
+	}
+
+	public static bool connected
+	{
+		get
+		{
+			if (nclient == null)
+				return false;
+
+
+			return true;
+		}
+	}
+
+	public static void Connect(string address, int port)
+	{
+		if (nclient.peerState == PeerState.Disconnected)
+		{
+			Debug.LogWarning("TODO");
+			return;
+		}
+
+		nclient.Connect(address, port);
+	}
+
+	public static void Instantiate()
+	{
+
 	}
 }

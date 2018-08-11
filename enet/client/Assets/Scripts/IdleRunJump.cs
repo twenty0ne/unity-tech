@@ -28,7 +28,7 @@ public class IdleRunJump : MonoBehaviour {
 
 		AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-		if (NetManager.Instance.isHost)
+		// if (NetManager.Instance.isHost)
 		{
 			animator.applyRootMotion = true;
 
@@ -38,7 +38,7 @@ public class IdleRunJump : MonoBehaviour {
 				{
 					animator.SetBool("Jump", true);
 
-					NetManager.Instance.AddMessage(NetField.JUMP);
+					// NetManager.Instance.AddMessage(NetField.JUMP);
 				}
 			}
 			else
@@ -57,21 +57,21 @@ public class IdleRunJump : MonoBehaviour {
 			nSpeed = h * h + v * v;
 			nDirection = h;
 
-			NetManager.Instance.AddMessage(NetField.ANI, h * h + v * v, h);
+		//	NetManager.Instance.AddMessage(NetField.ANI, h * h + v * v, h);
 		}
-		else
-		{
-			animator.applyRootMotion = false;
+		//else
+		//{
+		//	animator.applyRootMotion = false;
 
-			if (stateInfo.IsName("Base Layer.Run"))
-			{
+		//	if (stateInfo.IsName("Base Layer.Run"))
+		//	{
 
-			}
-			else
-			{
-				animator.SetBool("Jump", false);
-			}
-		}
+		//	}
+		//	else
+		//	{
+		//		animator.SetBool("Jump", false);
+		//	}
+		//}
 
 		animator.SetFloat("Speed", nSpeed);
 		animator.SetFloat("Direction", nDirection, DirectionDampTime, Time.deltaTime);
