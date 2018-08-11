@@ -7,7 +7,7 @@ public class Agent : MonoBehaviour {
 	protected UnityEngine.AI.NavMeshAgent		agent;
 	protected Animator			animator;
 
-	protected Locomotion locomotion;
+	// protected Locomotion locomotion;
 	protected Object particleClone;
 
 
@@ -17,7 +17,7 @@ public class Agent : MonoBehaviour {
 		agent.updateRotation = false;
 
 		animator = GetComponent<Animator>();
-		locomotion = new Locomotion(animator);
+		// locomotion = new Locomotion(animator);
 
 		particleClone = null;
 	}
@@ -48,7 +48,7 @@ public class Agent : MonoBehaviour {
 	{
 		if (AgentDone())
 		{
-			locomotion.Do(0, 0);
+			// locomotion.Do(0, 0);
 			if (particleClone != null)
 			{
 				GameObject.Destroy(particleClone);
@@ -63,7 +63,7 @@ public class Agent : MonoBehaviour {
 
 			float angle = Mathf.Atan2(velocity.x, velocity.z) * 180.0f / 3.14159f;
 
-			locomotion.Do(speed, angle);
+			// locomotion.Do(speed, angle);
 		}
 	}
 

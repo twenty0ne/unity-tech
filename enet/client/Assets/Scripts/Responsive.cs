@@ -14,13 +14,13 @@ public class Responsive : MonoBehaviour {
 
     protected Animator animator;
 
-    private Locomotion locomotion = null;
+    // private Locomotion locomotion = null;
 
 	// Use this for initialization
 	void Start () 
 	{
         animator = GetComponent<Animator>();
-        locomotion = new Locomotion(animator);
+        // locomotion = new Locomotion(animator);
 	}
     
 	void Update () 
@@ -33,7 +33,7 @@ public class Responsive : MonoBehaviour {
             float speed = (h * h + v * v) * 6;
             float direction = Mathf.Atan2(h, v) * 180.0f / 3.14159f;
 
-            locomotion.Do(speed, direction);
+            // locomotion.Do(speed, direction);
 		}		
 	}
 }

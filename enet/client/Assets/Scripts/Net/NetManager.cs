@@ -213,7 +213,6 @@ public static class NetManager
 			if (nclient == null)
 				return false;
 
-
 			return true;
 		}
 	}
