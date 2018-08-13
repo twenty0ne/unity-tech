@@ -11,7 +11,12 @@ public class ConnectAndJoin : MonoBehaviour
 		if (ConnectInUpdate && !NetManager.connected)
 		{
 			ConnectInUpdate = false;
-			NetManager.Connect("127.0.0.1", 17210);
+			NetManager.ConnectToMaster("127.0.0.1", 17210);
 		}
+	}
+
+	public void OnConnectedToMaster()
+	{
+		Debug.Log("xx-- ConnectAndJoin.OnConnectedToMaster");
 	}
 }

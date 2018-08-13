@@ -15,7 +15,14 @@ public class NetHandler : MonoBehaviour
 	
 	private void Update ()
 	{
-		// NetManager.peer.
+		if (NetManager.nclient == null)
+			return;
+
+		NetManager.nclient.HandleIncomingCommands();
+
+		// TODO
+		// send frequency？
+		NetManager.nclient.SendOutgoingCommands();
 	}
 
 	private void OnApplicationQuit()

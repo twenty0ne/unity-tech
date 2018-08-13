@@ -213,19 +213,19 @@ public static class NetManager
 			if (nclient == null)
 				return false;
 
-			return true;
+			return false;
 		}
 	}
 
-	public static void Connect(string address, int port)
+	public static void ConnectToMaster(string address, int port)
 	{
-		if (nclient.peerState == PeerState.Disconnected)
+		if (nclient.peerState != PeerState.Disconnected)
 		{
 			Debug.LogWarning("TODO");
 			return;
 		}
 
-		nclient.Connect(address, port);
+		nclient.Connect(address, port, ServerType.MasterServer);
 	}
 
 	public static void Instantiate()

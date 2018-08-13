@@ -55,7 +55,7 @@ public class ENetTransport : XNetTransport
 					case ENet.EventType.Receive:
 						{
 							var data = evt.Packet.GetBytes();
-							peer.ReceiveData(data, data.Length);
+							peer.OnReceiveData(data, data.Length);
 							evt.Packet.Dispose();
 						}
 						break;

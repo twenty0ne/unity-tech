@@ -73,7 +73,22 @@ using UnityEngine;
 public enum ClientState
 {
 	None,
-	ConnectingTo
+	ConnectingToMasterServer,
+	ConnectedToMasterServer,
+	ConnectingToGameServer,
+	ConnectedToGameServer,
+}
+
+public enum ServerType
+{
+	None,
+	MasterServer,
+	GameServer,	// relay server
+}
+
+public enum NetMessageMethod
+{
+	OnConnectedToMaster,
 }
 
 public class NetClient : XNetPeer
@@ -84,8 +99,71 @@ public class NetClient : XNetPeer
 	// ClientState 是在  PeerState 之上的进一步扩展，更多的 Lobby，Room 等具体游戏相关
 	public ClientState clientState = ClientState.None;
 
+	public ServerType cachedServerType = ServerType.None;
+	public string cachedServerAddress = "";
+	public int cachedServerPort = 0;
+
+	public static void SendNetMessage(NetMessageMethod method, params object[] parameters)
+	{
+		Object[] objs = GameObject.FindObjectsOfType(typeof(MonoBehaviour));
+
+		foreach (GameObject obj in objs)
+		{
+			if (obj != null)
+				obj.SendMessage(method.ToString(), parameters, SendMessageOptions.DontRequireReceiver);
+		}
+	}
+
+	public override void OnStatusChanged(StatusCode statusCode)
+	{
+		Debug.Log(string.Format("OnStatusChanged: {0} current State: {1}", statusCode.ToString(), clientState.ToString()));
+
+		switch (statusCode)
+		{
+			case StatusCode.Connect:
+				{
+					if (clientState == ClientState.ConnectingToMasterServer)
+					{
+						clientState = ClientState.ConnectedToMasterServer;
+						SendNetMessage(NetMessageMethod.OnConnectedToMaster);
+					}
+					else if (clientState == ClientState.ConnectingToGameServer)
+					{
+						clientState = ClientState.ConnectedToGameServer;
+					}
+				}
+				break;
+		}
+	}
+
+	public bool Connect(string address, int port, ServerType stype)
+	{
+		base.Connect(address, port);
+
+		cachedServerType = stype;
+		cachedServerAddress = address;
+		cachedServerPort = port;
+
+		if (stype == ServerType.MasterServer)
+			clientState = ClientState.ConnectingToMasterServer;
+		else if (stype == ServerType.GameServer)
+			clientState = ClientState.ConnectingToGameServer ;
+		else
+			Debug.Assert(false, "CHECK");
+
+		return true;
+	}
+
 	public void NewSceneLoaded()
 	{
-
+		
 	}
+
+	//public void SendOutgoingCommands()
+	//{
+	//}
+
+	//public void ReceiveIncomingCommands()
+	//{
+	//}
 }
