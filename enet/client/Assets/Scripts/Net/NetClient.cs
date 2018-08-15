@@ -91,6 +91,12 @@ public enum NetMessageMethod
 	OnConnectedToMaster,
 }
 
+public enum OpCode : byte
+{
+	JoinRoom = 0,
+
+}
+
 public class NetClient : XNetPeer
 {
 	public string hostPlayerId;
@@ -166,4 +172,6 @@ public class NetClient : XNetPeer
 	//public void ReceiveIncomingCommands()
 	//{
 	//}
+	
+	public void JoinRoom()
 }

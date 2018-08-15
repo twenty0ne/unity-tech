@@ -19,11 +19,27 @@ public enum StatusCode
 
 // TODO
 // 消息格式
+
 // short - peerId
 // byte - crcEnabled
 // byte - udpCommandCount
 // int - timeInt
 // int - challenge
+// - {
+//		NetCommand {
+//         CommndType
+
+// 以上内容 ENet/Lidgren 已经封装，需要关注的是 Payload
+
+//         Payload {
+//				MsgType
+//             OperationCode - 内部/外部
+//             ReturnCode
+//             DebugMessage
+//             Parameters - ParameterCode
+//			}
+//		}
+// - }
 
 public class XNetPeer
 {
@@ -101,7 +117,7 @@ public class XNetPeer
 			while (incomingCommands.Count > 0)
 			{
 				XNetCommand cmd = incomingCommands.Dequeue();
-
+				
 			}
 		}
 	}

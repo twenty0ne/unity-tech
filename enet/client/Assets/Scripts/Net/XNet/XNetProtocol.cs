@@ -4,5 +4,13 @@ using UnityEngine;
 
 public class XNetProtocol
 {
+	public static void Serialize()
+	{
 
+	}
+
+	public static void Deserialize()
+	{
+
+	}
 }
