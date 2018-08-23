@@ -117,8 +117,16 @@ public class XNetPeer
 			while (incomingCommands.Count > 0)
 			{
 				XNetCommand cmd = incomingCommands.Dequeue();
-				
+				if (cmd.type == CmdType.OperationResponse)
+				{
+					// XNetProtocol.Deserialize
+				}
 			}
 		}
+	}
+
+	public virtual void OnHandleOperationResponse(XNetOperationResponse rep)
+	{
+
 	}
 }

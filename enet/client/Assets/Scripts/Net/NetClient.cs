@@ -89,12 +89,22 @@ public enum ServerType
 public enum NetMessageMethod
 {
 	OnConnectedToMaster,
+	OnJoinRandomGameFailed,
 }
 
-public enum OpCode : byte
+public class OperationCode
 {
-	JoinRoom = 0,
+	public const byte JoinLobby = 0;
+	public const byte LeaveLobby = 1;
+	public const byte JoinRandomGame = 2;
+	public const byte JoinGame = 3;
+	public const byte LeaveGame = 4;
+	public const byte CreateGame = 5;
+}
 
+public class ErrorCode
+{
+	public const int OK = 0;
 }
 
 public class NetClient : XNetPeer
@@ -172,6 +182,31 @@ public class NetClient : XNetPeer
 	//public void ReceiveIncomingCommands()
 	//{
 	//}
-	
-	public void JoinRoom()
+
+	// public void JoinRoom()
+
+	public override void OnHandleOperationResponse(XNetOperationResponse rep)
+	{
+		// base.OnHandleOperationResponse(rep);
+		switch (rep.operationCode)
+		{
+			case OperationCode.JoinLobby:
+				break;
+			case OperationCode.LeaveLobby:
+				break;
+			case OperationCode.JoinGame:
+				break;
+			case OperationCode.JoinRandomGame:
+				{
+					if (rep.returnCode != ErrorCode.OK)
+					{
+						SendNetMessage(NetMessageMethod.OnJoinRandomGameFailed);
+						break;
+					}
+
+					// 
+				}
+				break;
+		}
+	}
 }
