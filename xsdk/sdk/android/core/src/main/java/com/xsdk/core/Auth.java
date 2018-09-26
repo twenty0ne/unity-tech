@@ -43,16 +43,21 @@ public class Auth {
     }
 
     public static abstract interface AuthLoginListener {
-        public abstract void onAuthLogin();
+        public abstract void onAuthLogin(ResultAPI paramResultAPI, Auth.Account paramAccount);
     }
 
     public static abstract interface AuthLogoutListener {
-        public abstract void onAuthLogout();
+        public abstract void onAuthLogout(ResultAPI paramResultAPI);
     }
 
     public static class AuthInitResult extends DataModel {
         public Boolean isAuthorized;
         public String playerName;
         public String playerId;
+    }
+
+    public static class Account extends DataModel {
+        public String uid;
+        public String accessToken;
     }
 }

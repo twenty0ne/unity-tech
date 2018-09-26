@@ -20,6 +20,6 @@ public class XPluginUnity extends XPlugin {
 
     public void callEngine(String targetObject, String jsonParamString)
     {
-
+        XPlugin.invokeMethod("com.unity3d.player.UnityPlayer", "UnitySendMessage", new Object[]{ targetObject, "CallEngine", jsonParamString});
     }
 }

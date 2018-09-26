@@ -36,10 +36,31 @@ public class Auth {
     }
 
     public String login(final String targetObject, final JSONObject jsonParam) {
+        com.xsdk.core.Auth.login(new com.xsdk.core.Auth.AuthLoginListener(){
+            public void onAuthLogin(ResultAPI result, com.xsdk.core.Auth.Account account) {
+                JSONObject resJsonParam = XPlugin.createResponse(result, jsonParam);
+                try
+                {
+                    if (account == null) {
+                        resJsonParam.put("account", account.toJson());
+                    }
+                }
+                catch (JSONException localJSONException) {}
+                String resJsonParamString = resJsonParam.toString();
+                Auth.this.callEngine.callEngine(targetObject, resJsonParamString);
+            }
+        });
         return "";
     }
 
     public String logout(final String targetObject, final JSONObject jsonParam) {
+        com.xsdk.core.Auth.logout(new com.xsdk.core.Auth.AuthLogoutListener(){
+            public void onAuthLogout(ResultAPI result) {
+                JSONObject resJsonParam = XPlugin.createResponse(result, jsonParam);
+                String resJsonParamString = resJsonParam.toString();
+                Auth.this.callEngine.callEngine(targetObject, resJsonParamString);
+            }
+        });
         return "";
     }
 }
