@@ -1,16 +1,14 @@
 package com.xsdk.plugin;
 
 import com.xsdk.core.ResultAPI;
+import com.xsdk.core.base.Logger;
 
 import org.json.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
-
-/**
- * Created by twenty0ne on 2018/9/21.
- */
+import android.util.Log;
 
 public abstract class XPlugin implements ICallEngine{
 
@@ -24,11 +22,13 @@ public abstract class XPlugin implements ICallEngine{
     public String executeNative(String jsonParamString) {
         try
         {
+            Log.d("XPlugin", "xx-- executeNative > " + jsonParamString);
             JSONObject jsonParam = new JSONObject(jsonParamString);
             String className = jsonParam.optString("class");
             String methodName = jsonParam.optString("method");
             String targetObject = jsonParam.optString("targetObject");
             if ("Auth".equals(className)) {
+                Log.d("XPlugin", "xx-- executeNative > Auth");
                 return (String)invokeMethod(this.auth, methodName, new Object[] { targetObject, jsonParam });
             }
         }

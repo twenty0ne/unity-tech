@@ -7,10 +7,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by twenty0ne on 2018/9/25.
- */
-
 public class Android
 {
     public static JSONObject fieldToJSON(Object object)

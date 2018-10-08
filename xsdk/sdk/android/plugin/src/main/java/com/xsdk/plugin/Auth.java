@@ -5,10 +5,6 @@ import com.xsdk.core.ResultAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by twenty0ne on 2018/9/21.
- */
-
 public class Auth {
     private ICallEngine callEngine;
 

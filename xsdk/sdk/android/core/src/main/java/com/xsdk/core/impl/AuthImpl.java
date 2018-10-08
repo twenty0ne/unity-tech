@@ -2,10 +2,6 @@ package com.xsdk.core.impl;
 
 import com.xsdk.core.Auth;
 
-/**
- * Created by twenty0ne on 2018/9/21.
- */
-
 public class AuthImpl {
 
     public static String TAG = AuthImpl.class.getSimpleName();

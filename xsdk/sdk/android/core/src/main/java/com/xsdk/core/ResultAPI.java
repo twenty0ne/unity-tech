@@ -5,10 +5,6 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
-/**
- * Created by twenty0ne on 2018/9/25.
- */
-
 public class ResultAPI {
     public static final int SUCCESS = 0;
 

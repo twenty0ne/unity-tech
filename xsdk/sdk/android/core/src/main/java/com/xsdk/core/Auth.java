@@ -4,10 +4,6 @@ import com.xsdk.core.base.DataModel;
 import com.xsdk.core.base.Logger;
 import com.xsdk.core.impl.AuthImpl;
 
-/**
- * Created by twenty0ne on 2018/9/21.
- */
-
 public class Auth {
     public static final String TAG = Auth.class.getSimpleName();
 

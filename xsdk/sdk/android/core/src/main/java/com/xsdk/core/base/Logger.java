@@ -1,9 +1,5 @@
 package com.xsdk.core.base;
 
-/**
- * Created by twenty0ne on 2018/9/21.
- */
-
 public class Logger {
     public static String TAG = "XSdk";
 
