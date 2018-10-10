@@ -1,5 +1,7 @@
 package com.xsdk.plugin;
 
+import android.util.Log;
+
 import com.xsdk.core.ResultAPI;
 
 import org.json.JSONException;
@@ -13,8 +15,10 @@ public class Auth {
     }
 
     public String init(final String targetObject, final JSONObject jsonParam) {
+        Log.d("Auth", "xx-- init 0 > " + jsonParam.toString());
         com.xsdk.core.Auth.init(new com.xsdk.core.Auth.AuthInitListener() {
             public void onAuthInit(ResultAPI result, com.xsdk.core.Auth.AuthInitResult authInitResult) {
+                Log.d("Auth", "xx-- init 1 > " + jsonParam.toString());
                 JSONObject resJsonParam = XPlugin.createResponse(result, jsonParam);
                 try
                 {
@@ -25,6 +29,7 @@ public class Auth {
                 }
                 catch (JSONException localJSONException) {}
                 String resJsonParamString = resJsonParam.toString();
+                Log.d("Auth", "xx-- init 2 > " + resJsonParamString);
                 Auth.this.callEngine.callEngine(targetObject, resJsonParamString);
             }
         });

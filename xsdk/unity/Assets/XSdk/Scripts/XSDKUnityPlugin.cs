@@ -43,7 +43,7 @@ namespace XSDK
 			}
 
 			_androidClass = new AndroidJavaClass("com.xsdk.plugin.XPluginUnity");
-			targetObject = gameObject.name;
+			targetObject = "XSDKUnityPlugin"; // gameObject.name;
 		}
 
 		public JsonObject CallNative(JsonObject jsonParam)
@@ -52,7 +52,10 @@ namespace XSDK
 			string jsonParamString = jsonParam.ToString();
 			string resJsonString = _androidClass.CallStatic<string>("callNative", jsonParamString);
 			Debug.Log("xx-- CallNative > " + resJsonString);
-			return SimpleJson.SimpleJson.DeserializeObject<JsonObject>(resJsonString);
+			if (string.IsNullOrEmpty(resJsonString))
+				return new JsonObject();
+			else
+				return SimpleJson.SimpleJson.DeserializeObject<JsonObject>(resJsonString);
 #else
 			return new JsonObject();
 #endif
@@ -76,7 +79,7 @@ namespace XSDK
 		public static JsonObject CreateParam(string className, string methodName, object handler)
 		{
 			JsonObject jsonParam = new JsonObject();
-			jsonParam.Add("targetObject", targetObject);
+			jsonParam.Add("targetObject", /*targetObject*/"XSDKUnityPlugin");
 			jsonParam.Add("class", className);
 			jsonParam.Add("method", methodName);
 

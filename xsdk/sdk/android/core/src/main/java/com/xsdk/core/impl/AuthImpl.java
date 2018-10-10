@@ -1,6 +1,9 @@
 package com.xsdk.core.impl;
 
+import android.util.Log;
+
 import com.xsdk.core.Auth;
+import com.xsdk.core.ResultAPI;
 
 public class AuthImpl {
 
@@ -12,7 +15,11 @@ public class AuthImpl {
     }
 
     public void init(final Auth.AuthInitListener initListener) {
-
+        Log.d("AuthImpl", "xx-- init 0 > ");
+        if (initListener != null){
+            Log.d("AuthImpl", "xx-- init 1 > ");
+            initListener.onAuthInit(new ResultAPI(0, ResultAPI.Code.Success), null);
+        }
     }
 
     public void login(final Auth.AuthLoginListener loginListener) {

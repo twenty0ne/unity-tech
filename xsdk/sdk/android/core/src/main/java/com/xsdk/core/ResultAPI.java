@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ResultAPI {
     public static final int SUCCESS = 0;
 
-    public ResultAPI() {
+    public ResultAPI(int errorCode, Code code) {
     }
 
     public static enum Code {

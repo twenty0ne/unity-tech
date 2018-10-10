@@ -1,5 +1,7 @@
 package com.xsdk.core;
 
+import android.util.Log;
+
 import com.xsdk.core.base.DataModel;
 import com.xsdk.core.base.Logger;
 import com.xsdk.core.impl.AuthImpl;
@@ -8,12 +10,14 @@ public class Auth {
     public static final String TAG = Auth.class.getSimpleName();
 
     public static void init(AuthInitListener listener) {
-        Logger.enterMethod(TAG);
+        // TODO:
+        // exception? Throwable ?
+        //Logger.enterMethod(TAG);
 
         AuthImpl authImpl = AuthImpl.getInstance();
         authImpl.init(listener);
 
-        Logger.exitMethod(TAG);
+        //Logger.exitMethod(TAG);
     }
 
     public static void login(AuthLoginListener listener) {

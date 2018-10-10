@@ -1,5 +1,7 @@
 package com.xsdk.plugin;
 
+import android.util.Log;
+
 public class XPluginUnity extends XPlugin
 {
     private static XPluginUnity pluginUnityImpl = new XPluginUnity();
@@ -17,6 +19,7 @@ public class XPluginUnity extends XPlugin
 
     public void callEngine(String targetObject, String jsonParamString)
     {
+        Log.d("XPluginUnity", "xx-- callEngine > " + targetObject + "-" + jsonParamString);
         XPlugin.invokeMethod("com.unity3d.player.UnityPlayer", "UnitySendMessage", new Object[]{ targetObject, "CallEngine", jsonParamString});
     }
 }

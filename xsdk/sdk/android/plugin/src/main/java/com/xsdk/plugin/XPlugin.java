@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
-import android.util.Log;
 
 public abstract class XPlugin implements ICallEngine{
 
@@ -22,16 +21,38 @@ public abstract class XPlugin implements ICallEngine{
     public String executeNative(String jsonParamString) {
         try
         {
-            Log.d("XPlugin", "xx-- executeNative > " + jsonParamString);
             JSONObject jsonParam = new JSONObject(jsonParamString);
             String className = jsonParam.optString("class");
             String methodName = jsonParam.optString("method");
             String targetObject = jsonParam.optString("targetObject");
             if ("Auth".equals(className)) {
-                Log.d("XPlugin", "xx-- executeNative > Auth");
                 return (String)invokeMethod(this.auth, methodName, new Object[] { targetObject, jsonParam });
             }
         }
+        catch (Exception localException) {}
+        return "";
+    }
+
+    public static Object invokeMethod(String className, String methodName, Object[] objList)
+    {
+        try
+        {
+            Class<?> cls = Class.forName(className);
+            Method[] methods = cls.getMethods();
+            for (int i = 0; i < methods.length; i++) {
+                if (methods[i].getName().equals(methodName))
+                {
+                    if (methods[i].getReturnType().getName().equals("void"))
+                    {
+                        methods[i].invoke(null, objList);
+                        return null;
+                    }
+                    return methods[i].invoke(null, objList);
+                }
+            }
+        }
+        catch (IllegalAccessException localIllegalAccessException) {}
+        catch (InvocationTargetException localInvocationTargetException) {}
         catch (Exception localException) {}
         return "";
     }
