@@ -12,7 +12,7 @@ public class Auth {
     public static void init(AuthInitListener listener) {
         // TODO:
         // exception? Throwable ?
-        //Logger.enterMethod(TAG);
+        Logger.methodEnter(TAG);
 
         AuthImpl authImpl = AuthImpl.getInstance();
         authImpl.init(listener);
@@ -21,21 +21,21 @@ public class Auth {
     }
 
     public static void login(AuthLoginListener listener) {
-        Logger.enterMethod(TAG);
+        Logger.methodEnter(TAG);
 
         AuthImpl authImpl = AuthImpl.getInstance();
         authImpl.login(listener);
 
-        Logger.exitMethod(TAG);
+        Logger.methodExit(TAG);
     }
 
     public static void logout(AuthLogoutListener listener) {
-        Logger.enterMethod(TAG);
+        Logger.methodEnter(TAG);
 
         AuthImpl authImpl = AuthImpl.getInstance();
         authImpl.logout(listener);
 
-        Logger.exitMethod(TAG);
+        Logger.methodExit(TAG);
     }
 
     public static abstract interface AuthInitListener {
