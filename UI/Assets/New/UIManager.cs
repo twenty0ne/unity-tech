@@ -1,0 +1,233 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+// TODO:
+// 界面出现的方式可以参考 ojbect-c storyboard
+// push, model, popover, replace, custom
+// 界面之间的通信可以通过传递参数/或者使用消息
+
+// TODO:
+// 如果是预先拖入 Scene 中的 UIPanel，说明是要在场景加载的时候初始化的
+// 这部分如何放入 uipanelStack, 如何避免重复打开
+// TODO:
+// 可以将预加载的 UI 放在 Scene 统一一个名字下面，比如 ui_preload
+// layer_main 按照 menu, dialog 规则
+// 其他 layer 随意添加
+// NOTE:
+// 行为定义
+// menu 一次只有一个
+// dialog 应该是保持一次只有一个，点击之后就应该关闭然后执行相关操作
+public class UIManager : MonoSingleton<UIManager> 
+{
+    public enum UIOpenType
+    {
+        PUSH,
+        REPLACE,
+    }
+        
+    private class UIPanelInfo
+    {
+        public string name;
+        public UIPanel panel;
+        // public float timeCreate;
+        // public float timeLastOpen;
+        public UIPanelInfo child; // for menu
+        public UIPanelInfo parent;  // for dialog
+    }
+
+//    private class MenuInfo : UIPanelInfo
+//    {
+//        public 
+//    }
+
+    //private class DialogInfo : UIPanelInfo
+    //{
+    //}
+
+    // private UIRoot m_uiRoot = null;
+    // private GameObject m_curMenu = null;
+    public Transform m_layerBack = null;
+    public Transform m_layerMain = null;
+    public Transform m_layerTop = null;
+
+    private UIPanelInfo m_topPanelInfo = null;
+
+    private List<UIPanelInfo> m_panelStack = new List<UIPanelInfo>();
+    private Dictionary<string, UIPanelInfo> m_panelCache = new Dictionary<string, UIPanelInfo>();
+    // private Dictionary<string, GameObject> m_uiAssets = new Dictionary<string, GameObject>();
+
+    // TODO:
+    // if top dialog?
+    public bool isUIPanelOver
+    {
+        get { 
+            bool ret = m_topPanelInfo != null && m_topPanelInfo.panel.isBlockClick; 
+            if (ret == false)
+                ret = m_topPanelInfo.child != null && m_topPanelInfo.child.panel.isBlockClick;
+            return ret;
+        }
+    }
+
+    public UIPanel OpenMenu(string menuName)
+    {
+        // Check ExistIn Stack
+        UIPanelInfo upInfo = FindPanelInStack(menuName);
+        if (upInfo != null)
+        {
+            MoveToStackTop(upInfo);
+        }
+        else
+        {
+            // Check In Cache
+            m_panelCache.TryGetValue(menuName, out upInfo);
+            if (upInfo != null)
+            {
+                m_panelStack.Add(upInfo);
+            }
+            else
+            {
+                // Check In Scene
+                // 没有在 Stack 却在场景中这种情况，是因为作为预加载放入场景中
+                GameObject obj = GameObject.Find(menuName);
+                if (obj == null)
+                {
+                    // Load from Assets
+                    string path = "UI/" + menuName + ".prefab";
+                    obj = AssetManager.LoadGameObject(path);
+                    DebugUtil.Assert(obj != null, "CHECK");
+                    obj.transform.SetParent(m_layerMain, false);
+                }
+
+                UIPanel panel = obj.GetComponent<UIPanel>();
+                panel.evtClose += OnMenuClose;
+                DebugUtil.Assert(panel != null, "CHECK");
+
+                upInfo = new UIPanelInfo();
+                upInfo.name = menuName;
+                upInfo.panel = panel;
+                m_panelStack.Add(upInfo);
+
+                if (!m_panelCache.ContainsKey(menuName))
+                    m_panelCache[menuName] = upInfo;
+            }
+        }
+
+        if (m_topPanelInfo != null)
+            m_topPanelInfo.panel.gameObject.SetActive(false);
+        m_topPanelInfo = upInfo;
+        m_topPanelInfo.panel.gameObject.SetActive(true);
+        return upInfo.panel;
+    }
+
+    public UIPanel OpenDialog(string dialogName)
+    {
+        DebugUtil.Assert(m_topPanelInfo != null, "CHECK");
+
+        if (m_panelCache.ContainsKey(dialogName))
+        {
+            UIPanelInfo upInfo = m_panelCache[dialogName];
+
+            if (upInfo.parent != null)
+            {
+                upInfo.parent.child = null;
+                upInfo.parent = null;
+            }
+
+            upInfo.panel.transform.SetParent(m_topPanelInfo.panel.transform, false);
+            upInfo.parent = m_topPanelInfo;
+            m_topPanelInfo.child = upInfo;
+            upInfo.panel.gameObject.SetActive(true);
+
+            return upInfo.panel;
+        }
+
+        // Load from Assets
+        string path = "UI/" + dialogName + ".prefab";
+        GameObject obj = AssetManager.LoadGameObject(path);
+        DebugUtil.Assert(obj != null, "CHECK");
+
+        UIPanel panel = obj.GetComponent<UIPanel>();
+        panel.evtClose += OnDialogClose;
+        DebugUtil.Assert(panel != null, "CHECK");
+
+        UIPanelInfo newUpInfo = new UIPanelInfo();
+        newUpInfo.name = dialogName;
+        newUpInfo.panel = panel;
+        m_panelCache[dialogName] = newUpInfo;
+
+        // if one menu had inclued one dialog
+        DebugUtil.Assert(m_topPanelInfo.child == null, "CHECK");
+
+        m_topPanelInfo.child = newUpInfo;
+        newUpInfo.panel.transform.SetParent(m_topPanelInfo.panel.transform, false);
+        newUpInfo.parent = m_topPanelInfo;
+           
+        return panel;
+    }
+
+    private void OnMenuClose(UIPanel panel)
+    {
+        DebugUtil.Assert(m_panelStack.Count >= 2, "CHECK");
+        DebugUtil.Assert(m_topPanelInfo.panel == panel, "CHECK");
+
+        // pop from stack
+        UIPanelInfo upInfo = m_panelStack[m_panelStack.Count - 1];
+        m_panelStack.RemoveAt(m_panelStack.Count - 1);
+
+        upInfo = m_panelStack[m_panelStack.Count - 1];
+        m_topPanelInfo = upInfo;
+        m_topPanelInfo.panel.gameObject.SetActive(true);
+    }
+
+    private void OnDialogClose(UIPanel panel)
+    {
+        UIPanelInfo upInfo = FindPanelInCache(panel);
+        if (upInfo == null)
+        {
+            if (DebugUtil.CanLog(LogLevel.WARNING))
+                DebugUtil.LogWarning("failed to find uipanel when dialog close");
+            return;
+        }
+
+        DebugUtil.Assert(upInfo.parent != null, "CHECK");
+        upInfo.parent.child = null;
+        upInfo.parent = null;
+    }
+
+    private UIPanelInfo FindPanelInStack(string name)
+    {
+        for (int i = 0; i < m_panelStack.Count; ++i)
+        {
+            UIPanelInfo upInfo = m_panelStack[i];
+            if (upInfo.name == name)
+                return upInfo;
+        }
+
+        return null;
+    }
+
+    private UIPanelInfo FindPanelInCache(UIPanel panel)
+    {
+        foreach (var kv in m_panelCache)
+        {
+            if (kv.Value.panel == panel)
+                return kv.Value;
+        }
+        return null;
+    }
+
+    private void MoveToStackTop(UIPanelInfo upInfo)
+    {
+        DebugUtil.Assert(upInfo != null, "CHECK");
+
+        m_panelStack.Remove(upInfo);
+        m_panelStack.Add(upInfo);
+    }
+
+    private void PopUIPanel()
+    {
+        
+    }
+        
+}
