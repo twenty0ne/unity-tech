@@ -47,8 +47,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
         }
         catch (Exception ex)
         {
-            if (DebugUtil.CanLog(LogLevel.EXCEPTION))
-                DebugUtil.LogException(ex);
+            Debug.LogException(ex);
             return null;
         }
     }
@@ -82,8 +81,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
         }
         catch (Exception ex)
         {
-            if (DebugUtil.CanLog(LogLevel.EXCEPTION))
-                DebugUtil.LogException(ex);
+            Debug.LogException(ex);
             return null;
         }
     }
@@ -96,8 +94,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
             var assText = LoadAsset<TextAsset>("Configs/" + path);
             if (assText == null)
             {
-                if (DebugUtil.CanLog(LogLevel.WARNING))
-                    DebugUtil.Log("failed to load config > " + path);
+                Debug.Log("failed to load config > " + path);
                 return null;
             }
             return JsonUtility.FromJson<T>(assText.ToString());
@@ -110,8 +107,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
         }
         catch (Exception ex)
         {
-            if (DebugUtil.CanLog(LogLevel.EXCEPTION))
-                DebugUtil.LogError(ex.ToString());
+            Debug.LogError(ex.ToString());
             return null;
         }
     }
@@ -122,9 +118,9 @@ public class AssetManager // : MonoSingleton<AssetManager>
         {
             #if UNITY_EDITOR
             var ass = LoadAsset<GameObject>("Prefabs/" + path);
-            if (ass == null && DebugUtil.CanLog(LogLevel.WARNING))
+            if (ass == null)
             {
-                DebugUtil.LogWarning("failed to load gameobject > " + path);
+                Debug.LogWarning("failed to load gameobject > " + path);
             }
             return UnityEngine.Object.Instantiate(ass);
             #else
@@ -133,8 +129,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
         }
         catch (Exception ex)
         {
-            if (DebugUtil.CanLog(LogLevel.EXCEPTION))
-                DebugUtil.LogError(ex.ToString());
+            Debug.LogError(ex.ToString());
             return null;
         }
     }
@@ -148,9 +143,9 @@ public class AssetManager // : MonoSingleton<AssetManager>
             if (path.Contains("@ss"))
             {
                 string[] args = path.Split('/');
-                if (args.Length < 2 && DebugUtil.CanLog(LogLevel.ERROR))
+                if (args.Length < 2)
                 {
-                    DebugUtil.LogError("check args length != 2");
+                    Debug.LogError("check args length != 2");
                     return null;
                 }
 
@@ -184,14 +179,13 @@ public class AssetManager // : MonoSingleton<AssetManager>
                 #endif
             }
 
-            if (spr == null && DebugUtil.CanLog(LogLevel.WARNING))
-                DebugUtil.LogWarning("failed to load sprite > " + path);
+            if (spr == null)
+                Debug.LogWarning("failed to load sprite > " + path);
             return spr;   
         }
         catch (Exception ex)
         {
-            if (DebugUtil.CanLog(LogLevel.EXCEPTION))
-                DebugUtil.LogError(ex.ToString());
+            Debug.LogError(ex.ToString());
             return null;
         }
     }

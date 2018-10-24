@@ -95,13 +95,13 @@ public class UIManager : MonoSingleton<UIManager>
                     // Load from Assets
                     string path = "UI/" + menuName + ".prefab";
                     obj = AssetManager.LoadGameObject(path);
-                    DebugUtil.Assert(obj != null, "CHECK");
+                    Debug.Assert(obj != null, "CHECK");
                     obj.transform.SetParent(m_layerMain, false);
                 }
 
                 UIPanel panel = obj.GetComponent<UIPanel>();
                 panel.evtClose += OnMenuClose;
-                DebugUtil.Assert(panel != null, "CHECK");
+                Debug.Assert(panel != null, "CHECK");
 
                 upInfo = new UIPanelInfo();
                 upInfo.name = menuName;
@@ -122,7 +122,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     public UIPanel OpenDialog(string dialogName)
     {
-        DebugUtil.Assert(m_topPanelInfo != null, "CHECK");
+        Debug.Assert(m_topPanelInfo != null, "CHECK");
 
         if (m_panelCache.ContainsKey(dialogName))
         {
@@ -145,11 +145,11 @@ public class UIManager : MonoSingleton<UIManager>
         // Load from Assets
         string path = "UI/" + dialogName + ".prefab";
         GameObject obj = AssetManager.LoadGameObject(path);
-        DebugUtil.Assert(obj != null, "CHECK");
+        Debug.Assert(obj != null, "CHECK");
 
         UIPanel panel = obj.GetComponent<UIPanel>();
         panel.evtClose += OnDialogClose;
-        DebugUtil.Assert(panel != null, "CHECK");
+        Debug.Assert(panel != null, "CHECK");
 
         UIPanelInfo newUpInfo = new UIPanelInfo();
         newUpInfo.name = dialogName;
@@ -157,7 +157,7 @@ public class UIManager : MonoSingleton<UIManager>
         m_panelCache[dialogName] = newUpInfo;
 
         // if one menu had inclued one dialog
-        DebugUtil.Assert(m_topPanelInfo.child == null, "CHECK");
+        Debug.Assert(m_topPanelInfo.child == null, "CHECK");
 
         m_topPanelInfo.child = newUpInfo;
         newUpInfo.panel.transform.SetParent(m_topPanelInfo.panel.transform, false);
@@ -168,8 +168,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void OnMenuClose(UIPanel panel)
     {
-        DebugUtil.Assert(m_panelStack.Count >= 2, "CHECK");
-        DebugUtil.Assert(m_topPanelInfo.panel == panel, "CHECK");
+        Debug.Assert(m_panelStack.Count >= 2, "CHECK");
+        Debug.Assert(m_topPanelInfo.panel == panel, "CHECK");
 
         // pop from stack
         UIPanelInfo upInfo = m_panelStack[m_panelStack.Count - 1];
@@ -185,12 +185,11 @@ public class UIManager : MonoSingleton<UIManager>
         UIPanelInfo upInfo = FindPanelInCache(panel);
         if (upInfo == null)
         {
-            if (DebugUtil.CanLog(LogLevel.WARNING))
-                DebugUtil.LogWarning("failed to find uipanel when dialog close");
+            Debug.LogWarning("failed to find uipanel when dialog close");
             return;
         }
 
-        DebugUtil.Assert(upInfo.parent != null, "CHECK");
+        Debug.Assert(upInfo.parent != null, "CHECK");
         upInfo.parent.child = null;
         upInfo.parent = null;
     }
@@ -219,7 +218,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void MoveToStackTop(UIPanelInfo upInfo)
     {
-        DebugUtil.Assert(upInfo != null, "CHECK");
+        Debug.Assert(upInfo != null, "CHECK");
 
         m_panelStack.Remove(upInfo);
         m_panelStack.Add(upInfo);
@@ -227,7 +226,6 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void PopUIPanel()
     {
-        
     }
         
 }
