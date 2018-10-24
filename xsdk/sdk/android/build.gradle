@@ -1,0 +1,36 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+//task deleteJar(type: Delete) {
+//    delete('build/release/channel-oppo-plugin.jar')
+//}
+//
+//task exportJar(type: Copy) {
+//    from('build/intermediates/bundles/release/')
+//    into('build/release')
+//    include('classes.jar')
+//    rename('classes.jar', 'channel-oppo-plugin.jar')
+//}
+//
+//exportJar.dependsOn(deleteJar, build)
