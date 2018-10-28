@@ -30,15 +30,22 @@ public class UIManager : MonoSingleton<UIManager>
     {
         public string name;
         public UIPanel panel;
-        // public float timeCreate;
-        // public float timeLastOpen;
+        public float openTime;
+        public float closeTime;
+
         public UIPanelInfo child; // for menu
         public UIPanelInfo parent;  // for dialog
+
+        public bool active; 
+        public bool forbidClean = false;
     }
        
     public const string PATH_PREFAB_MENU = "Prefabs/UI/Menu/";
     public const string PATH_PREFAB_DIALOG = "Prefabs/UI/Dialog/";
     public const string PATH_PREFAB_WIDGET = "Prefabs/UI/WIdget/";
+
+    public const float TIME_CLEAN_CACHE = 10;
+    public const float TIME_MAX_CACHE = 20;
 
     private UIRoot m_uiRoot = null;
     private UIPanelInfo m_topPanelInfo = null;
@@ -46,6 +53,8 @@ public class UIManager : MonoSingleton<UIManager>
     private List<UIPanelInfo> m_panelStack = new List<UIPanelInfo>();
     private Dictionary<string, UIPanelInfo> m_panelCache = new Dictionary<string, UIPanelInfo>();
     // private Dictionary<string, GameObject> m_uiAssets = new Dictionary<string, GameObject>();
+
+    private float cleanCacheTick = 0f;
 
     private Transform mainCanvas
     {
@@ -77,7 +86,7 @@ public class UIManager : MonoSingleton<UIManager>
             return m_uiRoot;
         }
     }
-
+ 
     // TODO:
     // if top dialog?
     public bool isUIPanelOver
@@ -87,6 +96,28 @@ public class UIManager : MonoSingleton<UIManager>
             if (ret == false)
                 ret = m_topPanelInfo.child != null && m_topPanelInfo.child.panel.isBlockClick;
             return ret;
+        }
+    }
+
+    public void Update()
+    {
+        // TODO
+        // 定时清理
+        cleanCacheTick += Time.deltaTime;
+        if (cleanCacheTick >= TIME_CLEAN_CACHE)
+        {
+            cleanCacheTick -= TIME_CLEAN_CACHE;
+
+            float curTime = Time.realtimeSinceStartup;
+            foreach (string key in m_panelCache.Keys)
+            {
+                UIPanelInfo upInfo = m_panelCache[key];
+
+                if (upInfo.closeTime + TIME_MAX_CACHE >= curTime)
+                {
+                    m_panelCache.Remove(key);
+                }
+            }
         }
     }
 
@@ -141,6 +172,9 @@ public class UIManager : MonoSingleton<UIManager>
         return upInfo.panel;
     }
 
+    // TODO:
+    // Menu 一般是唯一的，但是 Dialog 可能重复使用，比如 DialogConfirm
+    // 所以 PanelCache 的处理需要注意
     public UIPanel OpenDialog(string dialogName)
     {
         Debug.Assert(m_topPanelInfo != null, "CHECK");
@@ -155,7 +189,7 @@ public class UIManager : MonoSingleton<UIManager>
                 upInfo.parent = null;
             }
 
-            upInfo.panel.transform.SetParent(m_topPanelInfo.panel.transform, false);
+            upInfo.panel.transform.SetParent(mainCanvas, false);
             upInfo.parent = m_topPanelInfo;
             m_topPanelInfo.child = upInfo;
             upInfo.panel.gameObject.SetActive(true);
@@ -181,7 +215,7 @@ public class UIManager : MonoSingleton<UIManager>
         Debug.Assert(m_topPanelInfo.child == null, "CHECK");
 
         m_topPanelInfo.child = newUpInfo;
-        newUpInfo.panel.transform.SetParent(m_topPanelInfo.panel.transform, false);
+        newUpInfo.panel.transform.SetParent(mainCanvas, false);
         newUpInfo.parent = m_topPanelInfo;
            
         return panel;
@@ -246,6 +280,11 @@ public class UIManager : MonoSingleton<UIManager>
     }
 
     private void PopUIPanel()
+    {
+    }
+       
+    // TODO
+    private void OnMemoryWarning()
     {
     }
 }

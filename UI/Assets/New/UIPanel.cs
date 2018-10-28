@@ -23,4 +23,10 @@ public class UIPanel : UINode
         if (evtClose != null)
             evtClose(this);
     }
+
+    public bool visible
+    {
+        get { return gameObject.activeSelf; }
+        set { gameObject.SetActive(value); }
+    }
 }
