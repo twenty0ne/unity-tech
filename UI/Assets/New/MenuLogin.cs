@@ -9,6 +9,8 @@ public class MenuLogin : UIMenu
 
     public void OnClickBtnLogin()
     {
+        Debug.Log("MenuLogin.OnClickBtnLogin");
+
         // if (string.IsNullOrEmpty(inputName.text))
         {
             UIManager.Instance.OpenDialog("DialogConfirm");
