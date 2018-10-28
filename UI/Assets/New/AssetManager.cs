@@ -119,15 +119,15 @@ public class AssetManager // : MonoSingleton<AssetManager>
         }
     }
 
-    public static GameObject LoadPrefab(string path)
+    public static GameObject LoadGameObject(string path)
     {
         try
         {
 #if UNITY_EDITOR
-            var ass = LoadAsset<GameObject>("Prefabs/" + path);
+            var ass = LoadAsset<GameObject>(path);
             if (ass == null)
             {
-                Debug.LogWarning("failed to load prefab > " + path);
+                Debug.LogWarning("failed to load gameobject > " + path);
             }
             return UnityEngine.Object.Instantiate(ass);
 #else

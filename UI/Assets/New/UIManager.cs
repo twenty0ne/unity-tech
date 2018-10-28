@@ -36,9 +36,9 @@ public class UIManager : MonoSingleton<UIManager>
         public UIPanelInfo parent;  // for dialog
     }
        
-    public const string PATH_PREFAB_MENU = "UI/Menu/";
-    public const string PATH_PREFAB_DIALOG = "UI/Dialog/";
-    public const string PATH_PREFAB_WIDGET = "UI/WIdget/";
+    public const string PATH_PREFAB_MENU = "Prefabs/UI/Menu/";
+    public const string PATH_PREFAB_DIALOG = "Prefabs/UI/Dialog/";
+    public const string PATH_PREFAB_WIDGET = "Prefabs/UI/WIdget/";
 
     private UIRoot m_uiRoot = null;
     private UIPanelInfo m_topPanelInfo = null;
@@ -71,7 +71,7 @@ public class UIManager : MonoSingleton<UIManager>
             {
                 GameObject objUIRoot = GameObject.Find("UIROOT");
                 if (objUIRoot == null)
-                    Debug.LogError("failed find UIRoot");
+                    Debug.LogError("failed to find UIRoot");
                 m_uiRoot = objUIRoot.GetComponent<UIRoot>();
             }
             return m_uiRoot;
@@ -115,7 +115,7 @@ public class UIManager : MonoSingleton<UIManager>
 //                {
                     // Load from Assets
                 string path = PATH_PREFAB_MENU + menuName + ".prefab";
-                GameObject obj = AssetManager.LoadPrefab(path);
+                GameObject obj = AssetManager.LoadGameObject(path);
                 Debug.Assert(obj != null, "CHECK");
                 obj.transform.SetParent(mainCanvas, false);
 //                }
@@ -164,8 +164,8 @@ public class UIManager : MonoSingleton<UIManager>
         }
 
         // Load from Assets
-        string path = "UI/" + dialogName + ".prefab";
-        GameObject obj = AssetManager.LoadPrefab(path);
+        string path = PATH_PREFAB_DIALOG + dialogName + ".prefab";
+        GameObject obj = AssetManager.LoadGameObject(path);
         Debug.Assert(obj != null, "CHECK");
 
         UIPanel panel = obj.GetComponent<UIPanel>();
