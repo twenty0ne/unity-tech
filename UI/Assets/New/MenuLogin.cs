@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuTest1 : UIMenu
+public class MenuLogin : UIMenu
 {
 	// Use this for initialization
 	void Start () {

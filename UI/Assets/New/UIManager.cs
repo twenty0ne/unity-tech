@@ -35,27 +35,48 @@ public class UIManager : MonoSingleton<UIManager>
         public UIPanelInfo child; // for menu
         public UIPanelInfo parent;  // for dialog
     }
+       
+    public const string PATH_PREFAB_MENU = "UI/Menu/";
+    public const string PATH_PREFAB_DIALOG = "UI/Dialog/";
+    public const string PATH_PREFAB_WIDGET = "UI/WIdget/";
 
-//    private class MenuInfo : UIPanelInfo
-//    {
-//        public 
-//    }
-
-    //private class DialogInfo : UIPanelInfo
-    //{
-    //}
-
-    // private UIRoot m_uiRoot = null;
-    // private GameObject m_curMenu = null;
-    public Transform m_layerBack = null;
-    public Transform m_layerMain = null;
-    public Transform m_layerTop = null;
-
+    private UIRoot m_uiRoot = null;
     private UIPanelInfo m_topPanelInfo = null;
 
     private List<UIPanelInfo> m_panelStack = new List<UIPanelInfo>();
     private Dictionary<string, UIPanelInfo> m_panelCache = new Dictionary<string, UIPanelInfo>();
     // private Dictionary<string, GameObject> m_uiAssets = new Dictionary<string, GameObject>();
+
+    private Transform mainCanvas
+    {
+        get { 
+            return uiRoot.mainCanvas.transform; 
+        }
+    }
+
+    private Transform backCanvas
+    {
+        get { return uiRoot.backCanvas.transform; }
+    }
+
+    private Transform frontCanvas
+    {
+        get { return uiRoot.frontCanvas.transform; }
+    }
+
+    private UIRoot uiRoot
+    {
+        get { 
+            if (m_uiRoot == null)
+            {
+                GameObject objUIRoot = GameObject.Find("UIROOT");
+                if (objUIRoot == null)
+                    Debug.LogError("failed find UIRoot");
+                m_uiRoot = objUIRoot.GetComponent<UIRoot>();
+            }
+            return m_uiRoot;
+        }
+    }
 
     // TODO:
     // if top dialog?
@@ -89,15 +110,15 @@ public class UIManager : MonoSingleton<UIManager>
             {
                 // Check In Scene
                 // 没有在 Stack 却在场景中这种情况，是因为作为预加载放入场景中
-                GameObject obj = GameObject.Find(menuName);
-                if (obj == null)
-                {
+//                GameObject obj = GameObject.Find(menuName);
+//                if (obj == null)
+//                {
                     // Load from Assets
-                    string path = "UI/" + menuName + ".prefab";
-                    obj = AssetManager.LoadGameObject(path);
-                    Debug.Assert(obj != null, "CHECK");
-                    obj.transform.SetParent(m_layerMain, false);
-                }
+                string path = PATH_PREFAB_MENU + menuName + ".prefab";
+                GameObject obj = AssetManager.LoadPrefab(path);
+                Debug.Assert(obj != null, "CHECK");
+                obj.transform.SetParent(mainCanvas, false);
+//                }
 
                 UIPanel panel = obj.GetComponent<UIPanel>();
                 panel.evtClose += OnMenuClose;
@@ -144,7 +165,7 @@ public class UIManager : MonoSingleton<UIManager>
 
         // Load from Assets
         string path = "UI/" + dialogName + ".prefab";
-        GameObject obj = AssetManager.LoadGameObject(path);
+        GameObject obj = AssetManager.LoadPrefab(path);
         Debug.Assert(obj != null, "CHECK");
 
         UIPanel panel = obj.GetComponent<UIPanel>();
@@ -227,5 +248,4 @@ public class UIManager : MonoSingleton<UIManager>
     private void PopUIPanel()
     {
     }
-        
 }

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneTest : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
+public class SceneTest : MonoBehaviour 
+{
+	void Start () 
+    {
+        UIManager.Instance.OpenMenu("MenuLogin");	
 	}
-	
-	// Update is called once per frame
-	void Update () {
+        
+	void Update () 
+    {
 		
 	}
 }

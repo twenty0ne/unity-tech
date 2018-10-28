@@ -21,7 +21,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
     {
         try
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             if (assetsCache.ContainsKey(path))
             {
                 AssetInfo assInfo = assetsCache[path];
@@ -31,19 +31,26 @@ public class AssetManager // : MonoSingleton<AssetManager>
 
             if (!path.Contains("Assets/"))
                 path = "Assets/" + path;
-            var ass = (T)AssetDatabase.LoadAssetAtPath<T>(path);
 
-            // Cache
-            AssetInfo newAssInfo = new AssetInfo();
-            newAssInfo.path = path;
-            newAssInfo.objs = new UnityEngine.Object[1];
-            newAssInfo.objs[0] = ass;
-            assetsCache[path] = newAssInfo;
+            var ass = (T)AssetDatabase.LoadAssetAtPath<T>(path);
+            if (ass == null)
+            {
+                Debug.LogWarning("faild to load asset at path > " + path);
+            }
+            else
+            {
+                // Cache
+                AssetInfo newAssInfo = new AssetInfo();
+                newAssInfo.path = path;
+                newAssInfo.objs = new UnityEngine.Object[1];
+                newAssInfo.objs[0] = ass;
+                assetsCache[path] = newAssInfo;
+            }
 
             return ass;
-            #else
+#else
             throw new NotImplementedException();
-            #endif
+#endif
         }
         catch (Exception ex)
         {
@@ -112,20 +119,20 @@ public class AssetManager // : MonoSingleton<AssetManager>
         }
     }
 
-    public static GameObject LoadGameObject(string path)
+    public static GameObject LoadPrefab(string path)
     {
         try
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             var ass = LoadAsset<GameObject>("Prefabs/" + path);
             if (ass == null)
             {
-                Debug.LogWarning("failed to load gameobject > " + path);
+                Debug.LogWarning("failed to load prefab > " + path);
             }
             return UnityEngine.Object.Instantiate(ass);
-            #else
+#else
             throw new NotImplementedException();
-            #endif
+#endif
         }
         catch (Exception ex)
         {
