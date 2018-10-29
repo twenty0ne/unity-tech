@@ -15,16 +15,15 @@ public class HttpRequest
 	{
 		public HttpWebRequest request;
 		public byte[] data;
+		public HttpResponse response;
 	}
 
 	public static void Init()
 	{
-		
 	}
 
 	public static void Tick(float dt)
 	{
-
 	}
 
 	public static void Post(string url, Dictionary<string, string> headers, byte[] data)
@@ -56,19 +55,22 @@ public class HttpRequest
 		request.Method = method;
 		request.Proxy = null;
 
+		HttpResponse response = new HttpResponse();
+
 		HttpState state = new HttpState();
 		state.request = request;
 		state.data = data;
+		state.response = response;
 
 		request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), state);
 	}
 
 	private static void GetRequestStreamCallback(IAsyncResult asyncResult)
 	{
+		HttpState state = (HttpState)asyncResult.AsyncState;
+
 		try
 		{
-			HttpState state = (HttpState)asyncResult.AsyncState;
-
 			HttpWebRequest request = state.request;
 			byte[] data = state.data;
 
@@ -81,6 +83,7 @@ public class HttpRequest
 		}
 		catch (WebException e)
 		{
+
 		}
 	}
 
@@ -109,6 +112,8 @@ public class HttpRequest
 			}
 
 			// ProcessResponse(response.Headers, respData);
+
+			// 
 
 			// Release the HttpWebResponse
 			respStream.Close();
