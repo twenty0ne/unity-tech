@@ -13,7 +13,13 @@ public class MenuLogin : UIMenu
 
         // if (string.IsNullOrEmpty(inputName.text))
         {
-            UIManager.Instance.OpenDialog("DialogConfirm");
+			DialogConfirm dlgConfirm = (DialogConfirm)UIManager.Instance.OpenDialog("DialogConfirm");
+			dlgConfirm.title = "WARNING";
+			dlgConfirm.text = "input name shouldn't be empty";
+			dlgConfirm.btnText = "OK";
+			dlgConfirm.evtClose += (UIPanel panel)=>{
+				Debug.Log("close dialog confirm callback");
+			};
         }
 
 

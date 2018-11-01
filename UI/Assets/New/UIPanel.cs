@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +7,9 @@ public class UIPanel : UINode
     // 传递进来的参数
     public Dictionary<string, object> param;
 
+	// TODO:
+	// more event
+	// before open, after open, before close, after close
     public delegate void OpenEvent();
     public delegate void CloseEvent(UIPanel uipanel);
     // public Action onVisible;
