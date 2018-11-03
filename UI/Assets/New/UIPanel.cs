@@ -19,6 +19,19 @@ public class UIPanel : UINode
     // block throughclick
     public bool isBlockClick = true;
 
+	public GameObject btnClose = null;
+
+	protected virtual void Start()
+	{
+		Debug.Log(this.GetType().Name + ".Start");
+
+		if (btnClose != null)
+		{
+			// registe close event
+
+		}
+	}
+
     public virtual void Close()
     {
         gameObject.SetActive(false);
@@ -32,4 +45,6 @@ public class UIPanel : UINode
         get { return gameObject.activeSelf; }
         set { gameObject.SetActive(value); }
     }
+
+	// if Android, click back button to trigger close event
 }
