@@ -47,4 +47,9 @@ public class UIPanel : UINode
     }
 
 	// if Android, click back button to trigger close event
+
+    public virtual void OnClickBtnClose()
+    {
+        Close();
+    }
 }

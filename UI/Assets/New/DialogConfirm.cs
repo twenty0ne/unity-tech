@@ -35,6 +35,4 @@ public class DialogConfirm : UIDialog
 			txtButton.text = value;
 		}
 	}
-
-
 }
