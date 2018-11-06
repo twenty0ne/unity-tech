@@ -7,6 +7,7 @@
 // 资源清理
 // UI 间消息传递
 // 优化：减少 batch，内存，加载速度（长列表）
+// Navigation
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1

@@ -24,7 +24,7 @@ public class MenuLogin : UIMenu
         }
         else
         {
-            
+            UIManager.Instance.OpenMenu("MenuMain");
         }
     }
 }

@@ -19,17 +19,17 @@ public class UIPanel : UINode
     // block throughclick
     public bool isBlockClick = true;
 
-	public GameObject btnClose = null;
+	// public GameObject btnClose = null;
 
 	protected virtual void Start()
 	{
-		Debug.Log(this.GetType().Name + ".Start");
-
-		if (btnClose != null)
-		{
-			// registe close event
-
-		}
+//		Debug.Log(this.GetType().Name + ".Start");
+//
+//		if (btnClose != null)
+//		{
+//			// registe close event
+//
+//		}
 	}
 
     public virtual void Close()

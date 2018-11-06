@@ -44,7 +44,7 @@ public class UIManager : MonoSingleton<UIManager>
     public const string PATH_PREFAB_DIALOG = "Prefabs/UI/Dialog/";
     public const string PATH_PREFAB_WIDGET = "Prefabs/UI/WIdget/";
 
-    public const float TIME_CLEAN_CACHE = 5;
+    public const float INTERVAL_CLEAN_CACHE = 10;
     public const float TIME_MAX_CACHE = 20;
 
     private UIRoot m_uiRoot = null;
@@ -103,22 +103,28 @@ public class UIManager : MonoSingleton<UIManager>
     {
         // TODO
         // 定时清理
-//        cleanCacheTick += Time.deltaTime;
-//        if (cleanCacheTick >= TIME_CLEAN_CACHE)
-//        {
-//            cleanCacheTick -= TIME_CLEAN_CACHE;
-//
-//            float curTime = Time.realtimeSinceStartup;
-//            foreach (string key in m_panelCache.Keys)
-//            {
-//                UIPanelInfo upInfo = m_panelCache[key];
-//
-//                if (upInfo.closeTime + TIME_MAX_CACHE >= curTime)
-//                {
-//                    m_panelCache.Remove(key);
-//                }
-//            }
-//        }
+        cleanCacheTick += Time.deltaTime;
+        if (cleanCacheTick >= INTERVAL_CLEAN_CACHE)
+        {
+            cleanCacheTick -= INTERVAL_CLEAN_CACHE;
+
+            float curTime = Time.realtimeSinceStartup;
+            foreach (var kv in m_panelCache)
+            {
+                UIPanelInfo upInfo = kv.Value;
+                if (upInfo == null || upInfo.active ||
+                    upInfo.panel.visible)
+                    continue;
+
+                if (upInfo.closeTime + TIME_MAX_CACHE < curTime)
+                    continue;
+
+                Debug.Log("Destroy cache panel > " + upInfo.panel.name);
+                Destroy(upInfo.panel.gameObject);
+                m_panelCache.Remove(kv.Key);
+                break;
+            }
+        }
     }
 
     public UIPanel OpenMenu(string menuName)
