@@ -33,8 +33,8 @@ public class UIManager : MonoSingleton<UIManager>
         public float openTime;
         public float closeTime;
 
-        public UIPanelInfo child; // for menu
-        public UIPanelInfo parent;  // for dialog
+        // public UIPanelInfo child; // for menu
+        // public UIPanelInfo parent;  // for dialog
 
         public bool active; 
         public bool forbidClean = false;
@@ -89,15 +89,15 @@ public class UIManager : MonoSingleton<UIManager>
  
     // TODO:
     // if top dialog?
-    public bool isUIPanelOver
-    {
-        get { 
-            bool ret = m_topPanelInfo != null && m_topPanelInfo.panel.isBlockClick; 
-            if (ret == false)
-                ret = m_topPanelInfo.child != null && m_topPanelInfo.child.panel.isBlockClick;
-            return ret;
-        }
-    }
+    //public bool isUIPanelOver
+    //{
+    //    get { 
+    //        bool ret = m_topPanelInfo != null && m_topPanelInfo.panel.isBlockClick; 
+    //        if (ret == false)
+    //            ret = m_topPanelInfo.child != null && m_topPanelInfo.child.panel.isBlockClick;
+    //        return ret;
+    //    }
+    //}
 
     public void Update()
     {
@@ -189,15 +189,15 @@ public class UIManager : MonoSingleton<UIManager>
         {
             UIPanelInfo upInfo = m_panelCache[dialogName];
 
-            if (upInfo.parent != null)
-            {
-                upInfo.parent.child = null;
-                upInfo.parent = null;
-            }
+            //if (upInfo.parent != null)
+            //{
+            //    upInfo.parent.child = null;
+            //    upInfo.parent = null;
+            //}
 
             upInfo.panel.transform.SetParent(mainCanvas, false);
-            upInfo.parent = m_topPanelInfo;
-            m_topPanelInfo.child = upInfo;
+            //upInfo.parent = m_topPanelInfo;
+            //m_topPanelInfo.child = upInfo;
             upInfo.panel.gameObject.SetActive(true);
 
             return upInfo.panel;
@@ -218,11 +218,11 @@ public class UIManager : MonoSingleton<UIManager>
         m_panelCache[dialogName] = newUpInfo;
 
         // if one menu had inclued one dialog
-        Debug.Assert(m_topPanelInfo.child == null, "CHECK");
+        //Debug.Assert(m_topPanelInfo.child == null, "CHECK");
 
-        m_topPanelInfo.child = newUpInfo;
+        //m_topPanelInfo.child = newUpInfo;
         newUpInfo.panel.transform.SetParent(mainCanvas, false);
-        newUpInfo.parent = m_topPanelInfo;
+        //newUpInfo.parent = m_topPanelInfo;
            
         return panel;
     }
@@ -250,9 +250,9 @@ public class UIManager : MonoSingleton<UIManager>
             return;
         }
 
-        Debug.Assert(upInfo.parent != null, "CHECK");
-        upInfo.parent.child = null;
-        upInfo.parent = null;
+        //Debug.Assert(upInfo.parent != null, "CHECK");
+        //upInfo.parent.child = null;
+        //upInfo.parent = null;
     }
 
     private UIPanelInfo FindPanelInStack(string name)

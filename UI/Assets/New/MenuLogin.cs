@@ -19,8 +19,18 @@ public class MenuLogin : UIMenu
             dlgConfirm.btnText = "OK";
             dlgConfirm.evtClose += (UIPanel panel) =>
             {
-                Debug.Log("close dialog confirm callback");
+                Debug.Log("dialog close > name empty warning");
             };
+
+			// Simulate open two same Dialog
+			DialogConfirm dlgWarning = (DialogConfirm)UIManager.Instance.OpenDialog("DialogConfirm");
+			dlgConfirm.title = "WARNING";
+			dlgConfirm.text = "network error";
+			dlgConfirm.btnText = "OK";
+			dlgConfirm.evtClose += (UIPanel panel) =>
+			{
+				Debug.Log("dialog close > network error");
+			};
         }
         else
         {
