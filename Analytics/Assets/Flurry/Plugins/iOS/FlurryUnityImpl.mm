@@ -95,6 +95,11 @@ extern "C" {
 	{
 		[Flurry setUserID: strToNSString(userId)];
 	}
+	
+	void SetAppVersionImpl(const char* version)
+	{
+		[Flurry setAppVersion: strToNSString(version)];
+	}
 
 	void LogEventImplA(const char* eventName)
 	{

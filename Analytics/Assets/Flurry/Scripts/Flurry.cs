@@ -12,7 +12,7 @@ public class Flurry
 #endif
 	}
 
-	public static void SetLogEnable(bool isEnabled)
+	public static void SetLogEnabled(bool isEnabled)
 	{
 #if UNITY_EDITOR
 #elif UNITY_ANDROID
@@ -29,6 +29,16 @@ public class Flurry
 		FlurryAndroid.SetUserId(userId);
 #elif UNITY_IOS
 		FlurryIOS.SetUserId(userId);
+#endif
+	}
+
+	public static void SetAppVersion(string version)
+	{
+#if UNITY_EDITOR
+#elif UNITY_ANDROID
+		FlurryAndroid.SetAppVersion(version);
+#elif UNITY_IOS
+		FlurryIOS.SetAppVersion(version);
 #endif
 	}
 

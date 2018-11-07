@@ -42,6 +42,11 @@ public static class FlurryAndroid
 		FlurryAgent.CallStatic("setUserId", userId);
 	}
 
+	public static void SetAppVersion(string version)
+	{
+		FlurryAgent.CallStatic("setVersionName", version);
+	}
+
 	public static void LogEvent(string eventName)
 	{
 		FlurryAgent.CallStatic<AndroidJavaObject>("logEvent", eventName);

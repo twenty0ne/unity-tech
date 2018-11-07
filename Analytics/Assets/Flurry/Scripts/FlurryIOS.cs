@@ -12,6 +12,8 @@ public static class FlurryIOS
 	[DllImport("__Internal")]
 	private static extern void SetUserIdImpl(string userId);
 	[DllImport("__Internal")]
+	private static extern void SetAppVersionImpl(string version);
+	[DllImport("__Internal")]
 	private static extern void LogEventImplA(string eventName);
 	[DllImport("__Internal")]
 	private static extern void LogEventImplB(string eventName, string parameters);
@@ -32,6 +34,11 @@ public static class FlurryIOS
 	public static void SetUserId(string userId)
 	{
 		SetUserIdImpl(userId);
+	}
+
+	public static void SetAppVersion(string version)
+	{
+		SetAppVersionImpl(version);
 	}
 
 	public static void LogEvent(string eventName)
