@@ -73,12 +73,15 @@ public class Flurry
 	// @param parameters A {@code Map<String, String>} of the parameters which should be submitted with this event.
 	// @example: logPayment("candy", "yummy_candy", 1, 2.99, "USD", "123456789", params)
 	public static void LogPayment(string productName, string productId, int quantity, double price,
-		string currency, string transactionId, Dictionary<string, string> parameters = null)
+		string currency, string transactionId = null, Dictionary<string, string> parameters = null)
 	{
 #if UNITY_EDITOR
 #elif UNITY_ANDROID
+		if (string.IsNullOrEmpty(transactionId))
+			transactionId = System.DateTime.Now.ToString("yyyyMMddTHHmmss");
 		if (parameters == null)
 			parameters = new Dictionary<string, string>();
+
 		FlurryAndroid.LogPayment(productName, productId, quantity, price, currency, transactionId, parameters);
 #elif UNITY_IOS
 #endif

@@ -66,7 +66,7 @@ public static class FlurryAndroid
 		using (var hashMap = DictionaryToJavaHashMap(parameters))
 		{
 			FlurryAgent.CallStatic<AndroidJavaObject>("logPayment", productName, productId, 
-				quantity, price, currency, transactionId, parameters);
+				quantity, price, currency, transactionId, hashMap);
 		}
 	}
 

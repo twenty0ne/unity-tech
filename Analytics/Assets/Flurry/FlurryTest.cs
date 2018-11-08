@@ -6,12 +6,12 @@ public class FlurryTest : MonoBehaviour
 {
 	private void Start()
 	{
-		Flurry.SetLogEnable(true);
+		Flurry.SetLogEnabled(true);
 		Flurry.SetUserId ("15704");
 #if UNITY_ANDROID
-		Flurry.Init("BVGBDXRY47W2WJ8386S2");
+		Flurry.Init(FlurryAPIKey.ANDROID);
 #elif UNITY_IOS
-		Flurry.Init("SCXVX34FPZGDXPGQFZX5");
+		Flurry.Init(FlurryAPIKey.IOS);
 #endif
 	}
 
@@ -29,8 +29,12 @@ public class FlurryTest : MonoBehaviour
 			parameters ["param1"] = "world";
 			Flurry.LogEvent (eventId, parameters);
 		} else {
-			// Flurry.LogEvent (eventId);
-			Flurry.LogPayment("100coin", "10000", 1, 2.99, "USD", string.Empty);
+			Flurry.LogEvent (eventId);
 		}
+	}
+
+	public void OnClickLogPayment()
+	{
+		Flurry.LogPayment("10coin", "6003", 1, 0.99, "USD", string.Empty);
 	}
 }
