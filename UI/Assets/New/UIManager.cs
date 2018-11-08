@@ -36,7 +36,7 @@ public class UIManager : MonoSingleton<UIManager>
         // public UIPanelInfo child; // for menu
         // public UIPanelInfo parent;  // for dialog
 
-        public bool active; 
+        // public bool active; 
         public bool forbidClean = false;
     }
        
@@ -51,7 +51,9 @@ public class UIManager : MonoSingleton<UIManager>
     private UIPanelInfo m_topPanelInfo = null;
 
     private List<UIPanelInfo> m_panelStack = new List<UIPanelInfo>();
-    private Dictionary<string, UIPanelInfo> m_panelCache = new Dictionary<string, UIPanelInfo>();
+	// private Dictionary<string, UIPanelInfo> m_panelCache = new Dictionary<string, UIPanelInfo>();
+	// because dialog 可能重名，所以用 list 替换  dictionary
+	private List<UIPanelInfo> m_panelCache = new List<UIPanelInfo>();
     // private Dictionary<string, GameObject> m_uiAssets = new Dictionary<string, GameObject>();
 
     private float cleanCacheTick = 0f;
@@ -109,11 +111,9 @@ public class UIManager : MonoSingleton<UIManager>
             cleanCacheTick -= INTERVAL_CLEAN_CACHE;
 
             float curTime = Time.realtimeSinceStartup;
-            foreach (var kv in m_panelCache)
+            foreach (var upInfo in m_panelCache)
             {
-                UIPanelInfo upInfo = kv.Value;
-                if (upInfo == null || upInfo.active ||
-                    upInfo.panel.visible)
+                if (upInfo == null || upInfo.panel.active)
                     continue;
 
                 if (upInfo.closeTime + TIME_MAX_CACHE < curTime)
@@ -121,7 +121,7 @@ public class UIManager : MonoSingleton<UIManager>
 
                 Debug.Log("Destroy cache panel > " + upInfo.panel.name);
                 Destroy(upInfo.panel.gameObject);
-                m_panelCache.Remove(kv.Key);
+                m_panelCache.Remove(upInfo);
                 break;
             }
         }
@@ -137,8 +137,8 @@ public class UIManager : MonoSingleton<UIManager>
         }
         else
         {
-            // Check In Cache
-            m_panelCache.TryGetValue(menuName, out upInfo);
+			// Check In Cache
+			upInfo = FindPanelInStack(menuName);
             if (upInfo != null)
             {
                 m_panelStack.Add(upInfo);
@@ -164,10 +164,9 @@ public class UIManager : MonoSingleton<UIManager>
                 upInfo = new UIPanelInfo();
                 upInfo.name = menuName;
                 upInfo.panel = panel;
-                m_panelStack.Add(upInfo);
 
-                if (!m_panelCache.ContainsKey(menuName))
-                    m_panelCache[menuName] = upInfo;
+                m_panelStack.Add(upInfo);
+				m_panelCache.Add(upInfo);
             }
         }
 
@@ -185,22 +184,18 @@ public class UIManager : MonoSingleton<UIManager>
     {
         Debug.Assert(m_topPanelInfo != null, "CHECK");
 
-        if (m_panelCache.ContainsKey(dialogName))
+        foreach (var upInfo in m_panelCache)
         {
-            UIPanelInfo upInfo = m_panelCache[dialogName];
+			if (upInfo.name != dialogName)
+				continue;
 
-            //if (upInfo.parent != null)
-            //{
-            //    upInfo.parent.child = null;
-            //    upInfo.parent = null;
-            //}
+			if (upInfo.panel != null && upInfo.panel.active == false)
+			{
+				upInfo.panel.parent = mainCanvas;
+				upInfo.panel.active = true;
 
-            upInfo.panel.transform.SetParent(mainCanvas, false);
-            //upInfo.parent = m_topPanelInfo;
-            //m_topPanelInfo.child = upInfo;
-            upInfo.panel.gameObject.SetActive(true);
-
-            return upInfo.panel;
+				return upInfo.panel;
+			}
         }
 
         // Load from Assets
@@ -215,13 +210,14 @@ public class UIManager : MonoSingleton<UIManager>
         UIPanelInfo newUpInfo = new UIPanelInfo();
         newUpInfo.name = dialogName;
         newUpInfo.panel = panel;
-        m_panelCache[dialogName] = newUpInfo;
+		m_panelCache.Add(newUpInfo);
 
         // if one menu had inclued one dialog
         //Debug.Assert(m_topPanelInfo.child == null, "CHECK");
 
         //m_topPanelInfo.child = newUpInfo;
-        newUpInfo.panel.transform.SetParent(mainCanvas, false);
+        panel.parent = mainCanvas;
+		panel.active = true;
         //newUpInfo.parent = m_topPanelInfo;
            
         return panel;
@@ -269,10 +265,10 @@ public class UIManager : MonoSingleton<UIManager>
 
     private UIPanelInfo FindPanelInCache(UIPanel panel)
     {
-        foreach (var kv in m_panelCache)
+        foreach (var upInfo in m_panelCache)
         {
-            if (kv.Value.panel == panel)
-                return kv.Value;
+            if (upInfo.panel == panel)
+                return upInfo;
         }
         return null;
     }

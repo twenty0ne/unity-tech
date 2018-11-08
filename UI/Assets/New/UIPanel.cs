@@ -21,6 +21,20 @@ public class UIPanel : UINode
 
 	// public GameObject btnClose = null;
 
+	public Transform parent
+	{
+		set
+		{
+			transform.SetParent(value, false);
+		}
+	}
+
+	public bool active
+	{
+		get { return gameObject.activeSelf; }
+		set { gameObject.SetActive(value); }
+	}
+
 	protected virtual void Start()
 	{
 //		Debug.Log(this.GetType().Name + ".Start");
@@ -34,16 +48,10 @@ public class UIPanel : UINode
 
     public virtual void Close()
     {
-        gameObject.SetActive(false);
+		active = false;
 
         if (evtClose != null)
             evtClose(this);
-    }
-
-    public bool visible
-    {
-        get { return gameObject.activeSelf; }
-        set { gameObject.SetActive(value); }
     }
 
 	// if Android, click back button to trigger close event
