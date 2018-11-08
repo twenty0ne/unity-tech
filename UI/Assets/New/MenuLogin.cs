@@ -23,14 +23,14 @@ public class MenuLogin : UIMenu
             };
 
 			// Simulate open two same Dialog
-			DialogConfirm dlgWarning = (DialogConfirm)UIManager.Instance.OpenDialog("DialogConfirm");
-			dlgWarning.title = "WARNING";
-			dlgWarning.text = "network error";
-			dlgWarning.btnText = "OK";
-			dlgWarning.evtClose += (UIPanel panel) =>
-			{
-				Debug.Log("dialog close > network error");
-			};
+//			DialogConfirm dlgWarning = (DialogConfirm)UIManager.Instance.OpenDialog("DialogConfirm");
+//			dlgWarning.title = "WARNING";
+//			dlgWarning.text = "network error";
+//			dlgWarning.btnText = "OK";
+//			dlgWarning.evtClose += (UIPanel panel) =>
+//			{
+//				Debug.Log("dialog close > network error");
+//			};
         }
         else
         {

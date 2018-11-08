@@ -103,6 +103,8 @@ public class UIManager : MonoSingleton<UIManager>
 
     public void Update()
     {
+        return;
+
         // TODO
         // 定时清理
         cleanCacheTick += Time.deltaTime;
@@ -281,9 +283,9 @@ public class UIManager : MonoSingleton<UIManager>
         m_panelStack.Add(upInfo);
     }
 
-    private void PopUIPanel()
-    {
-    }
+//    private void PopUIPanel()
+//    {
+//    }
        
     // TODO
     private void OnMemoryWarning()
