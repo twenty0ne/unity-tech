@@ -11,6 +11,8 @@
 // 网络更新，数据刷新
 // 粒子
 // 动画
+// 不要使用 SetActive, 会引起重绘，最好办法是移除屏幕
+// Console
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
