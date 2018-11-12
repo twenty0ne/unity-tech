@@ -43,8 +43,9 @@ public class UIManager : MonoSingleton<UIManager>
     public const string PATH_PREFAB_MENU = "Prefabs/UI/Menu/";
     public const string PATH_PREFAB_DIALOG = "Prefabs/UI/Dialog/";
     public const string PATH_PREFAB_WIDGET = "Prefabs/UI/WIdget/";
+	public const string PATH_PREFAB_PANEL = "Prefabs/UI/Panel/";
 
-    public const float INTERVAL_CLEAN_CACHE = 10;
+	public const float INTERVAL_CLEAN_CACHE = 10;
     public const float TIME_MAX_CACHE = 20;
 
     private UIRoot m_uiRoot = null;
@@ -58,19 +59,19 @@ public class UIManager : MonoSingleton<UIManager>
 
     private float cleanCacheTick = 0f;
 
-    private Transform mainCanvas
+    public Transform mainCanvas
     {
         get { 
             return uiRoot.mainCanvas.transform; 
         }
     }
 
-    private Transform backCanvas
+    public Transform backCanvas
     {
         get { return uiRoot.backCanvas.transform; }
     }
 
-    private Transform frontCanvas
+    public Transform frontCanvas
     {
         get { return uiRoot.frontCanvas.transform; }
     }
@@ -224,6 +225,15 @@ public class UIManager : MonoSingleton<UIManager>
            
         return panel;
     }
+
+	// 比 OpenMenu, OpenDialog 更自由的打开方式
+	// 谨慎使用
+	public UIPanel OpenPanel(string panelName, Transform parent)
+	{
+		
+
+		return null;
+	}
 
     private void OnMenuClose(UIPanel panel)
     {

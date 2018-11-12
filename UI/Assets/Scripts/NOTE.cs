@@ -13,6 +13,8 @@
 // 动画
 // 不要使用 SetActive, 会引起重绘，最好办法是移除屏幕
 // Console
+// 最好不要使用 Alpha = 0 的作为输入的遮挡层，尝试用 Canvas block 来处理
+// 热度图：用于显示 Over Drawing
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
@@ -40,3 +42,6 @@
 
 // Q:UI 传递消息
 // A:第一种是初始化的时候传递，另外一种情况是通过 UIEvent
+
+// 来自 <2018腾讯移动游戏技术评审标准与实践>
+// 不同 Canvas 之间不能合并 batch

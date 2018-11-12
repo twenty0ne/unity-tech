@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,9 @@ public class SceneTest : MonoBehaviour
         
 	void Update () 
     {
-		
+		if (Input.GetKeyDown(KeyCode.Tab))
+		{
+			UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);
+		}
 	}
 }
