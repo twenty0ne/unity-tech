@@ -6,14 +6,14 @@ public class SceneTest : MonoBehaviour
 {
 	void Start () 
     {
-        UIManager.Instance.OpenMenu("MenuLogin");	
+        // UIManager.Instance.OpenMenu("MenuLogin");	
 	}
         
 	void Update () 
     {
-		if (Input.GetKeyDown(KeyCode.Tab))
-		{
-			UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);
-		}
+		//if (Input.GetKeyDown(KeyCode.Tab))
+		//{
+		//	UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);
+		//}
 	}
 }
