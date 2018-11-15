@@ -7,6 +7,8 @@ using UnityEngine.UI;
 // Console 有几种功能：
 // debug 命令
 // 输出 log
+// TODO:
+// 输入的记录是否保存
 public class Console : UIPanel
 {
 	private class Info
@@ -15,11 +17,20 @@ public class Console : UIPanel
 		public string msg;
 	}
 
+	public Color logDebugColor;
+	public Color logWarningColor;
+	public Color logErrorColor;
+
 	private List<Info> infos = new List<Info>();
+
+	// Cache log
+
+	//public static void RegisterDebug()
+	//{
+	//}
 
 	private void Awake()
 	{
-		
 	}
 
 	public void OnEndInput(InputField txtInput)
@@ -35,5 +46,10 @@ public class Console : UIPanel
 		info.msg = msg;
 
 		infos.Add(info);
+	}
+
+	public void Log(string log)
+	{
+
 	}
 }
