@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 放在最上层，并且不应该阻挡输入
+// Console 有几种功能：
+// debug 命令
+// 输出 log
 public class Console : UIPanel
 {
 	private class Info

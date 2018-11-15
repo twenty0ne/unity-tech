@@ -15,6 +15,8 @@
 // Console
 // 最好不要使用 Alpha = 0 的作为输入的遮挡层，尝试用 Canvas block 来处理
 // 热度图：用于显示 Over Drawing
+// Draw call 合并提示：相同图片和Material
+// Config, Data 获取频繁的可尝试做成通用组件，方便策划配置，而程序更关注复杂UI逻辑
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
