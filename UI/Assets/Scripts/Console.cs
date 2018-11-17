@@ -48,8 +48,17 @@ public class Console : UIPanel
 		infos.Add(info);
 	}
 
-	public void Log(string log)
-	{
-
+	public void LogDebug(string log)
+    {
+        
 	}
+
+    public void LogWarning(string log)
+    {
+    }
+
+    public void LogError(string log)
+    {
+        
+    }
 }
