@@ -23,6 +23,8 @@ public class Console : UIPanel
 
 	private List<Info> infos = new List<Info>();
 
+	public GameObject pfbLogText;
+
 	// Cache log
 
 	//public static void RegisterDebug()
@@ -61,4 +63,9 @@ public class Console : UIPanel
     {
         
     }
+
+	private void _Log(string log)
+	{
+		Instantiate(pfbLogText);
+	}
 }
