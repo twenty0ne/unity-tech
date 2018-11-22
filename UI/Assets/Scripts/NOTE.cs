@@ -1,5 +1,10 @@
 // NOTE
 
+// 原则：
+// 由于 Prefab 的不便查看，尽量少修改 Prefab，多用代码实现
+// 一个页面在功能基本不变的情况下，需要保证美术策划能方便修改，而程序基本不用参与
+// 已实现功能应该能够方便重用
+
 // TODO
 // 堆栈管理
 // 内存管理
@@ -17,6 +22,7 @@
 // 热度图：用于显示 Over Drawing
 // Draw call 合并提示：相同图片和Material
 // Config, Data 获取频繁的可尝试做成通用组件，方便策划配置，而程序更关注复杂UI逻辑
+// UIEventCompant 在 Awake 上面注册 UI Event 监听，这样就能将一部分代码移动到修改 prefab？
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
