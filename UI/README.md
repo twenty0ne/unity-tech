@@ -57,6 +57,7 @@
 
 // TODO
 [+] DOTWeen
+[+] Console 添加 ':' 执行命令，'/' 搜索 log
 
 
 // 测试例子
