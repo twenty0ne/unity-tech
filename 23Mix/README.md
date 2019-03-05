@@ -19,3 +19,4 @@ https://www.youtube.com/watch?v=mCg_6ca9iBY#t=733
 
 TODO:
 [+]实现 https://connect.unity.com/p/articles-what-i-learned-from-trying-to-make-an-isometric-game-in-unity
+[+]单层视角
