@@ -61,6 +61,9 @@
 [+] Console 最后采用纯代码生成，这样就能脱离 UI 框架，也能在其他项目中使用
 [+] 确保资源释放，无内存泄漏
 [+] 使用 LRU 原则
+[+] 数据绑定
+https://github.com/Real-Serious-Games/Unity-Weld
+https://github.com/sigtrapgames/SmartData
 
 
 // 测试例子
