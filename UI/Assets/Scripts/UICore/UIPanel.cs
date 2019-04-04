@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class UIPanel : UINode 
 {
-    // 传递进来的参数
-    public Dictionary<string, object> param;
+	// 传递进来的参数
+	public Dictionary<string, object> param;
 
 	// TODO:
 	// more event
 	// before open, after open, before close, after close
-    public delegate void OpenEvent();
-    public delegate void CloseEvent(UIPanel uipanel);
-    // public Action onVisible;
-    public event OpenEvent evtOpen = null;
-    public event CloseEvent evtClose = null;
+	public delegate void OpenEvent();
+	public delegate void CloseEvent(UIPanel uipanel);
+	// public Action onVisible;
+	public event OpenEvent evtOpen = null;
+	public event CloseEvent evtClose = null;
 
-    // block throughclick
-    public bool isBlockClick = true;
+	// block throughclick
+	public bool isBlockClick = true;
 
 	// public GameObject btnClose = null;
 
@@ -46,18 +47,18 @@ public class UIPanel : UINode
 //		}
 	}
 
-    public virtual void Close()
-    {
+	public virtual void Close()
+	{
 		active = false;
 
-        if (evtClose != null)
-            evtClose(this);
-    }
+		if (evtClose != null)
+			evtClose(this);
+	}
 
 	// if Android, click back button to trigger close event
 
-    public virtual void OnClickBtnClose()
-    {
-        Close();
-    }
+	public virtual void OnClickBtnClose()
+	{
+		Close();
+	}
 }

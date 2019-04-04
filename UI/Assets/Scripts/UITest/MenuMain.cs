@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MenuMain : UIMenu
 {
-    public void OnClickBtnWidget()
-    {
-        UIManager.Instance.OpenMenu("MenuLogin");    
-    }
+	public void OnClickBtnWidget()
+	{
+		UIManager.Instance.OpenMenu("MenuLogin");    
+	}
 }
