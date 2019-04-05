@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UINode : MonoBehaviour
+public class WidgetMainIcon : UIWidget
 {
-  
+	public void OnClick()
+	{
+		
+	}
 }

@@ -6,6 +6,6 @@ public class MenuMain : UIMenu
 {
 	public void OnClickBtnWidget()
 	{
-		UIManager.Instance.OpenMenu("MenuLogin");    
+		// UIManager.Instance.OpenMenu("MenuLogin");    
 	}
 }

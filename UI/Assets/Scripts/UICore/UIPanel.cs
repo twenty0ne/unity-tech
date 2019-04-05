@@ -21,6 +21,7 @@ public class UIPanel : UINode
 	public bool isBlockClick = true;
 
 	// public GameObject btnClose = null;
+	protected CanvasGroup canvasGroup = null;
 
 	public Transform parent
 	{
@@ -30,26 +31,20 @@ public class UIPanel : UINode
 		}
 	}
 
-	public bool active
-	{
+	public bool visible {
 		get { return gameObject.activeSelf; }
-		set { gameObject.SetActive(value); }
 	}
 
-	protected virtual void Start()
+	public virtual void Show()
 	{
-//		Debug.Log(this.GetType().Name + ".Start");
-//
-//		if (btnClose != null)
-//		{
-//			// registe close event
-//
-//		}
+		gameObject.SetActive(true);
+		canvasGroup.interactable = true;
 	}
 
 	public virtual void Close()
 	{
-		active = false;
+		gameObject.SetActive(false);
+		canvasGroup.interactable = false;
 
 		if (evtClose != null)
 			evtClose(this);
