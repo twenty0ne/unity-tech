@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// [ExecuteInEditMode]
 public class Tower : MonoBehaviour 
 {
 	[Range(10, 20)]
 	public float rotateSpeed;
 
+	// NOTE:
+	// 不能设置 object 为 static, 否则无法 Instantiate
 	public GameObject objStairCase;
 	public GameObject objStairCorner;
 
@@ -40,7 +43,7 @@ public class Tower : MonoBehaviour
 			GameObject stairCase = Instantiate(objStairCase);
 			stairCase.transform.SetParent(transform);
 			stairCase.transform.position = posStairStart + 
-					new Vector3(i * stairSize.x, i * stairSize.y, 0);
+					new Vector3(-i * stairSize.x, i * stairSize.y, 0);
 		}
 	}
 }
