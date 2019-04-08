@@ -7,6 +7,7 @@ public class Tower : MonoBehaviour
 {
 	[Range(10, 20)]
 	public float rotateSpeed;
+	public int stairNumOneFace = 6;
 
 	// NOTE:
 	// 不能设置 object 为 static, 否则无法 Instantiate
@@ -14,6 +15,7 @@ public class Tower : MonoBehaviour
 	public GameObject objStairCorner;
 
 	public Vector3 posStairStart;
+	public Vector3[] stairStartPos;
 
 	private Vector3 stairSize;
 
@@ -42,8 +44,21 @@ public class Tower : MonoBehaviour
 		{
 			GameObject stairCase = Instantiate(objStairCase);
 			stairCase.transform.SetParent(transform);
-			stairCase.transform.position = posStairStart + 
-					new Vector3(-i * stairSize.x, i * stairSize.y, 0);
+
+			int face = i % stairNumOneFace;
+			Debug.Log("xx-- face > " + face);
+			if (face == 0)
+			{
+				stairCase.transform.position = stairStartPos[0] + 
+						new Vector3(-i * stairSize.x, i * stairSize.y, 0);
+				stairCase.transform.localRotation = Quaternion.Euler(0, 90, 0);
+			}
+			else if (face == 1)
+			{
+				stairCase.transform.position = stairStartPos[1] + 
+						new Vector3(-i * stairSize.x, i * stairSize.y, 0);
+				stairCase.transform.localRotation = Quaternion.Euler(0, 180, 0);
+			}
 		}
 	}
 }
