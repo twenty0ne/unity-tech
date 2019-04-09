@@ -40,24 +40,36 @@ public class Tower : MonoBehaviour
 
 	private void InitStairs()
 	{
-		for (int i = 0; i < 10; ++i)
+		for (int i = 0; i < 50; ++i)
 		{
 			GameObject stairCase = Instantiate(objStairCase);
 			stairCase.transform.SetParent(transform);
 
-			int face = i % stairNumOneFace;
+			int face = i / stairNumOneFace % 4;
 			Debug.Log("xx-- face > " + face);
 			if (face == 0)
 			{
 				stairCase.transform.position = stairStartPos[0] + 
-						new Vector3(-i * stairSize.x, i * stairSize.y, 0);
-				stairCase.transform.localRotation = Quaternion.Euler(0, 90, 0);
+						new Vector3(-i % stairNumOneFace * stairSize.x, i * stairSize.y, 0);
+				// stairCase.transform.localRotation = Quaternion.Euler(0, 90, 0);
 			}
 			else if (face == 1)
 			{
 				stairCase.transform.position = stairStartPos[1] + 
-						new Vector3(-i * stairSize.x, i * stairSize.y, 0);
+						new Vector3(0, i * stairSize.y, i % stairNumOneFace * stairSize.x);
+				stairCase.transform.localRotation = Quaternion.Euler(0, 90, 0);
+			}
+			else if (face == 2)
+			{
+				stairCase.transform.position = stairStartPos[2] + 
+						new Vector3(i % stairNumOneFace * stairSize.x, i * stairSize.y, 0);
 				stairCase.transform.localRotation = Quaternion.Euler(0, 180, 0);
+			}
+			else if (face == 3)
+			{
+				stairCase.transform.position = stairStartPos[3] + 
+						new Vector3(0, i * stairSize.y, -i % stairNumOneFace * stairSize.x);
+				stairCase.transform.localRotation = Quaternion.Euler(0, 270, 0);
 			}
 		}
 	}
