@@ -95,7 +95,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Widget
+  m_Text: Bag
 --- !u!114 &114540981146143864
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8b1dd40d2d34ef38ba828e7807523b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
 --- !u!114 &114741523001088972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -234,8 +235,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 45.2, y: 45.9}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 120, y: 120}
+  m_Pivot: {x: 1, y: 0}
 --- !u!224 &224644628193580642
 RectTransform:
   m_ObjectHideFlags: 1
