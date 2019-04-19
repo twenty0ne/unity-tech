@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class UIWidget : UINode
 {
-	public GameObject container = null;
+	// public GameObject container = null;
 }

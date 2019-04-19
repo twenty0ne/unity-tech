@@ -8,6 +8,7 @@ public class MenuMain : UIMenu
 
 	public void OnClickWidgetMainIcon(WidgetMainIcon widget)
 	{
-		// UIManager.Instance.OpenMenu("MenuLogin");    
+		// UIManager.Instance.OpenMenu("MenuLogin");
+		// if (widget)
 	}
 }

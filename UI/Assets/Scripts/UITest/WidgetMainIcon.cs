@@ -7,9 +7,24 @@ public class WidgetMainIcon : UIWidget
 {
 	public Action<WidgetMainIcon> onClick = null;
 
+	public enum Type
+	{
+		None,
+		Bag,
+		Shop,
+	}
+
+	public Type type;
+
 	public void OnClicked()
 	{
-		if (onClick != null)
-			onClick(this);
+		if (type == Type.Bag)
+		{
+			UIManager.Instance.OpenMenu("MenuBag");
+		}
+		else if (type == Type.Shop)
+		{
+			UIManager.Instance.OpenMenu("MenuShop");
+		}
 	}
 }

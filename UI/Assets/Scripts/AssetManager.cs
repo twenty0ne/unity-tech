@@ -12,7 +12,7 @@ public class AssetInfo
 }
 
 public class AssetManager // : MonoSingleton<AssetManager>
-{   
+{
 	// TODO
 	// cache LoadAsset
 	static Dictionary<string, AssetInfo> assetsCache = new Dictionary<string, AssetInfo>();
