@@ -39,9 +39,9 @@ GameObject:
   - component: {fileID: 224248621555141512}
   - component: {fileID: 222120817152555350}
   - component: {fileID: 114787819910136608}
-  - component: {fileID: 114725015309989826}
   - component: {fileID: 114695101015804808}
   - component: {fileID: 225377035820377682}
+  - component: {fileID: 114401756894359172}
   m_Layer: 5
   m_Name: MenuShop
   m_TagString: Untagged
@@ -300,7 +300,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114725015309989826}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClickBtnWidget
         m_Mode: 1
         m_Arguments:
@@ -313,6 +313,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114401756894359172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1281956750389314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 687b7abf2b37f46629d49926c09195c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBlockClick: 1
 --- !u!114 &114416348168633040
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -431,18 +443,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Bag
---- !u!114 &114725015309989826
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1281956750389314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edcc8bb5560028642887373efd6260c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isBlockClick: 1
 --- !u!114 &114783534638421428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -482,7 +482,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114725015309989826}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClickBtnBack
         m_Mode: 1
         m_Arguments:
@@ -561,7 +561,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114725015309989826}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClickBtnWidget
         m_Mode: 1
         m_Arguments:

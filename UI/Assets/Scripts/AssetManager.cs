@@ -17,7 +17,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
 	// cache LoadAsset
 	static Dictionary<string, AssetInfo> assetsCache = new Dictionary<string, AssetInfo>();
 
-	public static T LoadAsset<T>(string path) where T : UnityEngine.Object
+	private static T LoadAsset<T>(string path) where T : UnityEngine.Object
 	{
 		try
 		{
@@ -59,7 +59,7 @@ public class AssetManager // : MonoSingleton<AssetManager>
 		}
 	}
 
-	public static UnityEngine.Object[] LoadAllAsset(string path)
+	private static UnityEngine.Object[] LoadAllAsset(string path)
 	{
 		try
 		{
