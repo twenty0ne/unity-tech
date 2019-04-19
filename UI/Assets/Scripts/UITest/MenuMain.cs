@@ -11,7 +11,11 @@ public class MenuMain : UIMenu
 
 	private IEnumerator InitWidgets()
 	{
-		AssetManager.LoadGameObject()
+		GameObject objWidget = AssetManager.LoadGameObject(AssetDefine.PATH_PREFAB_UI_WIDGET	+ "WidgetMainIcon");
+		Debug.Assert(objWidget != null, "CHECK");
+
+		for (int i = 0; i < )
+
 
 		yield return null;
 	}
