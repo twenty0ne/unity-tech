@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224039371620470834}
   - component: {fileID: 114846418197524236}
   - component: {fileID: 114540981146143864}
+  - component: {fileID: 114276071103834822}
   m_Layer: 5
   m_Name: WidgetMainIcon
   m_TagString: Untagged
@@ -63,6 +64,79 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &114276071103834822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1315937790399818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5097e058d09f8a645bba959d5a099af4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Properties:
+    Properties: []
+    Groups: []
+    Hidden: 
+  Links:
+    Links:
+    - LIIF: -416005235
+      InstanceTarget: {fileID: 114276071103834822}
+    - LIIF: 1173126803
+      InstanceTarget: {fileID: 1315937790399818}
+    - LIIF: 184756446
+      InstanceTarget: {fileID: 1908580576749788}
+    - LIIF: 326659218
+      InstanceTarget: {fileID: 224039371620470834}
+    - LIIF: -154425928
+      InstanceTarget: {fileID: 114846418197524236}
+    - LIIF: 1678526517
+      InstanceTarget: {fileID: 114540981146143864}
+    - LIIF: -322927837
+      InstanceTarget: {fileID: 224958309991152660}
+    - LIIF: -1674400692
+      InstanceTarget: {fileID: 224644628193580642}
+    - LIIF: -1951671026
+      InstanceTarget: {fileID: 222506717621218832}
+    - LIIF: -768388892
+      InstanceTarget: {fileID: 114741523001088972}
+    - LIIF: 980853735
+      InstanceTarget: {fileID: 114809683527902462}
+    - LIIF: 718812820
+      InstanceTarget: {fileID: 1412229209850420}
+    - LIIF: 975460354
+      InstanceTarget: {fileID: 222001444784656246}
+    - LIIF: 1995069135
+      InstanceTarget: {fileID: 114337782448383014}
+  Modifications:
+    Modificated:
+    - Object: {fileID: 1315937790399818}
+      ObjeckLink: 1173126803
+      PropertyPath: m_Name
+      Mode: 0
+    - Object: {fileID: 224039371620470834}
+      ObjeckLink: 326659218
+      PropertyPath: m_LocalPosition
+      Mode: 0
+    - Object: {fileID: 224039371620470834}
+      ObjeckLink: 326659218
+      PropertyPath: m_AnchorMin
+      Mode: 0
+    - Object: {fileID: 224039371620470834}
+      ObjeckLink: 326659218
+      PropertyPath: m_AnchorMax
+      Mode: 0
+    - Object: {fileID: 224039371620470834}
+      ObjeckLink: 326659218
+      PropertyPath: m_AnchoredPosition
+      Mode: 0
+    NonPrefabObjects: []
+    NonPrefabComponents: []
+    RemovedObjects: 
+    TransformParentChanges: []
+  ParentPrefabGUID: 
+  PrefabGUID: 2abbb1a0204b44f9394e46dfb30a7c6c
 --- !u!114 &114337782448383014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -226,7 +300,7 @@ RectTransform:
   m_GameObject: {fileID: 1315937790399818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0003312, y: 1.0003312, z: 1.0003312}
   m_Children:
   - {fileID: 224958309991152660}
   m_Father: {fileID: 0}
