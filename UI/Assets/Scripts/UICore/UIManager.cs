@@ -161,7 +161,7 @@ public class UIManager : MonoSingleton<UIManager>
 //                }
 
 				UIPanel panel = obj.GetComponent<UIPanel>();
-				panel.evtClose += OnMenuClose;
+				panel.onClose += OnMenuClose;
 				Debug.Assert(panel != null, "CHECK");
 
 				upInfo = new UIPanelInfo();
@@ -207,7 +207,7 @@ public class UIManager : MonoSingleton<UIManager>
 		Debug.Assert(obj != null, "CHECK");
 
 		UIPanel panel = obj.GetComponent<UIPanel>();
-		panel.evtClose += OnDialogClose;
+		panel.onClose += OnDialogClose;
 		Debug.Assert(panel != null, "CHECK");
 
 		UIPanelInfo newUpInfo = new UIPanelInfo();

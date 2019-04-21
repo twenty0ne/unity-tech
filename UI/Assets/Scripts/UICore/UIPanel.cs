@@ -14,11 +14,11 @@ public class UIPanel : UINode
 	public delegate void OpenEvent();
 	public delegate void CloseEvent(UIPanel uipanel);
 	// public Action onVisible;
-	public event OpenEvent evtOpen = null;
-	public event CloseEvent evtClose = null;
+	public event OpenEvent onOpen = null;
+	public event CloseEvent onClose = null;
 
 	// block throughclick
-	public bool isBlockClick = true;
+	// public bool isBlockClick = true;
 
 	// public GameObject btnClose = null;
 	protected CanvasGroup canvasGroup = null;
@@ -46,8 +46,8 @@ public class UIPanel : UINode
 		gameObject.SetActive(false);
 		canvasGroup.interactable = false;
 
-		if (evtClose != null)
-			evtClose(this);
+		if (onClose != null)
+			onClose(this);
 	}
 
 	// if Android, click back button to trigger close event

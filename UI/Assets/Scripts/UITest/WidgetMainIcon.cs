@@ -18,6 +18,7 @@ public class WidgetMainIcon : UIWidget
 
 	public void OnClicked()
 	{
+		Debug.Log("xx-- WidgetMainIcon clicked");
 		if (type == Type.Bag)
 		{
 			UIManager.Instance.OpenMenu("MenuBag");

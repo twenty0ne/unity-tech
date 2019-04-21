@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class UIMenu : UIPanel
 {
-    public virtual void OnClickBtnBack()
-    {
-        Close();
-    }
+	public virtual void OnClickBtnBack()
+	{
+		Close();
+	}
 }

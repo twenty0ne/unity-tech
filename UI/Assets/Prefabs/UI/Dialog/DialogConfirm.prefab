@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 224477737307645174}
   - component: {fileID: 222555897005347158}
   - component: {fileID: 114391028794217926}
+  - component: {fileID: 225697686914704078}
   - component: {fileID: 114059577745514170}
   m_Layer: 5
   m_Name: DialogConfirm
@@ -126,11 +127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aacfec0ed50abd646b982148820b0767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBlockClick: 1
   txtTitle: {fileID: 114884019509145138}
   txtContent: {fileID: 114861781512780764}
   txtButton: {fileID: 114945478819623274}
-  txtHello: {fileID: 0}
 --- !u!114 &114391028794217926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -512,3 +511,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &225697686914704078
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1960654803750030}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

@@ -11,8 +11,6 @@ public class DialogConfirm : UIDialog
 	private Text txtContent;
 	[SerializeField]
 	private Text txtButton;
-    [SerializeField]
-    private Text txtHello;
 
 	public string title
 	{
