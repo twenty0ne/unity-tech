@@ -51,6 +51,8 @@ public class UIManager : MonoSingleton<UIManager>
 	private UIRoot m_uiRoot = null;
 	private UIPanelInfo m_topPanelInfo = null;
 
+	// TODO:
+	// use LRU
 	private List<UIPanelInfo> m_panelStack = new List<UIPanelInfo>();
 	// private Dictionary<string, UIPanelInfo> m_panelCache = new Dictionary<string, UIPanelInfo>();
 	// because dialog 可能重名，所以用 list 替换  dictionary
@@ -163,6 +165,7 @@ public class UIManager : MonoSingleton<UIManager>
 				UIPanel panel = obj.GetComponent<UIPanel>();
 				panel.onClose += OnMenuClose;
 				Debug.Assert(panel != null, "CHECK");
+				panel.Open();
 
 				upInfo = new UIPanelInfo();
 				upInfo.name = menuName;
@@ -174,9 +177,9 @@ public class UIManager : MonoSingleton<UIManager>
 		}
 
 		if (m_topPanelInfo != null)
-			m_topPanelInfo.panel.gameObject.SetActive(false);
+			m_topPanelInfo.panel.Hide();
 		m_topPanelInfo = upInfo;
-		m_topPanelInfo.panel.gameObject.SetActive(true);
+		m_topPanelInfo.panel.Show();
 		return upInfo.panel;
 	}
 

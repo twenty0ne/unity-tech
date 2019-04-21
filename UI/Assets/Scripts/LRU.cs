@@ -5,9 +5,11 @@ public class LRU<TKey, TValue>
 {
 	private const int DEFAULT_CAPACITY = 255;
 
+	// public 
+
 	private int _capacity = 0;
-	private Dictionary<TKey, TValue> hashMap;
-	private LinkedList<TKey> linkedList;
+	private Dictionary<TKey, TValue> _hashMap;
+	private LinkedList<TKey> _linkedList;
 
 	public LRU() 
 	{

@@ -11,10 +11,17 @@ public class UIPanel : UINode
 	// TODO:
 	// more event
 	// before open, after open, before close, after close
+	// Open 与 Show 区别
+	// Open 是第一次打开
+	// Show 是每次显示出来
 	public delegate void OpenEvent();
-	public delegate void CloseEvent(UIPanel uipanel);
+	public delegate void ShowEvent();
+	public delegate void HideEvent();
+	public delegate void CloseEvent(UIPanel up);
 	// public Action onVisible;
 	public event OpenEvent onOpen = null;
+	public event ShowEvent onShow = null;
+	public event HideEvent onHide = null;
 	public event CloseEvent onClose = null;
 
 	// block throughclick
@@ -31,14 +38,32 @@ public class UIPanel : UINode
 		}
 	}
 
-	public bool visible {
+	public bool visible 
+	{
 		get { return gameObject.activeSelf; }
 	}
 
-	public virtual void Show()
+	public virtual void Open()
+	{
+		if (onOpen != null)
+			onOpen();
+	}
+
+	public virtual void Show(/*bool isAutoByMgr */)
 	{
 		gameObject.SetActive(true);
 		canvasGroup.interactable = true;
+
+		if (onShow != null)
+			onShow();
+	}
+
+	public virtual void Hide(/* bool isAutoByMgr */)
+	{
+		gameObject.SetActive(false);
+
+		if (onHide != null)
+			onHide();
 	}
 
 	public virtual void Close()
