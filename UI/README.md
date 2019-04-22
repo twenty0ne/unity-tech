@@ -24,6 +24,8 @@
 // Config, Data 获取频繁的可尝试做成通用组件，方便策划配置，而程序更关注复杂UI逻辑
 // UIEventCompant 在 Awake 上面注册 UI Event 监听，这样就能将一部分代码移动到修改 prefab？
 // ScrollView/List 动态加载，惰性加载（指先打开页面，然后一个个的异步加载）
+// 多语言
+// 自动换行，自动缩放文本
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
