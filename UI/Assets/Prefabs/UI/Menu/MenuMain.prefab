@@ -63,7 +63,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1225422219521166
 GameObject:
   m_ObjectHideFlags: 1
@@ -403,14 +403,6 @@ MonoBehaviour:
       Mode: 0
     - Object: {fileID: 224587001313540084}
       ObjeckLink: 326659218
-      PropertyPath: m_AnchorMin
-      Mode: 0
-    - Object: {fileID: 224587001313540084}
-      ObjeckLink: 326659218
-      PropertyPath: m_AnchorMax
-      Mode: 0
-    - Object: {fileID: 224587001313540084}
-      ObjeckLink: 326659218
       PropertyPath: m_AnchoredPosition
       Mode: 0
     NonPrefabObjects: []
@@ -634,7 +626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edcc8bb5560028642887373efd6260c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBlockClick: 1
 --- !u!114 &114783534638421428
 MonoBehaviour:
   m_ObjectHideFlags: 1

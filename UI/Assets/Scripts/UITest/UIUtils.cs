@@ -1,3 +1,4 @@
+using System.Text;
 using UnityEngine;
 
 public static class UIUtils
@@ -9,5 +10,18 @@ public static class UIUtils
 		T widget = obj.GetComponent<T>();
 		Debug.Assert(widget != null, "CHECK");
 		return widget;
+	}
+
+	public static string FullName(this GameObject obj)
+	{
+		StringBuilder sb = new StringBuilder();
+
+		GameObject pobj = obj;
+		while (pobj.transform.parent != null)
+		{
+			sb.Insert(0, pobj.name + " > ");
+		}
+
+		return sb.ToString();
 	}
 }
