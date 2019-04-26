@@ -26,6 +26,7 @@
 // ScrollView/List 动态加载，惰性加载（指先打开页面，然后一个个的异步加载）
 // 多语言
 // 自动换行，自动缩放文本
+// 当页面被清理之后，需要有恢复页面的功能，比如切换到指定的 tab
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
