@@ -60,6 +60,8 @@
 
 // Q:如何区分哪些 dialog 是要缓存的
 
+// Q:是否可以做成类似 bolt 插件一样拖拽的形式
+https://assetstore.unity.com/packages/tools/visual-scripting/bolt-87491
 
 // TODO
 [+] DOTWeen
