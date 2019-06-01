@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CanvasGroup))]
-public class UIPanel : UINode 
+public class UIPanel : UIWidget 
 {
 	// 传递进来的参数
 	public Dictionary<string, object> param;
@@ -29,6 +29,8 @@ public class UIPanel : UINode
 
 	// public GameObject btnClose = null;
 	protected CanvasGroup canvasGroup = null;
+
+	protected List<UIWidget> widgets = new List<UIWidget>();
 
 	public Transform parent
 	{
@@ -80,5 +82,10 @@ public class UIPanel : UINode
 	public virtual void OnClickBtnClose()
 	{
 		Close();
+	}
+
+	public virtual void AddChild(UIWidget uw)
+	{
+		
 	}
 }
