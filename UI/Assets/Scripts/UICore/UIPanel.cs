@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CanvasGroup))]
-public class UIPanel : UIWidget 
+// [RequireComponent(typeof(CanvasGroup))]
+// UIPanel 是一组 UIWidget 集合，便于控制局部功能
+public class UIPanel : MonoBehaviour 
 {
 	// 传递进来的参数
 	public Dictionary<string, object> param;

@@ -1,5 +1,8 @@
 // NOTE
 
+// UI Assets
+// https://assetstore.unity.com/packages/2d/gui/fantasy-wooden-gui-free-103811
+
 // 原则：
 // 由于 Prefab 的不便查看，尽量少修改 Prefab，多用代码实现
 // 一个页面在功能基本不变的情况下，需要保证美术策划能方便修改，而程序基本不用参与

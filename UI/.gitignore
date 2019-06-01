@@ -10,6 +10,7 @@ ProjectSettings/ProjectVersion.txt
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+[Ll]ogs/
 
 # Visual Studio cache directory
 .vs/
