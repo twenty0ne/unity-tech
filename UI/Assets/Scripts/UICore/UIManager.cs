@@ -1,23 +1,23 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-// // TODO:
-// // 界面出现的方式可以参考 ojbect-c storyboard
-// // push, model, popover, replace, custom
-// // 界面之间的通信可以通过传递参数/或者使用消息
+// TODO:
+// 界面出现的方式可以参考 ojbect-c storyboard
+// push, model, popover, replace, custom
+// 界面之间的通信可以通过传递参数/或者使用消息
 
-// // TODO:
-// // 如果是预先拖入 Scene 中的 UIPanel，说明是要在场景加载的时候初始化的
-// // 这部分如何放入 uipanelStack, 如何避免重复打开
-// // TODO:
-// // 可以将预加载的 UI 放在 Scene 统一一个名字下面，比如 ui_preload
-// // layer_main 按照 menu, dialog 规则
-// // 其他 layer 随意添加
-// // NOTE:
-// // 行为定义
-// // menu 一次只有一个
-// // dialog 应该是保持一次只有一个，点击之后就应该关闭然后执行相关操作
+// TODO:
+// 如果是预先拖入 Scene 中的 UIPanel，说明是要在场景加载的时候初始化的
+// 这部分如何放入 uipanelStack, 如何避免重复打开
+// TODO:
+// 可以将预加载的 UI 放在 Scene 统一一个名字下面，比如 ui_preload
+// layer_main 按照 menu, dialog 规则
+// 其他 layer 随意添加
+// NOTE:
+// 行为定义
+// menu 一次只有一个
+// dialog 应该是保持一次只有一个，点击之后就应该关闭然后执行相关操作
 // public class UIManager : MonoSingleton<UIManager> 
 // {
 // 	public enum UIOpenType
@@ -48,7 +48,7 @@
 // 	public const float INTERVAL_CLEAN_CACHE = 10;
 // 	public const float TIME_MAX_CACHE = 20;
 
-// 	private UIRoot m_uiRoot = null;
+// 	// private UIRoot m_uiRoot = null;
 // 	private UIPanelInfo m_topPanelInfo = null;
 
 // 	// TODO:
@@ -61,36 +61,36 @@
 
 // 	private float cleanCacheTick = 0f;
 
-// 	public Transform mainCanvas
-// 	{
-// 		get { 
-// 			return uiRoot.mainCanvas.transform; 
-// 		}
-// 	}
+// 	// public Transform mainCanvas
+// 	// {
+// 	// 	get { 
+// 	// 		return uiRoot.mainCanvas.transform; 
+// 	// 	}
+// 	// }
 
-// 	public Transform backCanvas
-// 	{
-// 		get { return uiRoot.backCanvas.transform; }
-// 	}
+// 	// public Transform backCanvas
+// 	// {
+// 	// 	get { return uiRoot.backCanvas.transform; }
+// 	// }
 
-// 	public Transform frontCanvas
-// 	{
-// 		get { return uiRoot.frontCanvas.transform; }
-// 	}
+// 	// public Transform frontCanvas
+// 	// {
+// 	// 	get { return uiRoot.frontCanvas.transform; }
+// 	// }
 
-// 	private UIRoot uiRoot
-// 	{
-// 		get { 
-// 			if (m_uiRoot == null)
-// 			{
-// 				GameObject objUIRoot = GameObject.Find("UIROOT");
-// 				if (objUIRoot == null)
-// 					Debug.LogError("failed to find UIRoot");
-// 				m_uiRoot = objUIRoot.GetComponent<UIRoot>();
-// 			}
-// 			return m_uiRoot;
-// 		}
-// 	}
+// 	// private UIRoot uiRoot
+// 	// {
+// 	// 	get { 
+// 	// 		if (m_uiRoot == null)
+// 	// 		{
+// 	// 			GameObject objUIRoot = GameObject.Find("UIROOT");
+// 	// 			if (objUIRoot == null)
+// 	// 				Debug.LogError("failed to find UIRoot");
+// 	// 			m_uiRoot = objUIRoot.GetComponent<UIRoot>();
+// 	// 		}
+// 	// 		return m_uiRoot;
+// 	// 	}
+// 	// }
  
 // 	// TODO:
 // 	// if top dialog?
@@ -305,3 +305,35 @@
 // 	{
 // 	}
 // }
+
+using System;
+
+public class UIManager : MonoSingleton<UIManager>
+{
+	public const string PATH_PREFAB_MENU = "Prefabs/";
+
+	private Dictionary<Type, UIMenu> menuCaches = new Dictionary<Type, UIMenu>();
+	private GameObject mainCanvas = null;
+
+	protected override void Awake() 
+	{
+		base.Awake();
+
+		mainCanvas = GameObject.Find("MainCanvas");
+		Debug.Assert(mainCanvas != null, "CHECK");
+	}
+
+	public UIMenu TryGetMenu(Type tp)
+	{
+		if (menuCaches.ContainsKey(tp))
+			return menuCaches[tp];
+
+		// Load from Assets
+		string path = PATH_PREFAB_MENU + tp.ToString() + ".prefab";
+		GameObject obj = AssetManager.LoadGameObject(path);
+		Debug.Assert(obj != null, "CHECK");
+		obj.transform.SetParent(mainCanvas.transform, false);
+
+		return null;
+	}
+}

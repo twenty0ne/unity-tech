@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class SceneTest : MonoBehaviour 
 {
-	void Start () 
-    {
-        // UIManager.Instance.OpenMenu("MenuLogin");	
+	private void Awake()
+	{
+		// MenuStart mu = MenuStart.Show();
 	}
-        
+
+	void Start () 
+	{
+		// UIManager.Instance.OpenMenu("MenuLogin");
+	}
+
 	void Update () 
-    {
+  {
 		//if (Input.GetKeyDown(KeyCode.Tab))
 		//{
 		//	UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);

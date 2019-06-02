@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIMenu : MonoBehaviour
+public class UIMenu : UIWidget
 {
-	public virtual void OnClickBtnBack()
-	{
-		// Close();
-	}
+	// public virtual void OnClickBtnBack()
+	// {
+	// 	// Close();
+	// }
 }
