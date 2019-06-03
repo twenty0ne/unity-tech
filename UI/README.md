@@ -33,6 +33,7 @@
 // 当页面被清理之后，需要有恢复页面的功能，比如切换到指定的 tab
 // dyanmic batch - 比如背包 Widget 格子的面板，应该自动 batch
 // UI panel 下面元素分层， Static, Dynamic, Static+Dynamic（偶尔变化） 根据修改的强度划分
+// 适配 - 匹配大多数手机的分辨率
 
 // OpenDialog 如何指定使用哪个 Canvas, 是否添加一个 int canvasOrder 参数
 // UIRoot 默认3个 Canvas： -1，0， 1
