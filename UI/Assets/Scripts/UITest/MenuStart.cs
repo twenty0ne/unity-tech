@@ -11,6 +11,6 @@ public class MenuStart : UIMenu
 
 	public static void Hide()
 	{
-
+		
 	}
 }

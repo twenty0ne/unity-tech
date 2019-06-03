@@ -603,6 +603,7 @@ GameObject:
   - component: {fileID: 1668647304}
   - component: {fileID: 1668647303}
   - component: {fileID: 1668647306}
+  - component: {fileID: 1668647307}
   m_Layer: 5
   m_Name: MainCanvas
   m_TagString: Untagged
@@ -702,6 +703,20 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &1668647307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668647301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1254083943, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 1
+  m_AspectRatio: 0.46153846
 --- !u!1001 &1768971204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -818,6 +833,21 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 224248621555141512, guid: b16e64435fe02314b83ed9febe87145e,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224248621555141512, guid: b16e64435fe02314b83ed9febe87145e,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224248621555141512, guid: b16e64435fe02314b83ed9febe87145e,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5066383542424100387, guid: b16e64435fe02314b83ed9febe87145e,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -876,6 +906,16 @@ PrefabInstance:
     - target: {fileID: 7848037052225789244, guid: b16e64435fe02314b83ed9febe87145e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114695101015804808, guid: b16e64435fe02314b83ed9febe87145e,
+        type: 3}
+      propertyPath: m_AspectRatio
+      value: 0.5625
+      objectReference: {fileID: 0}
+    - target: {fileID: 114695101015804808, guid: b16e64435fe02314b83ed9febe87145e,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
