@@ -6,7 +6,7 @@ public class SceneTest : MonoBehaviour
 {
 	private void Awake()
 	{
-		// MenuStart mu = MenuStart.Show();
+		// MenuStart mu = UIMenu.Show<MenuStart>();
 	}
 
 	void Start () 

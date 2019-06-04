@@ -2,14 +2,16 @@ using UnityEngine;
 
 public class MenuStart : UIMenu
 {
-	public static MenuStart Show()
+	private int clickCount = 0;
+
+	// 下到上：通过 事件 传递
+	public void OnClickBtnStart()
 	{
-		UIMenu mu = UIManager.Instance.TryGetMenu(typeof(MenuStart));
-		Debug.Assert(mu != null && mu.GetComponent<MenuStart>() != null, "CHECK");
-		return mu.GetComponent<MenuStart>();
+		clickCount += 1;
+		Debug.Log("xx-- clickCount > " + clickCount);
 	}
 
-	public static void Hide()
+	private void Update()
 	{
 		
 	}

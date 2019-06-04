@@ -312,7 +312,7 @@ public class UIManager : MonoSingleton<UIManager>
 {
 	public const string PATH_PREFAB_MENU = "Prefabs/";
 
-	private Dictionary<Type, UIMenu> menuCaches = new Dictionary<Type, UIMenu>();
+	private Dictionary<Type, GameObject> menuCaches = new Dictionary<Type, GameObject>();
 	private GameObject mainCanvas = null;
 
 	protected override void Awake() 
@@ -323,7 +323,7 @@ public class UIManager : MonoSingleton<UIManager>
 		Debug.Assert(mainCanvas != null, "CHECK");
 	}
 
-	public UIMenu TryGetMenu(Type tp)
+	public GameObject TryGetMenu(Type tp)
 	{
 		if (menuCaches.ContainsKey(tp))
 			return menuCaches[tp];
@@ -334,6 +334,6 @@ public class UIManager : MonoSingleton<UIManager>
 		Debug.Assert(obj != null, "CHECK");
 		obj.transform.SetParent(mainCanvas.transform, false);
 
-		return null;
+		return obj;
 	}
 }

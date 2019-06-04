@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class UIMenu : UIWidget
 {
-	// public virtual void OnClickBtnBack()
-	// {
-	// 	// Close();
-	// }
+	public static T Show<T>()
+	{
+		GameObject mu = UIManager.Instance.TryGetMenu(typeof(T));
+		Debug.Assert(mu != null && mu.GetComponent<T>() != null, "CHECK");
+		return mu.GetComponent<T>();
+	}
 }
