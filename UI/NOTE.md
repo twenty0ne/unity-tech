@@ -20,3 +20,5 @@ https://connect.unity.com/doc/Manual/UIAutoLayout
 > If there is sufficient available space, preferred sizes are allocated.
 > If there is additional available space, flexible size is allocated.
 任何带有矩形变换的游戏对象都可以作为布局元素
+
+自动布局系统首先计算宽度，然后计算高度。因此，计算的高度可取决于宽度，但计算的宽度决不能取决于高度
