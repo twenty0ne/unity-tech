@@ -11,3 +11,7 @@ https://assetstore.unity.com/packages/essentials/tutorial-projects/lighting-opti
 https://80.lv/articles/building-great-lighting-in-unity/
 https://catlikecoding.com/unity/tutorials/rendering/part-16/
 https://tutorialedge.net/gamedev/unity/custom-diffuse-lighting-model-unity-tutorial/
+
+Tutorials:
+https://www.youtube.com/watch?v=sFugrMBmtf4
+https://www.youtube.com/watch?v=7fI3MBMSR5k
