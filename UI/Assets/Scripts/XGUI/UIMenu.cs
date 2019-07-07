@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIMenu : UIWidget
+public class UIMenu : MonoBehaviour
 {
 	public static T Show<T>()
 	{
