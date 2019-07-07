@@ -4,7 +4,7 @@ using UnityEngine;
 
 // [RequireComponent(typeof(CanvasGroup))]
 // UIPanel 是一组 UIWidget 集合，便于控制局部功能
-public class UIPanel : MonoBehaviour 
+public class UIPanel : UIWidget 
 {
 	// 传递进来的参数
 	public Dictionary<string, object> param;
@@ -85,8 +85,8 @@ public class UIPanel : MonoBehaviour
 		Close();
 	}
 
-	public virtual void AddChild(UIWidget uw)
-	{
+	// public virtual void AddChild(UIWidget uw)
+	// {
 		
-	}
+	// }
 }
