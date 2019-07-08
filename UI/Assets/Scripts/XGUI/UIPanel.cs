@@ -80,10 +80,10 @@ public class UIPanel : UIWidget
 
 	// if Android, click back button to trigger close event
 
-	public virtual void OnClickBtnClose()
-	{
-		Close();
-	}
+	// public virtual void OnClickBtnClose()
+	// {
+	// 	Close();
+	// }
 
 	// public virtual void AddChild(UIWidget uw)
 	// {

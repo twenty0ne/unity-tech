@@ -14,12 +14,15 @@ public class TestListView : MonoBehaviour
 		{
 			var obj = GameObject.Instantiate(itemPrefab);
 			// obj.transform.SetParent(listView.transform, false);
-			listView.AddChild(obj.GetComponent<TestListItem>());
+			TestListItem item = obj.GetComponent<TestListItem>();
+			listView.AddChild(item);
+
+			item.onItemClick = OnItemClick;
 		}
 	}
 
-	void Update()
+	private void OnItemClick(TestListItem item)
 	{
-			
+		Debug.Log("xx-- TestListView > OnItemClick");
 	}
 }
