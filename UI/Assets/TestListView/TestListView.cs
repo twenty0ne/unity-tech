@@ -9,20 +9,28 @@ public class TestListView : MonoBehaviour
 
 	void Start()
 	{
-		Debug.Assert(listView != null, "CHECK");
-		for (int i = 0; i < 20; ++i)
-		{
-			var obj = GameObject.Instantiate(itemPrefab);
-			// obj.transform.SetParent(listView.transform, false);
-			TestListItem item = obj.GetComponent<TestListItem>();
-			listView.AddChild(item);
+		// Debug.Assert(listView != null, "CHECK");
+		// for (int i = 0; i < 20; ++i)
+		// {
+		// 	var obj = GameObject.Instantiate(itemPrefab);
+		// 	// obj.transform.SetParent(listView.transform, false);
+		// 	TestListItem item = obj.GetComponent<TestListItem>();
+		// 	listView.AddChild(item);
 
-			item.onItemClick = OnItemClick;
-		}
+		// 	item.onItemClick = OnItemClick;
+		// }
+
+		// test long list
+		listView.itemCount = 20;
 	}
 
 	private void OnItemClick(TestListItem item)
 	{
 		Debug.Log("xx-- TestListView > OnItemClick");
+	}
+
+	private void OnListBuilder(int index)
+	{
+
 	}
 }
