@@ -8,6 +8,7 @@ public class UIListView : UIWidget
 {
 	public LayoutGroup layoutGroup;
 	public GameObject pfbItem;
+	public int itemCount = 0;
 
 	public override void AddChild(UIWidget widget)
 	{
