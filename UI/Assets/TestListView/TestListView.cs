@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestListView : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class TestListView : MonoBehaviour
 
 		// test long list
 		listView.itemCount = 20;
+
+		// GetComponent<ScrollRect>
 	}
 
 	private void OnItemClick(TestListItem item)
