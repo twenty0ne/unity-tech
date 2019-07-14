@@ -6,7 +6,7 @@ public class UIPageViewIndicator : UIWidget
 {
 	void Start()
 	{
-			
+		
 	}
 
 	void Update()

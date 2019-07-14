@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class UIPageView : UIWidget
 {
-	void Start()
-	{
-			
-	}
+	public UIPageViewIndicator indicator;
 
-	void Update()
+	public override void AddChild(UIWidget widget)
 	{
-			
+		
 	}
 }
