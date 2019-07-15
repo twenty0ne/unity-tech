@@ -9,15 +9,15 @@ public class TestPageView : UIPanel
 
 	private void Awake() 
 	{
-		pageView = GetComponent<UIPageView>();
+		// pageView = GetComponent<UIPageView>();
 
-		for (int i = 0; i < 10; ++i)
-		{
-			GameObject obj = Instantiate(itemPrefab);
-			TestPageViewItem item = obj.GetComponent<TestPageViewItem>();
+		// for (int i = 0; i < 10; ++i)
+		// {
+		// 	GameObject obj = Instantiate(itemPrefab);
+		// 	TestPageViewItem item = obj.GetComponent<TestPageViewItem>();
 
-			pageView.AddChild(item);
-		}
+		// 	pageView.AddChild(item);
+		// }
 	}
 
 	void Start()

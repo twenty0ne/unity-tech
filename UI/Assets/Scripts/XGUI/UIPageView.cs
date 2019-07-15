@@ -20,6 +20,6 @@ public class UIPageView : UIWidget
 
 	private void OnScrollValueChanged(Vector2 vec2)
 	{
-		
+		Debug.Log("xx-- UIPageView.OnScrollValueChanged > " + (vec2.x * 1080f));
 	}
 }
