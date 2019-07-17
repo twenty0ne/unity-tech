@@ -431,7 +431,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00018311, y: 333}
+  m_AnchoredPosition: {x: 0.00018310547, y: 333}
   m_SizeDelta: {x: 1080, y: 696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &386005964
@@ -756,7 +756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00018311, y: 333}
+  m_AnchoredPosition: {x: 0.00018310547, y: 333}
   m_SizeDelta: {x: 1080, y: 696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &676241217
@@ -835,7 +835,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00018311, y: 333}
+  m_AnchoredPosition: {x: 0.00018310547, y: 333}
   m_SizeDelta: {x: 1080, y: 696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1465501553
@@ -1084,7 +1084,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   indicator: {fileID: 0}
-  scrollRect: {fileID: 6550072463907740312}
+  controller: {fileID: 0}
 --- !u!114 &1717405438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1419,7 +1419,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pageView: {fileID: 1717405437}
   itemPrefab: {fileID: 0}
---- !u!114 &6550072463907740312
+--- !u!1 &6550072463907740319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5662114859286350060}
+  - component: {fileID: 6550072463907740320}
+  m_Layer: 5
+  m_Name: scroll
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &6550072463907740320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1428,7 +1445,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6550072463907740319}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1012a95ace583554fa8c529c58e8a399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 1717405435}
@@ -1451,23 +1468,6 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!1 &6550072463907740319
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5662114859286350060}
-  - component: {fileID: 6550072463907740312}
-  m_Layer: 5
-  m_Name: scroll
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!114 &8258414042079198432
 MonoBehaviour:
   m_ObjectHideFlags: 0

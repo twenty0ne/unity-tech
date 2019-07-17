@@ -4,10 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIPageView : UIWidget, IPointerUpHandler
+public class UIPageView : UIWidget
 {
 	public UIPageViewIndicator indicator;
-	public ScrollRect scrollRect;
+	public UIPageController controller;
 
 	private RectTransform contentRT;
 
@@ -17,7 +17,8 @@ public class UIPageView : UIWidget, IPointerUpHandler
 	{
 		contentRT = GetComponent<RectTransform>();
 
-		scrollRect.onValueChanged.AddListener(OnScrollValueChanged);
+		// scrollRect.onValueChanged.AddListener(OnScrollValueChanged);
+		// scrollRect.
 	}
 
 	public override void AddChild(UIWidget widget)
@@ -28,17 +29,29 @@ public class UIPageView : UIWidget, IPointerUpHandler
 
 	private void OnScrollValueChanged(Vector2 val)
 	{
-		// Debug.Log("xx-- UIPageView.OnScrollValueChanged > " + vec2.x + " - " + vec2.x * contentRT.sizeDelta.x);
+		// Debug.Log("xx-- UIPageView.OnScrollValueChanged > " + val.x + " - " + val.x * contentRT.sizeDelta.x);
 		float vx = val.x;
 
 	}
 
-	// private void OnMouseUp() 
+	// public void OnBeginDrag(PointerEventData eventData)
 	// {
-	// 	Debug.Log("xx-- OnMouseUp");
+	// 	Debug.Log("xx-- UIPageView.OnBeginDrag > " + eventData.ToString());
+	// 	return;
 	// }
-	public void OnPointerUp(PointerEventData eventData)
-	{
-		Debug.Log("xx-- OnPointerUp");
-	}
+
+	// public void OnDrag(PointerEventData eventData)
+	// {
+	// 	Debug.Log("xx-- UIPageView.OnDrag > " + eventData.ToString());
+	// }
+
+	// public void OnEndDrag(PointerEventData eventData)
+	// {
+	// 	Debug.Log("xx-- UIPageView.OnEndDrag > " + eventData.ToString());
+	// }
+
+	// public void OnScrollToItem(int idx)
+	// {
+
+	// }
 }
