@@ -1084,7 +1084,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   indicator: {fileID: 0}
-  controller: {fileID: 0}
+  controller: {fileID: 6550072463907740320}
+  contentRT: {fileID: 0}
 --- !u!114 &1717405438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1468,6 +1469,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.ScrollRect+ScrollRectEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  pageView: {fileID: 0}
 --- !u!114 &8258414042079198432
 MonoBehaviour:
   m_ObjectHideFlags: 0

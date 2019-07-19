@@ -9,7 +9,8 @@ public class UIPageView : UIWidget
 	public UIPageViewIndicator indicator;
 	public UIPageController controller;
 
-	private RectTransform contentRT;
+	[HideInInspector]
+	public RectTransform contentRT;
 
 	// public List<UIWidget> children = new List<UIWidget>();
 
@@ -19,6 +20,7 @@ public class UIPageView : UIWidget
 
 		// scrollRect.onValueChanged.AddListener(OnScrollValueChanged);
 		// scrollRect.
+		controller.pageView = this;
 	}
 
 	public override void AddChild(UIWidget widget)
@@ -33,25 +35,4 @@ public class UIPageView : UIWidget
 		float vx = val.x;
 
 	}
-
-	// public void OnBeginDrag(PointerEventData eventData)
-	// {
-	// 	Debug.Log("xx-- UIPageView.OnBeginDrag > " + eventData.ToString());
-	// 	return;
-	// }
-
-	// public void OnDrag(PointerEventData eventData)
-	// {
-	// 	Debug.Log("xx-- UIPageView.OnDrag > " + eventData.ToString());
-	// }
-
-	// public void OnEndDrag(PointerEventData eventData)
-	// {
-	// 	Debug.Log("xx-- UIPageView.OnEndDrag > " + eventData.ToString());
-	// }
-
-	// public void OnScrollToItem(int idx)
-	// {
-
-	// }
 }
