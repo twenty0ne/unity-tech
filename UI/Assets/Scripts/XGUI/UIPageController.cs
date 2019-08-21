@@ -13,21 +13,24 @@ public class UIPageController : ScrollRect
 
 	private void Update() 
 	{
-		if (isMoving)
-		{
-			
-		}
+		// if (isMoving)
+		// {
+		// }
+		
+	}
+
+	public override void OnBeginDrag(PointerEventData eventData)
+	{
+		base.OnBeginDrag(eventData);
 	}
 
 	public override void OnEndDrag(PointerEventData eventData)
 	{
-		// base.OnEndDrag(eventData);
+		base.OnEndDrag(eventData);
 
 		// Debug.Log("xx-- UIPageController.OnEndDrag > " + pageView.contentRT.anchoredPosition);
-
-		float px = Mathf.Abs(pageView.contentRT.anchoredPosition.x) / pageView.contentRT.sizeDelta.x;
-		Debug.Log("xx-- px > " + px);
-
-		isMoving = true;
+		// float px = Mathf.Abs(pageView.contentRT.anchoredPosition.x) / pageView.contentRT.sizeDelta.x;
+		// Debug.Log("xx-- px > " + px);
+		// isMoving = true;
 	}
 }
