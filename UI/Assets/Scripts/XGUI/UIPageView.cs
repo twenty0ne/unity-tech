@@ -20,7 +20,7 @@ public class UIPageView : UIWidget
 
 		// scrollRect.onValueChanged.AddListener(OnScrollValueChanged);
 		// scrollRect.
-		controller.pageView = this;
+		controller.PageView = this;
 	}
 
 	public override void AddChild(UIWidget widget)

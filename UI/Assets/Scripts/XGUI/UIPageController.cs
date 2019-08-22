@@ -6,17 +6,35 @@ using UnityEngine.EventSystems;
 
 public class UIPageController : ScrollRect
 {
-	[HideInInspector]
-	public UIPageView pageView;
+	private UIPageView _pageView;
 
 	private bool isMoving = false;
+	private RectTransform _pageViewRTF = null;
+
+	// protected override void Start() 
+	// {
+	// 	base.Start();
+
+	// 	// pageView = content.GetComponent<UIPageView>();
+	// 	// Debug.Assert(pageView);
+	// }
+
+	public UIPageView PageView 
+	{
+		get { return _pageView; }
+		set 
+		{
+			_pageView = value;
+			_pageViewRTF = _pageView.GetComponent<RectTransform>();
+		}
+	}
 
 	private void Update() 
 	{
-		// if (isMoving)
-		// {
-		// }
-		
+		if (_pageView == null)
+			return;
+
+		 // _pageViewRTF.anchoredPosition / this.
 	}
 
 	public override void OnBeginDrag(PointerEventData eventData)
@@ -33,4 +51,6 @@ public class UIPageController : ScrollRect
 		// Debug.Log("xx-- px > " + px);
 		// isMoving = true;
 	}
+
+	// private void MoveToIndex()
 }

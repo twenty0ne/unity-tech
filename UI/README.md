@@ -81,7 +81,7 @@ https://github.com/Real-Serious-Games/Unity-Weld
 https://github.com/sigtrapgames/SmartData
 [+] DrawCall 优化  
 [+] OverDraw 优化  
-
+[+] 自动
 
 // 测试例子
 [+] 同时打开多个 Dialog，应该按照顺序依次弹出

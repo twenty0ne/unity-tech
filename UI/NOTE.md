@@ -26,3 +26,7 @@ https://connect.unity.com/doc/Manual/UIAutoLayout
 记住：MVVM 或者 MVC 这种框架只适合复杂的 UI，如果是简单的直接放在采用 VC 合并在一个页面逻辑里面
 使用 MVVM 绑定数据
 MVC 
+
+优化建议：
+https://www.youtube.com/watch?v=_wxitgdx-UI
+https://create.unity3d.com/Unity-UI-optimization-tips
