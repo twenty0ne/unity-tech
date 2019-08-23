@@ -336,4 +336,49 @@ public class UIManager : MonoSingleton<UIManager>
 
 		return obj;
 	}
+
+	public UIPanel OpenMenu(string menuName)
+	{
+		// Check ExistIn Stack
+		UIPanelInfo upInfo = FindPanelInStack(menuName);
+		if (upInfo != null)
+		{
+			MoveToStackTop(upInfo);
+		}
+		else
+		{
+			// Check In Cache
+			upInfo = FindPanelInStack(menuName);
+			if (upInfo != null)
+			{
+				m_panelStack.Add(upInfo);
+			}
+			else
+			{
+				// Check In Scene
+				// 没有在 Stack 却在场景中这种情况，是因为作为预加载放入场景中
+//                GameObject obj = GameObject.Find(menuName);
+//                if (obj == null)
+//                {
+					// Load from Assets
+				string path = PATH_PREFAB_MENU + menuName + ".prefab";
+				GameObject obj = AssetManager.LoadGameObject(path);
+				Debug.Assert(obj != null, "CHECK");
+				obj.transform.SetParent(mainCanvas, false);
+//                }
+
+				UIPanel panel = obj.GetComponent<UIPanel>();
+				panel.onClose += OnMenuClose;
+				Debug.Assert(panel != null, "CHECK");
+				panel.Open();
+
+				upInfo = new UIPanelInfo();
+				upInfo.name = menuName;
+				upInfo.panel = panel;
+
+				m_panelStack.Add(upInfo);
+				m_panelCache.Add(upInfo);
+			}
+		}
+	}
 }

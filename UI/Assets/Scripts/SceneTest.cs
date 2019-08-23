@@ -16,9 +16,14 @@ public class SceneTest : MonoBehaviour
 
 	void Update () 
   {
-		//if (Input.GetKeyDown(KeyCode.Tab))
-		//{
-		//	UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);
-		//}
+		// if (Input.GetKeyDown(KeyCode.Space))
+		// {
+		// 	UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);
+		// }
+
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			UIManager.Instance.OpenMenu("MenuLogin");
+		}
 	}
 }
