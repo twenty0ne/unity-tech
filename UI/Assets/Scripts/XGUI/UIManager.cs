@@ -308,19 +308,28 @@ using UnityEngine;
 
 using System;
 
+public class MenuStackInfo
+{
+	public string name;
+	public UIMenu menu;
+}
+
 public class UIManager : MonoSingleton<UIManager>
 {
 	public const string PATH_PREFAB_MENU = "Prefabs/";
 
 	private Dictionary<Type, GameObject> menuCaches = new Dictionary<Type, GameObject>();
-	private GameObject mainCanvas = null;
+	private Transform _mainCanvas = null;
+
+	private List<MenuStackInfo> _menuStack = new List<MenuStackInfo>();
+	private UIMenu _currMenu = null;
 
 	protected override void Awake() 
 	{
 		base.Awake();
 
-		mainCanvas = GameObject.Find("MainCanvas");
-		Debug.Assert(mainCanvas != null, "CHECK");
+		_mainCanvas = GameObject.Find("MainCanvas").transform;
+		Debug.Assert(_mainCanvas != null, "CHECK");
 	}
 
 	public GameObject TryGetMenu(Type tp)
@@ -332,53 +341,73 @@ public class UIManager : MonoSingleton<UIManager>
 		string path = PATH_PREFAB_MENU + tp.ToString() + ".prefab";
 		GameObject obj = AssetManager.LoadGameObject(path);
 		Debug.Assert(obj != null, "CHECK");
-		obj.transform.SetParent(mainCanvas.transform, false);
+		obj.transform.SetParent(_mainCanvas.transform, false);
 
 		return obj;
 	}
 
-	public UIPanel OpenMenu(string menuName)
+	public UIMenu OpenMenu(string name)
 	{
-		// Check ExistIn Stack
-		UIPanelInfo upInfo = FindPanelInStack(menuName);
-		if (upInfo != null)
+		MenuStackInfo minfo = FindMenuStackInfo(name);
+		if (minfo != null)
 		{
-			MoveToStackTop(upInfo);
+			// MoveToStackTop(upInfo);
+			_currMenu = minfo.menu;
+			_menuStack.Remove(minfo);
 		}
 		else
 		{
-			// Check In Cache
-			upInfo = FindPanelInStack(menuName);
-			if (upInfo != null)
-			{
-				m_panelStack.Add(upInfo);
-			}
-			else
-			{
 				// Check In Scene
 				// 没有在 Stack 却在场景中这种情况，是因为作为预加载放入场景中
 //                GameObject obj = GameObject.Find(menuName);
 //                if (obj == null)
 //                {
 					// Load from Assets
-				string path = PATH_PREFAB_MENU + menuName + ".prefab";
+				string path = PATH_PREFAB_MENU + name + ".prefab";
 				GameObject obj = AssetManager.LoadGameObject(path);
 				Debug.Assert(obj != null, "CHECK");
-				obj.transform.SetParent(mainCanvas, false);
-//                }
+				obj.transform.SetParent(_mainCanvas, false);
 
-				UIPanel panel = obj.GetComponent<UIPanel>();
-				panel.onClose += OnMenuClose;
-				Debug.Assert(panel != null, "CHECK");
-				panel.Open();
+				UIMenu um = obj.GetComponent<UIMenu>();
+				um.onClose += OnMenuClose;
+				Debug.Assert(um, "CHECK");
+				um.Show();
 
-				upInfo = new UIPanelInfo();
-				upInfo.name = menuName;
-				upInfo.panel = panel;
+				// upInfo = new UIPanelInfo();
+				// upInfo.name = menuName;
+				// upInfo.panel = panel;
 
-				m_panelStack.Add(upInfo);
-				m_panelCache.Add(upInfo);
-			}
+				// m_panelStack.Add(upInfo);
+				// m_panelCache.Add(upInfo);
+
+				_currMenu = um;
 		}
+		
+		return _currMenu;
+	}
+
+	private MenuStackInfo FindMenuStackInfo(string name)
+	{
+		for (int i = 0; i < _menuStack.Count; ++i)
+		{
+			MenuStackInfo minfo = _menuStack[i];
+			if (minfo.name == name)
+				return minfo;
+		}
+
+		return null;
+	}
+
+	// private void MoveToMenuStackTop(UIPanelInfo upInfo)
+	// {
+	// 	Debug.Assert(upInfo != null, "CHECK");
+
+	// 	m_panelStack.Remove(upInfo);
+	// 	m_panelStack.Add(upInfo);
+	// }
+
+	private void OnMenuClose()
+	{
+
 	}
 }

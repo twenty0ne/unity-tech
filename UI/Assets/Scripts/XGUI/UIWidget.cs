@@ -11,4 +11,10 @@ public class UIWidget : MonoBehaviour
 	public virtual void AddChild(UIWidget widget)
 	{
 	}
+
+	// 隔绝下层 Update，更好的控制
+	public virtual void Tick(float dt)
+	{
+
+	}
 }
