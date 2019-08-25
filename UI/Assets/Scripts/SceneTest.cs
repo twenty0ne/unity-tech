@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SceneTest : MonoBehaviour 
 {
+	MenuMain menuMain = null;
+
 	private void Awake()
 	{
 		// MenuStart mu = UIMenu.Show<MenuStart>();
@@ -23,7 +25,14 @@ public class SceneTest : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
-			UIManager.Instance.OpenMenu("MenuLogin");
+			if (menuMain == null)
+			{
+				menuMain = UIManager.Instance.OpenMenu("MenuMain") as MenuMain;
+			}
+			else
+			{
+				menuMain.TestMove();
+			}
 		}
 	}
 }
