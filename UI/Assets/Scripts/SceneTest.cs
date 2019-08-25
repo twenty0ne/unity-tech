@@ -23,16 +23,16 @@ public class SceneTest : MonoBehaviour
 		// 	UIManager.Instance.OpenPanel("Console", UIManager.Instance.frontCanvas);
 		// }
 
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			if (menuMain == null)
-			{
-				menuMain = UIManager.Instance.OpenMenu("MenuMain") as MenuMain;
-			}
-			else
-			{
-				menuMain.TestMove();
-			}
-		}
+		// if (Input.GetKeyDown(KeyCode.Space))
+		// {
+		// 	if (menuMain == null)
+		// 	{
+		// 		menuMain = UIManager.Instance.OpenMenu("MenuMain") as MenuMain;
+		// 	}
+		// 	else
+		// 	{
+		// 		menuMain.TestMove();
+		// 	}
+		// }
 	}
 }

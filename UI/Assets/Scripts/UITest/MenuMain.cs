@@ -17,10 +17,16 @@ public class MenuMain : UIMenu
 	// }
 	private void Update() 
 	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			TestMove();
+		}
 	}
 
 	public void TestMove()
 	{
-
+		Vector3 pos = tfIconBag.position;
+		pos.y += 0.01f;
+		tfIconBag.position = pos;
 	}
 }
