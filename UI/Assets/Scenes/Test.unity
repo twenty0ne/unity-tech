@@ -639,7 +639,7 @@ PrefabInstance:
     - target: {fileID: 224248621555141512, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224248621555141512, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
@@ -729,7 +729,7 @@ PrefabInstance:
     - target: {fileID: 224587001313540084, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 456.95
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 224587001313540084, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
@@ -759,7 +759,7 @@ PrefabInstance:
     - target: {fileID: 224898404259345286, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 456.95
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 224898404259345286, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
@@ -785,11 +785,84 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1281956750389314}
+      objectReference: {fileID: 1200299573}
+    - target: {fileID: 114003677492983492, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickBtnBag
+      objectReference: {fileID: 0}
+    - target: {fileID: 114003677492983492, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3968297778458800035, guid: 748fb02faf2f54d25b7005111369f02c,
         type: 3}
       propertyPath: m_BlockingMask.m_Bits
       value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 114787819910136608, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 114787819910136608, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 114787819910136608, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 114787819910136608, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114725015309989826, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: fullScreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1116775994910054, guid: 748fb02faf2f54d25b7005111369f02c, type: 3}
+      propertyPath: m_Name
+      value: btn_bag
+      objectReference: {fileID: 0}
+    - target: {fileID: 1394689912113968, guid: 748fb02faf2f54d25b7005111369f02c, type: 3}
+      propertyPath: m_Name
+      value: btn_shop
+      objectReference: {fileID: 0}
+    - target: {fileID: 114458159321500162, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114458159321500162, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114458159321500162, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114458159321500162, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1200299573}
+    - target: {fileID: 114458159321500162, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickBtnShop
+      objectReference: {fileID: 0}
+    - target: {fileID: 114458159321500162, guid: 748fb02faf2f54d25b7005111369f02c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 748fb02faf2f54d25b7005111369f02c, type: 3}
@@ -799,6 +872,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1200299571}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1200299573 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114725015309989826, guid: 748fb02faf2f54d25b7005111369f02c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1200299571}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edcc8bb5560028642887373efd6260c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1668647301
 GameObject:
   m_ObjectHideFlags: 0
@@ -973,12 +1058,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86eabba8d9b5245d1840381138b0eea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1281956750389314 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1281956750389314, guid: 748fb02faf2f54d25b7005111369f02c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1200299571}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1304876954651230 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1304876954651230, guid: 748fb02faf2f54d25b7005111369f02c,
@@ -999,11 +1078,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 100
+    m_Right: 20
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
+  m_ChildAlignment: 5
+  m_Spacing: 10
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MenuMain : UIMenu
 {
-	public Transform tfIconBag;
+	// public Transform tfIconBag;
 
 	private void Start()
 	{
@@ -17,16 +17,27 @@ public class MenuMain : UIMenu
 	// }
 	private void Update() 
 	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			TestMove();
-		}
+		// if (Input.GetKeyDown(KeyCode.Space))
+		// {
+		// 	TestMove();
+		// }
 	}
 
-	public void TestMove()
+	// public void TestMove()
+	// {
+	// 	Vector3 pos = tfIconBag.position;
+	// 	pos.y += 0.01f;
+	// 	tfIconBag.position = pos;
+	// }
+
+	public void OnClickBtnBag()
 	{
-		Vector3 pos = tfIconBag.position;
-		pos.y += 0.01f;
-		tfIconBag.position = pos;
+		Debug.Log("OnClickBtnBag");
+		UIManager.Instance.OpenMenu("MenuBag");
+	}
+
+	public void OnClickBtnShop()
+	{
+		Debug.Log("OnClickBtnShop");
 	}
 }

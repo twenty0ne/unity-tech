@@ -6,7 +6,7 @@ using UnityEngine;
 // 只用 FullScreen 区分
 public class UIMenu : UIWidget
 {
-	public bool FullScreen { get; set; }
+	public bool fullScreen;
 
 	// public static T Show<T>()
 	// {
