@@ -18,14 +18,39 @@ public class UIMenu : UIWidget
 	public System.Action onShow;
 	public System.Action onClose;
 
+	protected bool _bActive = true;
+	protected Vector3 _originPos;
+
+	private void Start()
+	{
+		_originPos = _rt.position;
+	}
+
 	public void Show()
 	{
-
 	}
 
 	public void Hide()
 	{
 
+	}
+
+	public void Active()
+	{
+		if (_bActive)
+			return;
+
+		_bActive = true;
+		_rt.position = _originPos;
+	}
+
+	public void Deactive()
+	{
+		if (!_bActive)
+			return;
+
+		_bActive = false;
+		_rt.position = _originPos + new Vector3(0, 19200, 0);
 	}
 
 	public virtual void OnShow()
@@ -38,4 +63,13 @@ public class UIMenu : UIWidget
 
 	}
 
+	public virtual void OnActive()
+	{
+
+	}
+
+	public virtual void OnDeactive()
+	{
+
+	}
 }

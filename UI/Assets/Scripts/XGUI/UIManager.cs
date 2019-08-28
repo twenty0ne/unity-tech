@@ -348,11 +348,13 @@ public class UIManager : MonoSingleton<UIManager>
 
 	public UIMenu OpenMenu(string name)
 	{
+		UIMenu newMenu = null;
+
 		MenuStackInfo minfo = FindMenuStackInfo(name);
 		if (minfo != null)
 		{
 			// MoveToStackTop(upInfo);
-			_currMenu = minfo.menu;
+			newMenu = minfo.menu;
 			_menuStack.Remove(minfo);
 		}
 		else
@@ -380,10 +382,16 @@ public class UIManager : MonoSingleton<UIManager>
 				// m_panelStack.Add(upInfo);
 				// m_panelCache.Add(upInfo);
 
-				_currMenu = um;
+				newMenu = um;
 		}
-		
-		return _currMenu;
+
+		if (_currMenu && newMenu.fullScreen)
+		{
+			_currMenu.Deactive();
+		}
+
+		_currMenu = newMenu;
+		return newMenu;
 	}
 
 	private MenuStackInfo FindMenuStackInfo(string name)
