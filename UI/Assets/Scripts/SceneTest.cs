@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class SceneTest : MonoBehaviour 
 {
-	MenuMain menuMain = null;
+	// MenuMain menuMain = null;
+	public string initMenu = null;
 
 	private void Awake()
 	{
 		// MenuStart mu = UIMenu.Show<MenuStart>();
+		if (string.IsNullOrEmpty(initMenu) == false)
+		{
+			// Instantiate(initMenu)
+			UIManager.Instance.OpenMenu(initMenu);
+		}
 	}
 
 	void Start () 

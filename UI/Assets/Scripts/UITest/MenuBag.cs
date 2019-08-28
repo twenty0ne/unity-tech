@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class MenuBag : UIMenu
 {
+	// public void OnClickBtnBack()
+	// {
+
+	// }
+
 	public void OnClickBtnTestDialog1()
 	{
 		// Debug.Log("xx-- OnClickBtnTestDialog1");

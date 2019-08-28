@@ -23,53 +23,70 @@ public class UIMenu : UIWidget
 
 	private void Start()
 	{
-		_originPos = _rt.position;
+		_originPos = _rt.anchoredPosition;
 	}
 
 	public void Show()
 	{
+		Debug.Log("Menu " + name + " Show.");
+		OnShow();
 	}
 
 	public void Hide()
 	{
-
+		Debug.Log("Menu " + name + " Hide.");
+		OnHide();
 	}
 
 	public void Active()
 	{
+		Debug.Log("Menu " + name + " Active.");
+
 		if (_bActive)
 			return;
 
 		_bActive = true;
-		_rt.position = _originPos;
+		_rt.anchoredPosition = _originPos;
+
+		OnActive();
 	}
 
 	public void Deactive()
 	{
+		Debug.Log("Menu " + name + " Deactive.");
+
 		if (!_bActive)
 			return;
 
 		_bActive = false;
-		_rt.position = _originPos + new Vector3(0, 19200, 0);
+		_rt.anchoredPosition = _originPos + new Vector3(0, Screen.height * 2, 0);
+
+		OnDeactive();
 	}
 
-	public virtual void OnShow()
+	protected virtual void OnShow()
 	{
-
+		Debug.Log("Menu " + name + " OnShow.");
 	}
 
-	public virtual void OnHide()
+	protected virtual void OnHide()
 	{
-
+		Debug.Log("Menu " + name + " OnHide.");
 	}
 
-	public virtual void OnActive()
+	protected virtual void OnActive()
 	{
-
+		Debug.Log("Menu " + name + " OnActive.");
 	}
 
-	public virtual void OnDeactive()
+	protected virtual void OnDeactive()
 	{
+		Debug.Log("Menu " + name + " OnDeactive.");
+	}
 
+	public void OnClickBtnClose()
+	{
+		Debug.Log("Menu " + name + " OnClickBtnClose.");
+		UIManager.Instance.CloseMenu(this);
 	}
 }

@@ -373,7 +373,7 @@ public class UIManager : MonoSingleton<UIManager>
 				UIMenu um = obj.GetComponent<UIMenu>();
 				um.onClose += OnMenuClose;
 				Debug.Assert(um, "CHECK");
-				um.Show();
+				// um.Show();
 
 				// upInfo = new UIPanelInfo();
 				// upInfo.name = menuName;
@@ -390,8 +390,15 @@ public class UIManager : MonoSingleton<UIManager>
 			_currMenu.Deactive();
 		}
 
+		newMenu.Show();
+
 		_currMenu = newMenu;
 		return newMenu;
+	}
+
+	public void CloseMenu(UIMenu menu)
+	{
+
 	}
 
 	private MenuStackInfo FindMenuStackInfo(string name)
