@@ -18,7 +18,9 @@ public class UIMenu : UIWidget
 	public System.Action onShow;
 	public System.Action onClose;
 
+	protected bool _bShow = true;
 	protected bool _bActive = true;
+	protected bool _bOutOfScreen = false;
 	protected Vector3 _originPos;
 
 	private void Start()
@@ -29,13 +31,21 @@ public class UIMenu : UIWidget
 	public void Show()
 	{
 		Debug.Log("Menu " + name + " Show.");
+		// OnBeforeShow();
+		// 播放 show 的动画
 		OnShow();
+	
+		_bShow = true;
+		_rt.anchoredPosition = _originPos;
 	}
 
 	public void Hide()
 	{
 		Debug.Log("Menu " + name + " Hide.");
 		OnHide();
+
+		_bShow = false;
+		_rt.anchoredPosition = _originPos + new Vector3(0, Screen.height * 2, 0);
 	}
 
 	public void Active()
@@ -46,12 +56,16 @@ public class UIMenu : UIWidget
 			return;
 
 		_bActive = true;
-		_rt.anchoredPosition = _originPos;
+		if (_bOutOfScreen)
+		{
+			_bOutOfScreen = false;
+			_rt.anchoredPosition = _originPos;
+		}
 
 		OnActive();
 	}
 
-	public void Deactive()
+	public void Deactive(UIMenu newTopMenu = null)
 	{
 		Debug.Log("Menu " + name + " Deactive.");
 
@@ -59,7 +73,11 @@ public class UIMenu : UIWidget
 			return;
 
 		_bActive = false;
-		_rt.anchoredPosition = _originPos + new Vector3(0, Screen.height * 2, 0);
+		if (newTopMenu && newTopMenu.fullScreen)
+		{
+			_bOutOfScreen = true;
+			_rt.anchoredPosition = _originPos + new Vector3(0, Screen.height * 2, 0);
+		}
 
 		OnDeactive();
 	}

@@ -314,6 +314,13 @@ public class MenuStackInfo
 	public UIMenu menu;
 }
 
+public class MenuCacheInfo
+{
+	public UIMenu menu;
+}
+
+// menu cache: all opened menu, 如何处理曾经打开过的多个窗口，比如确认框
+// menu stack: record menu open 
 public class UIManager : MonoSingleton<UIManager>
 {
 	public const string PATH_PREFAB_MENU = "Prefabs/";
@@ -321,8 +328,13 @@ public class UIManager : MonoSingleton<UIManager>
 	private Dictionary<Type, GameObject> menuCaches = new Dictionary<Type, GameObject>();
 	private Transform _mainCanvas = null;
 
-	private List<MenuStackInfo> _menuStack = new List<MenuStackInfo>();
-	private UIMenu _currMenu = null;
+	// private List<MenuStackInfo> _menuStack = new List<MenuStackInfo>();
+	// private UIMenu _currMenu = null;
+	// private List<ui>
+	private List<UIMenu> _menuStack = new List<UIMenu>();
+	// private List<UIMenu> _showMenus = new List<UIMenu>();
+	private List<UIMenu> _menuCache = new List<UIMenu>();
+	private UIMenu _topMenu = null;
 
 	protected override void Awake() 
 	{
@@ -348,69 +360,67 @@ public class UIManager : MonoSingleton<UIManager>
 
 	public UIMenu OpenMenu(string name)
 	{
-		UIMenu newMenu = null;
-
-		MenuStackInfo minfo = FindMenuStackInfo(name);
-		if (minfo != null)
+		// UIMenu newMenu = null;
+		// MenuStackInfo minfo = FindMenuStackInfo(name);
+		// if (minfo != null)
+		// {
+		// 	// MoveToStackTop(upInfo);
+		// 	newMenu = minfo.menu;
+		// 	_menuStack.Remove(minfo);
+		// }
+		UIMenu menu = FindMenuInCache(name);
+		if (menu == null)
 		{
-			// MoveToStackTop(upInfo);
-			newMenu = minfo.menu;
-			_menuStack.Remove(minfo);
-		}
-		else
-		{
-				// Check In Scene
-				// 没有在 Stack 却在场景中这种情况，是因为作为预加载放入场景中
-//                GameObject obj = GameObject.Find(menuName);
-//                if (obj == null)
-//                {
-					// Load from Assets
-				string path = PATH_PREFAB_MENU + name + ".prefab";
-				GameObject obj = AssetManager.LoadGameObject(path);
-				Debug.Assert(obj != null, "CHECK");
-				obj.transform.SetParent(_mainCanvas, false);
+			string path = PATH_PREFAB_MENU + name + ".prefab";
+			GameObject obj = AssetManager.LoadGameObject(path);
+			Debug.Assert(obj != null, "CHECK");
+			obj.transform.SetParent(_mainCanvas, false);
 
-				UIMenu um = obj.GetComponent<UIMenu>();
-				um.onClose += OnMenuClose;
-				Debug.Assert(um, "CHECK");
-				// um.Show();
-
-				// upInfo = new UIPanelInfo();
-				// upInfo.name = menuName;
-				// upInfo.panel = panel;
-
-				// m_panelStack.Add(upInfo);
-				// m_panelCache.Add(upInfo);
-
-				newMenu = um;
+			menu = obj.GetComponent<UIMenu>();
+			Debug.Assert(menu, "CHECK");
+			menu.onClose += OnMenuClose;
+			_menuCache.Add(menu);
 		}
 
-		if (_currMenu && newMenu.fullScreen)
+		// set top menu
+		if (_topMenu)
 		{
-			_currMenu.Deactive();
+			_topMenu.Deactive(menu);
 		}
+		_topMenu = menu;
 
-		newMenu.Show();
+		// 将 menu 放在栈顶
+		_menuStack.Remove(menu);
+		_menuStack.Add(menu);
 
-		_currMenu = newMenu;
-		return newMenu;
+		menu.Show();
+		return menu;
 	}
 
 	public void CloseMenu(UIMenu menu)
 	{
+		menu.Deactive();
+		menu.Hide();
 
+		// 关闭的界面从 stack 中清除
+		_menuStack.Remove(menu);
+		// 从堆栈中返回最后一个
+		Debug.Assert(_menuStack.Count > 0, "CHECK");
+		UIMenu stackTopMenu = _menuStack[_menuStack.Count - 1];
+		stackTopMenu.Show();
+		_topMenu = stackTopMenu;
 	}
 
-	private MenuStackInfo FindMenuStackInfo(string name)
+	private UIMenu FindMenuInStack(string name)
 	{
-		for (int i = 0; i < _menuStack.Count; ++i)
-		{
-			MenuStackInfo minfo = _menuStack[i];
-			if (minfo.name == name)
-				return minfo;
-		}
+		UIMenu menu = _menuStack.Find(x => x.name == name);
+		return menu;
+	}
 
-		return null;
+	private UIMenu FindMenuInCache(string name)
+	{
+		UIMenu menu = _menuCache.Find(x => x.name == name);
+		return menu;
 	}
 
 	// private void MoveToMenuStackTop(UIPanelInfo upInfo)
