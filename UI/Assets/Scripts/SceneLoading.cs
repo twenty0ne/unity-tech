@@ -30,6 +30,7 @@ public class SceneLoading : MonoBehaviour
 
 	void Start () 
 	{
+		
 	}
 
 	void Update () 

@@ -5,12 +5,7 @@ using UnityEngine.UI;
 
 public class MenuLoading : UIMenu
 {
-	
-
-	private void Start()
-	{
-
-	}
+	public Text labStatus;
 
 	private void Update() 
 	{
