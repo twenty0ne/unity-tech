@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ColorInterpolation
-  m_Shader: {fileID: 4800000, guid: f91dd12fc135d374d83b2ebd105ba233, type: 3}
+  m_Name: TriplanarMapping
+  m_Shader: {fileID: 4800000, guid: ceae9744345c1c94d9d5e72e44e1b773, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
