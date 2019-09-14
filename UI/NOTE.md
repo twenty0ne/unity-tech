@@ -27,6 +27,10 @@ https://connect.unity.com/doc/Manual/UIAutoLayout
 使用 MVVM 绑定数据
 MVC 
 
+是否可以参考 React flux 模式
+https://github.com/facebook/flux
+取代消息订阅
+
 优化建议：
 https://www.youtube.com/watch?v=_wxitgdx-UI
 https://create.unity3d.com/Unity-UI-optimization-tips
