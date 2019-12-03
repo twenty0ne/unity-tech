@@ -7,7 +7,9 @@ public class MenuLoading : UIMenu
 {
 	public Text labStatus;
 
-	private void Update() 
+	public static string Name { get { return "menu_loading"; } }
+
+	public override void Tick(float dt)
 	{
 		
 	}

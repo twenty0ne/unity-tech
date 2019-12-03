@@ -16,7 +16,7 @@ public class UIMenu : UIWidget
 	// }
 
 	public System.Action onShow;
-	public System.Action onClose;
+	public System.Action onHide;
 
 	protected bool _bShow = true;
 	protected bool _bActive = true;
@@ -48,7 +48,7 @@ public class UIMenu : UIWidget
 		_rt.anchoredPosition = _originPos + new Vector3(0, Screen.height * 2, 0);
 	}
 
-	public void Active()
+	public override void Active()
 	{
 		Debug.Log("Menu " + name + " Active.");
 
@@ -62,10 +62,13 @@ public class UIMenu : UIWidget
 			_rt.anchoredPosition = _originPos;
 		}
 
+		// 
+		base.Active();
+
 		OnActive();
 	}
 
-	public void Deactive(UIMenu newTopMenu = null)
+	public  void Deactive(UIMenu newTopMenu = null)
 	{
 		Debug.Log("Menu " + name + " Deactive.");
 
@@ -79,32 +82,37 @@ public class UIMenu : UIWidget
 			_rt.anchoredPosition = _originPos + new Vector3(0, Screen.height * 2, 0);
 		}
 
+		//
+		base.Deactive();
+
 		OnDeactive();
 	}
 
 	protected virtual void OnShow()
 	{
 		Debug.Log("Menu " + name + " OnShow.");
+		Active();
 	}
 
 	protected virtual void OnHide()
 	{
 		Debug.Log("Menu " + name + " OnHide.");
+		Deactive();
 	}
 
-	protected virtual void OnActive()
+	protected override void OnActive()
 	{
 		Debug.Log("Menu " + name + " OnActive.");
 	}
 
-	protected virtual void OnDeactive()
+	protected override void OnDeactive()
 	{
 		Debug.Log("Menu " + name + " OnDeactive.");
 	}
 
-	public void OnClickBtnClose()
-	{
-		Debug.Log("Menu " + name + " OnClickBtnClose.");
-		UIManager.Instance.CloseMenu(this);
-	}
+	// public void OnClickBtnClose()
+	// {
+	// 	Debug.Log("Menu " + name + " OnClickBtnClose.");
+	// 	UIManager.Instance.CloseMenu(this);
+	// }
 }

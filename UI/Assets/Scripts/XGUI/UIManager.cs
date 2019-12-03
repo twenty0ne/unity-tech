@@ -344,6 +344,15 @@ public class UIManager : MonoSingleton<UIManager>
 		Debug.Assert(_mainCanvas != null, "CHECK");
 	}
 
+	private void Update()
+	{
+		float dt = Time.deltaTime;
+		for (int i = 0; i < _menuStack.Count; ++i)
+		{
+			_menuStack[i].Tick(dt);
+		}
+	}
+
 	public GameObject TryGetMenu(Type tp)
 	{
 		if (menuCaches.ContainsKey(tp))
@@ -378,7 +387,7 @@ public class UIManager : MonoSingleton<UIManager>
 
 			menu = obj.GetComponent<UIMenu>();
 			Debug.Assert(menu, "CHECK");
-			menu.onClose += OnMenuClose;
+			menu.onHide += OnMenuHide;
 			_menuCache.Add(menu);
 		}
 
@@ -431,8 +440,13 @@ public class UIManager : MonoSingleton<UIManager>
 	// 	m_panelStack.Add(upInfo);
 	// }
 
-	private void OnMenuClose()
+	private void OnMenuHide()
 	{
 
+	}
+
+	public void OnReceiveMemory()
+	{
+		
 	}
 }
