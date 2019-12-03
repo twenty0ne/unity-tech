@@ -13,34 +13,34 @@ public class EventManager : Singleton<EventManager>
 
 	public Dictionary<string, Dictionary<IEventListener, EventCallback>> listeners = new Dictionary<string, Dictionary<IEventListener, EventCallback>>();
 
-	public void Add(string eventName, IEventListener lt, EventCallback cb)
+	public void Add(string evtName, IEventListener lt, EventCallback cb)
 	{
-		Debug.Assert(string.IsNullOrEmpty(eventName) == false, "CHECK");
+		Debug.Assert(string.IsNullOrEmpty(evtName) == false, "CHECK");
 		Debug.Assert(lt != null, "CHECK");
 		Debug.Assert(cb != null, "CHECK");
 
-		if (!listeners.ContainsKey(eventName))
-			listeners.Add(eventName, new Dictionary<IEventListener, EventCallback>());
+		if (!listeners.ContainsKey(evtName))
+			listeners.Add(evtName, new Dictionary<IEventListener, EventCallback>());
 
-		listeners[eventName].Add(lt, cb);
+		listeners[evtName].Add(lt, cb);
 	}
 
-	public void Remove(string eventName, IEventListener lt)
+	public void Remove(string evtName, IEventListener lt)
 	{
-		Debug.Assert(string.IsNullOrEmpty(eventName) == false, "CHECK");
+		Debug.Assert(string.IsNullOrEmpty(evtName) == false, "CHECK");
 		Debug.Assert(lt != null, "CHECK");
 
-		if (listeners.ContainsKey(eventName))
+		if (listeners.ContainsKey(evtName))
 		{
-			listeners[eventName].Remove(lt);
+			listeners[evtName].Remove(lt);
 		}
 		else
 		{
-			Debug.LogWarning("failed to remove " + eventName + ", because cant find.");
+			Debug.LogWarning("failed to remove " + evtName + ", because cant find.");
 		}
 	}
 
-	public void Remove(IEventListener lt)
+	public void RemoveAll(IEventListener lt)
 	{
 		Debug.Assert(lt != null, "CHECK");
 		
@@ -53,10 +53,34 @@ public class EventManager : Singleton<EventManager>
 		}
 	}
 
-	public void Dispatch(string eventName)
+	public void Dispatch(string name)
 	{
 		Event evt = new Event();
-		evt.name = eventName;
+		evt.name = name;
+		Dispatch(evt);
+	}
+
+	public void Dispatch(string name, int val)
+	{
+		EventSimpleInt evt = new EventSimpleInt();
+		evt.name = name;
+		evt.val = val;
+		Dispatch(evt);
+	}
+
+	public void Dispatch(string name, float val)
+	{
+		EventSimpleFloat evt = new EventSimpleFloat();
+		evt.name = name;
+		evt.val = val;
+		Dispatch(evt);
+	}
+
+	public void Dispatch(string name, string val)
+	{
+		EventSimpleString evt = new EventSimpleString();
+		evt.name = name;
+		evt.val = val;
 		Dispatch(evt);
 	}
 

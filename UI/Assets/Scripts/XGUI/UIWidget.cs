@@ -4,7 +4,7 @@ using UnityEngine;
 
 // 所有控件扩展的基类
 [RequireComponent(typeof(RectTransform))]
-public class UIWidget : MonoBehaviour
+public class UIWidget : MonoBehaviour, IEventListener
 {
 	protected List<UIWidget> children = new List<UIWidget>();
 
