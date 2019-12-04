@@ -31,6 +31,14 @@ MVC
 https://github.com/facebook/flux
 取代消息订阅
 
+Canvas / Sub-Canvas 父子关系的时候
+子 Canvas 的修改不会影响父 Canvas，反之亦然
+但是有些特殊情况例外，比如父 Canvas 修改子 Canvas 的大小。
+因为 Canvas Render 计算 batch 使用到的 mesh 只计算依附在上面的，不计算下面的
+
+batch 计算是在 CPU 上面
+
 优化建议：
 https://www.youtube.com/watch?v=_wxitgdx-UI
 https://create.unity3d.com/Unity-UI-optimization-tips
+https://learn.unity.com/tutorial/optimizing-unity-ui

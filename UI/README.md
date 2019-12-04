@@ -1,4 +1,6 @@
-// NOTE
+# **OBSOLETE**
+## please see: https://github.com/twenty0ne/unity-x
+
 
 // UI Assets
 // https://assetstore.unity.com/packages/2d/gui/fantasy-wooden-gui-free-103811
