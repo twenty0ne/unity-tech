@@ -1,27 +1,31 @@
-﻿// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using UnityEditor;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
 
-// [CustomEditor(typeof(MyItem))]
-// public class MyItemEditor : Editor
-// {
-// 	private SerializedProperty idProperty;
-// 	private SerializedProperty nameProperty;
+[CustomEditor(typeof(MyItem))]
+public class MyItemEditor : Editor
+{
+  private MyItem item;
 
-// 	private void OnEnable() 
-// 	{
-// 		idProperty = serializedObject.FindProperty("id");
-// 		nameProperty = serializedObject.FindProperty("name");
-// 	}
+	private SerializedProperty idProperty;
+	private SerializedProperty nameProperty;
 
-// 	public override void OnInspectorGUI()
-// 	{
-// 		serializedObject.Update();
+	private void OnEnable() 
+	{
+    item = (MyItem)target;
 
-// 		EditorGUILayout.PropertyField(idProperty);
-// 		EditorGUILayout.PropertyField(nameProperty);
+		idProperty = serializedObject.FindProperty("id");
+		// nameProperty = serializedObject.FindProperty("name");
+	}
 
-// 		serializedObject.ApplyModifiedProperties();
-// 	}
-// }
+	public override void OnInspectorGUI()
+	{
+		serializedObject.Update();
+
+		EditorGUILayout.PropertyField(idProperty);
+		// EditorGUILayout.PropertyField(nameProperty);
+
+		serializedObject.ApplyModifiedProperties();
+	}
+}
