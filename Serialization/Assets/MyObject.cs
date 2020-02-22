@@ -8,14 +8,15 @@ using UnityEngine;
 public class MyItem 
 {
 	public int id;
-	public string name;
+	// public string name;
 }
 
 // [Serializable]
 public class MyObject : MonoBehaviour
 {
-	[SerializeField]
-	public MyItem myItem;
+	// [SerializeField]
+	// public MyItem myItem;
+	public MyItem[] myItems;
 
 	void Start()
 	{

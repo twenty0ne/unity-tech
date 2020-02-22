@@ -29,47 +29,49 @@ public class MyObjectEditor : Editor
 
 	public override void OnInspectorGUI()
 	{
-		serializedObject.Update();
+		DrawDefaultInspector();
 
-		if (myObject.myItem != null)
-		{
-			// AssetDatabase.StartAssetEditing();
+		// serializedObject.Update();
 
-			myObject.myItem.id = EditorGUILayout.IntField(myObject.myItem.id);
-			myObject.myItem.name = EditorGUILayout.TextField(myObject.myItem.name);
+		// if (myObject.myItem != null)
+		// {
+		// 	// AssetDatabase.StartAssetEditing();
 
-			EditorUtility.SetDirty(myObject);
-			// AssetDatabase.StartAssetEditing
-			// AssetDatabase.SaveAssets();
+		// 	myObject.myItem.id = EditorGUILayout.IntField(myObject.myItem.id);
+		// 	// myObject.myItem.name = EditorGUILayout.TextField(myObject.myItem.name);
 
-			// AssetDatabase.StopAssetEditing();
-			if (GUILayout.Button("Save", GUILayout.Width(70f)))
-			{
-				AssetDatabase.SaveAssets();
-			}
-		}
-		else
-		{
-			if (GUILayout.Button("Add", GUILayout.Width(70f)))
-			{
-				// AssetDatabase.StartAssetEditing();
+		// 	EditorUtility.SetDirty(myObject);
+		// 	// AssetDatabase.StartAssetEditing
+		// 	// AssetDatabase.SaveAssets();
 
-				// var myItem = (MyItem)ScriptableObject.CreateInstance(typeof(MyItem));
-				// myObject.myItem = myItem;
+		// 	// AssetDatabase.StopAssetEditing();
+		// 	if (GUILayout.Button("Save", GUILayout.Width(70f)))
+		// 	{
+		// 		AssetDatabase.SaveAssets();
+		// 	}
+		// }
+		// else
+		// {
+		// 	if (GUILayout.Button("Add", GUILayout.Width(70f)))
+		// 	{
+		// 		// AssetDatabase.StartAssetEditing();
 
-				// AssetDatabase.AddObjectToAsset(myItem, myObject);
+		// 		// var myItem = (MyItem)ScriptableObject.CreateInstance(typeof(MyItem));
+		// 		// myObject.myItem = myItem;
 
-				myObject.myItem = new MyItem();
+		// 		// AssetDatabase.AddObjectToAsset(myItem, myObject);
 
-				EditorUtility.SetDirty(myObject);
-				// AssetDatabase.StopAssetEditing();
+		// 		myObject.myItem = new MyItem();
 
-				AssetDatabase.SaveAssets();
-			}
+		// 		EditorUtility.SetDirty(myObject);
+		// 		// AssetDatabase.StopAssetEditing();
 
-			EditorGUILayout.PropertyField(myItemProperty);
-		}
+		// 		AssetDatabase.SaveAssets();
+		// 	}
 
-		serializedObject.ApplyModifiedProperties();
+		// 	EditorGUILayout.PropertyField(myItemProperty);
+		// }
+
+		// serializedObject.ApplyModifiedProperties();
 	}
 }
