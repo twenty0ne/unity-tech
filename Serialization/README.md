@@ -4,7 +4,8 @@
 
 序列化无法序列化派生类
 将 ScriptableObject 保存在 Prefab 中，只能通过创建 asset 文件，然后引用的方式关联到 Prefab 上
-
+添加 ScriptableObject 到 ScriptableObject 要使用 AssetsDatabase.AddObjectToAsset
+添加 ScriptableObject 到 Monobehavior 不需要
 
 https://blogs.unity3d.com/2014/06/24/serialization-in-unity/
 https://forum.unity.com/threads/saving-instances-of-scriptable-objects-to-prefabs.56947/
@@ -14,3 +15,7 @@ https://forum.unity.com/threads/editor-tool-better-scriptableobject-inspector-ed
 https://forum.unity.com/threads/best-practice-questions-scriptable-objects-and-prefabs-reference.511021/
 https://forum.unity.com/threads/referencing-prefabs-in-a-scriptableobject.717881/
 https://answers.unity.com/questions/1249485/scriptable-object-references-to-prefabs.html
+
+
+Serializable 不支持派生的序列化，只能用 ScriptableObject 替代
+https://answers.unity.com/questions/245604/does-unity-serialization-support-inheritence.html?_ga=2.5187123.1642642325.1607938770-656484685.1581916478
