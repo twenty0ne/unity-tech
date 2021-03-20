@@ -4,8 +4,14 @@
 
 序列化无法序列化派生类
 将 ScriptableObject 保存在 Prefab 中，只能通过创建 asset 文件，然后引用的方式关联到 Prefab 上
+序列化 ScriptableObject 类的名字要和文件的名字一样，否则 Unity 找不到
 添加 ScriptableObject 到 ScriptableObject 要使用 AssetsDatabase.AddObjectToAsset
 添加 ScriptableObject 到 Monobehavior 不需要
+
+// 另外一种方法是参考 Behavior Tree
+// 将编辑后的 json 转换为 string 保存在 Behavior Tree (派生自 MonoBehavior)
+
+
 
 https://blogs.unity3d.com/2014/06/24/serialization-in-unity/
 https://forum.unity.com/threads/saving-instances-of-scriptable-objects-to-prefabs.56947/
